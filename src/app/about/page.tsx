@@ -34,18 +34,18 @@ export default function AboutPage() {
       <Header />
       <div className="min-h-screen pt-24 pb-16">
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-r from-orange-100 to-yellow-50 py-16 mb-12">
-          <div className="absolute inset-0 bg-[url('/images/pattern-bg.png')] opacity-5" />
+        <section className="relative overflow-hidden bg-[#1e1e1e] py-16 mb-12">
+          <div className="absolute inset-0 bg-[url('/images/pattern-bg.png')] opacity-10 mix-blend-overlay" />
           <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-col md:flex-row items-center gap-8">
               <div className="flex-1">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-600 to-yellow-500">
+                <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
                   About TK Afro Kitchen
                 </h1>
-                <p className="text-xl text-muted-foreground mb-6">
+                <p className="text-xl text-slate-300 mb-6">
                   Bringing authentic Nigerian cuisine to your doorstep
                 </p>
-                <div className="prose prose-lg">
+                <div className="prose prose-lg text-slate-400">
                   <p className="mb-4">
                     TK Afro Kitchen Ltd is a premier African food catering and kitchen service based in Milton Keynes. 
                     We take pride in delivering authentic Nigerian cuisine across the UK mainland, bringing the rich flavors 
@@ -75,12 +75,12 @@ export default function AboutPage() {
             {features.map((feature, index) => {
               const Icon = feature.icon;
               return (
-                <div key={index} className="p-6 rounded-xl bg-white shadow-lg hover:shadow-xl transition-shadow">
+                <div key={index} className="p-6 rounded-xl bg-[#1e1e1e] border border-orange-900/20 hover:border-orange-500/50 transition-all">
                   <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-orange-500 to-yellow-500 text-white mb-4">
                     <Icon className="w-6 h-6" />
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">{feature.title}</h3>
-                  <p className="text-muted-foreground">{feature.description}</p>
+                  <h3 className="text-lg font-semibold mb-2 text-orange-400">{feature.title}</h3>
+                  <p className="text-slate-400">{feature.description}</p>
                 </div>
               );
             })}
@@ -89,49 +89,49 @@ export default function AboutPage() {
 
         {/* Services Overview */}
         <section className="container mx-auto px-4 mb-16">
-          <h2 className="text-3xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-orange-600 to-yellow-500">
+          <h2 className="text-3xl font-bold mb-8 text-center bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
             Our Services
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div className="bg-gradient-to-br from-orange-50 to-yellow-50 p-8 rounded-2xl">
-              <h3 className="text-xl font-semibold mb-4">Delivery Service</h3>
+            <div className="bg-[#1e1e1e] p-8 rounded-2xl border border-orange-900/20">
+              <h3 className="text-xl font-semibold mb-4 text-orange-400">Delivery Service</h3>
               <ul className="space-y-3">
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-orange-500" />
-                  <span>Next-day delivery across UK mainland</span>
+                  <span className="text-slate-300">Next-day delivery across UK mainland</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-orange-500" />
-                  <span>Temperature-controlled packaging</span>
+                  <span className="text-slate-300">Temperature-controlled packaging</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-orange-500" />
-                  <span>Same-day delivery in Milton Keynes</span>
+                  <span className="text-slate-300">Same-day delivery in Milton Keynes</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-orange-500" />
-                  <span>Minimum order value: £70</span>
+                  <span className="text-slate-300">Minimum order value: £70</span>
                 </li>
               </ul>
             </div>
-            <div className="bg-gradient-to-br from-orange-50 to-yellow-50 p-8 rounded-2xl">
-              <h3 className="text-xl font-semibold mb-4">Catering Service</h3>
+            <div className="bg-[#1e1e1e] p-8 rounded-2xl border border-orange-900/20">
+              <h3 className="text-xl font-semibold mb-4 text-orange-400">Catering Service</h3>
               <ul className="space-y-3">
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-orange-500" />
-                  <span>Corporate events and functions</span>
+                  <span className="text-slate-300">Professional event catering</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-orange-500" />
-                  <span>Private parties and celebrations</span>
+                  <span className="text-slate-300">Customized menu options</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-orange-500" />
-                  <span>Customized menu options</span>
+                  <span className="text-slate-300">Full service setup and cleanup</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <span className="w-2 h-2 rounded-full bg-orange-500" />
-                  <span>Professional service staff</span>
+                  <span className="text-slate-300">Corporate and private events</span>
                 </li>
               </ul>
             </div>
@@ -140,19 +140,19 @@ export default function AboutPage() {
 
         {/* CTA Section */}
         <section className="container mx-auto px-4">
-          <div className="bg-gradient-to-r from-orange-600 to-yellow-500 rounded-2xl p-12 text-white text-center">
-            <h2 className="text-3xl font-bold mb-4">Ready to Experience Our Cuisine?</h2>
-            <p className="text-lg opacity-90 mb-8">
-              Order now and discover why we're Milton Keynes' premier African kitchen
+          <div className="bg-gradient-to-r from-orange-500/10 to-yellow-500/10 rounded-2xl p-12 text-center border border-orange-900/20">
+            <h2 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
+              Ready to Experience Our Cuisine?
+            </h2>
+            <p className="text-lg text-slate-300 mb-8">
+              Browse our menu and place your order today
             </p>
-            <div className="flex gap-4 justify-center">
-              <Button asChild size="lg" variant="secondary" className="bg-white text-orange-600 hover:bg-white/90">
-                <a href="/menu">View Menu</a>
-              </Button>
-              <Button asChild size="lg" variant="outline" className="border-white text-white hover:bg-white/10">
-                <a href="/contact">Contact Us</a>
-              </Button>
-            </div>
+            <Button 
+              asChild
+              className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
+            >
+              <a href="/menu">View Menu</a>
+            </Button>
           </div>
         </section>
       </div>

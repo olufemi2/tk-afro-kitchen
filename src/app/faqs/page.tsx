@@ -117,13 +117,13 @@ export default function FAQsPage() {
       <Header />
       <div className="min-h-screen pt-24 pb-16">
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-r from-orange-100 to-yellow-50 py-16 mb-12">
-          <div className="absolute inset-0 bg-[url('/images/pattern-bg.png')] opacity-5" />
+        <section className="relative overflow-hidden bg-[#1e1e1e] py-16 mb-12">
+          <div className="absolute inset-0 bg-[url('/images/pattern-bg.png')] opacity-10 mix-blend-overlay" />
           <div className="container mx-auto px-4 relative z-10 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-600 to-yellow-500">
+            <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
               Frequently Asked Questions
             </h1>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+            <p className="text-xl text-slate-300 max-w-2xl mx-auto">
               Find answers to common questions about our services, delivery, and food preparation
             </p>
           </div>
@@ -133,7 +133,7 @@ export default function FAQsPage() {
         <div className="container mx-auto px-4">
           {categories.map((category, categoryIndex) => (
             <section key={category} className="mb-12">
-              <h2 className="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-orange-600 to-yellow-500">
+              <h2 className="text-2xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
                 {category}
               </h2>
               <div className="space-y-4">
@@ -142,12 +142,27 @@ export default function FAQsPage() {
                   .map((faq, faqIndex) => {
                     const index = categoryIndex * 100 + faqIndex;
                     return (
-                      <FAQItem
+                      <div
                         key={index}
-                        faq={faq}
-                        isOpen={openFAQs.includes(index)}
-                        onToggle={() => toggleFAQ(index)}
-                      />
+                        className="bg-[#1e1e1e] rounded-lg border border-orange-900/20 overflow-hidden"
+                      >
+                        <button
+                          className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-[#242424] transition-colors"
+                          onClick={() => toggleFAQ(index)}
+                        >
+                          <span className="font-medium text-slate-200">{faq.question}</span>
+                          <ChevronDown
+                            className={`w-5 h-5 text-orange-400 transition-transform ${
+                              openFAQs.includes(index) ? 'rotate-180' : ''
+                            }`}
+                          />
+                        </button>
+                        {openFAQs.includes(index) && (
+                          <div className="px-6 pb-4 text-slate-400">
+                            {faq.answer}
+                          </div>
+                        )}
+                      </div>
                     );
                   })}
               </div>
@@ -157,12 +172,17 @@ export default function FAQsPage() {
 
         {/* CTA Section */}
         <section className="container mx-auto px-4 mt-16">
-          <div className="bg-gradient-to-r from-orange-600 to-yellow-500 rounded-2xl p-12 text-white text-center">
-            <h2 className="text-3xl font-bold mb-4">Still Have Questions?</h2>
-            <p className="text-lg opacity-90 mb-8">
+          <div className="bg-gradient-to-r from-orange-500/10 to-yellow-500/10 rounded-2xl p-12 text-center border border-orange-900/20">
+            <h2 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
+              Still Have Questions?
+            </h2>
+            <p className="text-lg text-slate-300 mb-8">
               We're here to help! Contact us for any additional information
             </p>
-            <Button asChild size="lg" variant="secondary" className="bg-white text-orange-600 hover:bg-white/90">
+            <Button 
+              asChild 
+              className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
+            >
               <a href="/contact">Contact Us</a>
             </Button>
           </div>
