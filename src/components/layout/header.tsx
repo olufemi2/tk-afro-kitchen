@@ -1,15 +1,24 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ShoppingCart, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
 export function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center">
-          <span className="text-xl font-bold">Tkafro</span>
+          <div className="relative w-40 h-14">
+            <Image
+              src="/images/dishes/tklogo.jpg"
+              alt="TK Afro Kitchen"
+              fill
+              className="object-contain"
+              priority
+            />
+          </div>
         </Link>
 
         {/* Search Bar - Hidden on mobile, shown on desktop */}
@@ -28,17 +37,26 @@ export function Header() {
           </Button>
           
           <nav className="hidden md:flex items-center gap-6">
-            <Link href="/menu" className="text-sm font-medium">
+            <Link href="/menu" className="text-sm font-medium hover:text-orange-600 transition-colors">
               Menu
             </Link>
-            <Link href="/about" className="text-sm font-medium">
+            <Link href="/frozen" className="text-sm font-medium hover:text-orange-600 transition-colors">
+              Frozen
+            </Link>
+            <Link href="/services" className="text-sm font-medium hover:text-orange-600 transition-colors">
+              Services
+            </Link>
+            <Link href="/about" className="text-sm font-medium hover:text-orange-600 transition-colors">
               About
+            </Link>
+            <Link href="/faqs" className="text-sm font-medium hover:text-orange-600 transition-colors">
+              FAQs
             </Link>
           </nav>
 
-          <Button variant="ghost" size="icon" className="relative">
+          <Button variant="ghost" size="icon" className="relative hover:text-orange-600 transition-colors">
             <ShoppingCart className="h-6 w-6" />
-            <span className="absolute -top-1 -right-1 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center">
+            <span className="absolute -top-1 -right-1 bg-gradient-to-r from-orange-600 to-yellow-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
               0
             </span>
           </Button>
