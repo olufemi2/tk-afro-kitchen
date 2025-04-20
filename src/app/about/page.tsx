@@ -34,12 +34,12 @@ export default function AboutPage() {
       <Header />
       <div className="min-h-screen pt-24 pb-16">
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-[#1e1e1e] py-16 mb-12">
-          <div className="absolute inset-0 bg-[url('/images/pattern-bg.png')] opacity-10 mix-blend-overlay" />
-          <div className="container mx-auto px-4 relative z-10">
+        <section className="hero-section">
+          <div className="hero-pattern" />
+          <div className="hero-content">
             <div className="flex flex-col md:flex-row items-center gap-8">
               <div className="flex-1">
-                <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
+                <h1 className="hero-title">
                   About TK Afro Kitchen
                 </h1>
                 <p className="text-xl text-slate-300 mb-6">

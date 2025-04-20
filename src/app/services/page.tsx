@@ -71,18 +71,13 @@ export default function ServicesPage() {
       <Header />
       <div className="min-h-screen">
         {/* Hero Section */}
-        <section className="relative py-20 px-4 overflow-hidden">
-          <div 
-            className="absolute inset-0 bg-[url('/images/hero-bg.jpg')] bg-cover bg-center"
-            style={{ 
-              filter: 'brightness(0.2)',
-            }}
-          />
-          <div className="relative container mx-auto text-center z-10">
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
+        <section className="hero-section">
+          <div className="hero-pattern" />
+          <div className="hero-content text-center">
+            <h1 className="hero-title">
               Our Services
             </h1>
-            <p className="text-lg md:text-xl max-w-2xl mx-auto text-slate-300">
+            <p className="hero-description">
               Experience authentic African cuisine through our premium food services. 
               From nationwide delivery to event catering, we bring the taste of Africa to you.
             </p>

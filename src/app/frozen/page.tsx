@@ -21,55 +21,66 @@ export default function FrozenPage() {
   return (
     <>
       <Header />
-      <div className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
-          {/* Hero Section */}
-          <section className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-4">Frozen Nigerian Delicacies</h1>
-            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+      <div className="min-h-screen bg-gradient-warm pb-16">
+        {/* Hero Section */}
+        <section className="hero-section">
+          <div className="hero-pattern" />
+          <div className="hero-content text-center">
+            <h1 className="hero-title">
+              Frozen Nigerian Delicacies
+            </h1>
+            <p className="hero-description">
               Enjoy authentic Nigerian dishes at your convenience. Our frozen meals are carefully 
               prepared, portioned, and frozen to preserve their authentic flavors.
             </p>
-          </section>
+          </div>
+        </section>
 
+        <div className="container mx-auto px-4">
           {/* Search and Filter Section */}
-          <div className="mb-8 space-y-4">
-            <Input
-              type="search"
-              placeholder="Search frozen items..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="max-w-md"
-            />
-            <div className="flex gap-2 flex-wrap">
-              <Button
-                variant={selectedCategory === null ? "default" : "outline"}
-                onClick={() => setSelectedCategory(null)}
-              >
-                All
-              </Button>
-              {frozenCategories.map((category) => (
+          <div className="card-base p-6 mb-8">
+            <div className="max-w-xl mx-auto space-y-4">
+              <Input
+                type="search"
+                placeholder="Search frozen items..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full"
+              />
+              <div className="flex gap-2 flex-wrap">
                 <Button
-                  key={category.id}
-                  variant={selectedCategory === category.name ? "default" : "outline"}
-                  onClick={() => setSelectedCategory(category.name)}
+                  variant={selectedCategory === null ? "default" : "outline"}
+                  onClick={() => setSelectedCategory(null)}
+                  className="rounded-full"
                 >
-                  {category.name}
+                  All
                 </Button>
-              ))}
+                {frozenCategories.map((category) => (
+                  <Button
+                    key={category.id}
+                    variant={selectedCategory === category.name ? "default" : "outline"}
+                    onClick={() => setSelectedCategory(category.name)}
+                    className="rounded-full"
+                  >
+                    {category.name}
+                  </Button>
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Results Section */}
           <div>
-            <h2 className="text-2xl font-bold mb-6">
+            <h2 className="text-2xl font-bold mb-6 text-gray-900">
               {selectedCategory || "All Items"}
               {searchQuery && ` - Search results for "${searchQuery}"`}
             </h2>
             {filteredItems.length === 0 ? (
-              <p className="text-muted-foreground">No items found matching your criteria.</p>
+              <div className="card-base p-8 text-center">
+                <p className="text-muted-foreground">No items found matching your criteria.</p>
+              </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-8">
                 {filteredItems.map((item) => (
                   <FrozenFoodCard key={item.id} {...item} />
                 ))}

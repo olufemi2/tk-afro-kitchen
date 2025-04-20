@@ -5,14 +5,14 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
-import { categories, featuredDishes } from "@/data/sample-menu";
+import { categories, featuredDishes, MenuItem } from "@/data/sample-menu";
 import { useCart } from "@/contexts/CartContext";
 
 // Transform the data for the menu sections
 const menuSections = categories.map(category => ({
   title: category.name,
   description: category.description,
-  image: category.imageUrl,
+  imageUrl: category.imageUrl,
   items: featuredDishes
     .filter(dish => dish.category === category.name)
     .map(dish => ({
@@ -20,7 +20,7 @@ const menuSections = categories.map(category => ({
       name: dish.name,
       description: dish.description,
       price: dish.price,
-      image: dish.imageUrl,
+      imageUrl: dish.imageUrl,
       category: dish.category
     }))
 })).filter(section => section.items.length > 0);
@@ -28,7 +28,7 @@ const menuSections = categories.map(category => ({
 export default function MenuPage() {
   const { addToCart } = useCart();
 
-  const handleAddToCart = (item: any) => {
+  const handleAddToCart = (item: MenuItem) => {
     const originalItem = featuredDishes.find(dish => dish.id === item.id);
     if (originalItem) {
       addToCart(originalItem);
@@ -40,13 +40,11 @@ export default function MenuPage() {
       <Header />
       <div className="min-h-screen pt-24 pb-16">
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-gradient-to-r from-orange-950/50 to-yellow-950/50 py-16 mb-12">
-          <div className="absolute inset-0 bg-[url('/images/pattern-bg.png')] opacity-10 mix-blend-overlay" />
-          <div className="container mx-auto px-4 relative z-10">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 text-center bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
-              Our Menu
-            </h1>
-            <p className="text-xl text-center text-slate-300 max-w-2xl mx-auto">
+        <section className="hero-section">
+          <div className="hero-pattern" />
+          <div className="hero-content text-center">
+            <h1 className="hero-title">Our Menu</h1>
+            <p className="hero-description">
               Discover the Rich Flavors of Nigeria
             </p>
           </div>
@@ -87,7 +85,7 @@ export default function MenuPage() {
                   <Card key={item.id} className="overflow-hidden group hover:shadow-xl transition-all duration-300 bg-[#1e1e1e] border-orange-900/20">
                     <div className="relative aspect-[16/9]">
                       <Image
-                        src={item.image}
+                        src={item.imageUrl}
                         alt={item.name}
                         fill
                         className="object-cover transition-transform group-hover:scale-105"

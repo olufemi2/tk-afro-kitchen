@@ -11,7 +11,7 @@ export default function Home() {
       <div className="pt-24 pb-16">
         {/* Hero Section */}
         <section className="relative min-h-[600px] bg-[#1e1e1e] overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/images/pattern-bg.png')] opacity-10 mix-blend-overlay" />
+          <div className="absolute inset-0 bg-[url('/images/dishes/Jollof.jpeg')] bg-cover bg-center opacity-5 mix-blend-overlay" />
           <div className="container mx-auto px-4 h-full flex flex-col justify-center py-16">
             <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
               Authentic Nigerian Cuisine
@@ -58,7 +58,7 @@ export default function Home() {
 
         {/* Featured Dishes */}
         <section className="py-16 relative overflow-hidden rounded-3xl mx-4 bg-[#1e1e1e] border border-orange-900/20">
-          <div className="absolute inset-0 bg-[url('/images/pattern-bg.png')] opacity-10 mix-blend-overlay" />
+          <div className="absolute inset-0 bg-[url('/images/dishes/efo-riro.png')] bg-cover bg-center opacity-5 mix-blend-overlay" />
           <div className="container mx-auto px-4 relative z-10">
             <h2 className="text-3xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
               Featured Dishes

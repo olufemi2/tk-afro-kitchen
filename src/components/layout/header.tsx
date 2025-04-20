@@ -1,76 +1,122 @@
+'use client';
+
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingCart, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Search, ShoppingCart, Menu } from "lucide-react";
+import { useCart, CartItem } from "@/contexts/CartContext";
+import { useState } from "react";
 
 export function Header() {
+  const { items } = useCart();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const cartItemCount = items.reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        {/* Logo */}
-        <Link href="/" className="flex items-center">
-          <div className="relative w-40 h-14">
-            <Image
-              src="/images/dishes/tklogo.jpg"
-              alt="TK Afro Kitchen"
-              fill
-              className="object-contain"
-              priority
-            />
+    <div className="sticky top-0 z-50 w-full backdrop-blur-sm bg-white/80">
+      <header className="border-b border-orange-100">
+        <div className="container mx-auto px-4 max-w-7xl h-16 flex items-center justify-between">
+          {/* Logo section */}
+          <Link href="/" className="flex items-center space-x-2 group">
+            <div className="relative w-10 h-10">
+              <Image
+                src="/images/brand/tklogo.jpg"
+                alt="TK Afro Kitchen"
+                fill
+                priority
+                sizes="(max-width: 768px) 40px, 40px"
+                className="object-contain rounded-full hover:scale-105 transition-transform duration-300"
+                style={{ filter: 'drop-shadow(0 0 8px rgba(255, 165, 0, 0.2))' }}
+              />
+            </div>
+            <span className="font-semibold text-xl bg-clip-text text-transparent bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700">
+              TK Afro
+            </span>
+          </Link>
+
+          {/* Search bar - hidden on mobile */}
+          <div className="hidden md:flex items-center max-w-md w-full mx-4">
+            <div className="relative w-full">
+              <Input
+                type="search"
+                placeholder="Search our menu..."
+                className="w-full pl-10 rounded-lg border-orange-200/20 focus:border-orange-500/30 focus:ring-orange-500/20"
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-400" />
+            </div>
           </div>
-        </Link>
 
-        {/* Search Bar - Hidden on mobile, shown on desktop */}
-        <div className="hidden md:flex flex-1 max-w-md mx-8">
-          <Input
-            type="search"
-            placeholder="Search for dishes..."
-            className="w-full"
-          />
-        </div>
-
-        {/* Navigation */}
-        <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="md:hidden">
-            <Menu className="h-6 w-6" />
-          </Button>
-          
-          <nav className="hidden md:flex items-center gap-6">
-            <Link href="/menu" className="text-sm font-medium hover:text-orange-600 transition-colors">
-              Menu
-            </Link>
-            <Link href="/frozen" className="text-sm font-medium hover:text-orange-600 transition-colors">
-              Frozen
-            </Link>
-            <Link href="/services" className="text-sm font-medium hover:text-orange-600 transition-colors">
-              Services
-            </Link>
-            <Link href="/about" className="text-sm font-medium hover:text-orange-600 transition-colors">
-              About
-            </Link>
-            <Link href="/faqs" className="text-sm font-medium hover:text-orange-600 transition-colors">
-              FAQs
-            </Link>
+          {/* Navigation */}
+          <nav className="hidden md:flex items-center space-x-6">
+            {['Menu', 'Frozen', 'Services', 'About'].map((item) => (
+              <Link 
+                key={item}
+                href={`/${item.toLowerCase()}`} 
+                className="text-gray-600 hover:text-orange-600 hover:scale-105 transition-all duration-300"
+              >
+                {item}
+              </Link>
+            ))}
           </nav>
 
-          <Button variant="ghost" size="icon" className="relative hover:text-orange-600 transition-colors">
-            <ShoppingCart className="h-6 w-6" />
-            <span className="absolute -top-1 -right-1 bg-gradient-to-r from-orange-600 to-yellow-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-              0
-            </span>
-          </Button>
+          <div className="flex items-center space-x-2">
+            {/* Mobile menu button */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden relative group hover:bg-orange-50 rounded-full transition-all duration-300"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <Menu className="h-5 w-5 text-gray-600 group-hover:text-orange-600 transition-colors duration-300" />
+            </Button>
+
+            {/* Cart button */}
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              className="relative group hover:bg-orange-50 rounded-full transition-all duration-300"
+            >
+              <ShoppingCart className="h-5 w-5 text-gray-600 group-hover:text-orange-600 transition-colors duration-300" />
+              {cartItemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-bounce shadow-lg">
+                  {cartItemCount}
+                </span>
+              )}
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      {/* Mobile menu */}
+      {isMenuOpen && (
+        <div className="md:hidden border-b border-orange-100 bg-white/95">
+          <nav className="container mx-auto px-4 py-4">
+            {['Menu', 'Frozen', 'Services', 'About'].map((item) => (
+              <Link 
+                key={item}
+                href={`/${item.toLowerCase()}`} 
+                className="block py-2 text-gray-600 hover:text-orange-600 transition-colors duration-300"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {item}
+              </Link>
+            ))}
+          </nav>
+        </div>
+      )}
+
+      {/* Mobile search bar */}
+      <div className="md:hidden border-b border-orange-100 px-4 py-2 bg-white/80">
+        <div className="relative">
+          <Input
+            type="search"
+            placeholder="Search our menu..."
+            className="w-full pl-10 rounded-lg border-orange-200/20 focus:border-orange-500/30 focus:ring-orange-500/20"
+          />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-orange-400" />
         </div>
       </div>
-      
-      {/* Mobile Search - Shown below header on mobile */}
-      <div className="md:hidden p-4 border-t">
-        <Input
-          type="search"
-          placeholder="Search for dishes..."
-          className="w-full"
-        />
-      </div>
-    </header>
+    </div>
   );
 } 

@@ -117,13 +117,13 @@ export default function FAQsPage() {
       <Header />
       <div className="min-h-screen pt-24 pb-16">
         {/* Hero Section */}
-        <section className="relative overflow-hidden bg-[#1e1e1e] py-16 mb-12">
-          <div className="absolute inset-0 bg-[url('/images/pattern-bg.png')] opacity-10 mix-blend-overlay" />
-          <div className="container mx-auto px-4 relative z-10 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
+        <section className="hero-section">
+          <div className="hero-pattern" />
+          <div className="hero-content text-center">
+            <h1 className="hero-title">
               Frequently Asked Questions
             </h1>
-            <p className="text-xl text-slate-300 max-w-2xl mx-auto">
+            <p className="hero-description">
               Find answers to common questions about our services, delivery, and food preparation
             </p>
           </div>

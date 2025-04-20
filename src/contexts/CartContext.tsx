@@ -3,11 +3,17 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { MenuItem } from '@/data/sample-menu';
 
-interface CartItem extends MenuItem {
+export interface CartItem {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  imageUrl: string;
+  category: string;
   quantity: number;
 }
 
-interface CartContextType {
+export interface CartContextType {
   items: CartItem[];
   addToCart: (item: MenuItem) => void;
   removeFromCart: (itemId: string) => void;
@@ -18,7 +24,16 @@ interface CartContextType {
   total: number;
 }
 
-const CartContext = createContext<CartContextType | undefined>(undefined);
+export const CartContext = createContext<CartContextType>({
+  items: [],
+  addToCart: () => {},
+  removeFromCart: () => {},
+  updateQuantity: () => {},
+  clearCart: () => {},
+  isCartOpen: false,
+  setIsCartOpen: () => {},
+  total: 0,
+});
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
@@ -79,10 +94,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function useCart() {
+export const useCart = () => {
   const context = useContext(CartContext);
-  if (context === undefined) {
+  if (!context) {
     throw new Error('useCart must be used within a CartProvider');
   }
   return context;
-} 
+}; 

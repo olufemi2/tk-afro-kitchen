@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { inter } from "@/lib/fonts";
 import "./globals.css";
 import { Footer } from "@/components/layout/footer";
 import { CartProvider } from "@/contexts/CartContext";
 import { CartModal } from "@/components/cart/CartModal";
 
-const inter = Inter({ subsets: ["latin"] });
-
 export const metadata: Metadata = {
-  title: "Tkafro - Authentic Nigerian Food Delivery in the UK",
-  description: "Order authentic Nigerian food delicacies for delivery across the UK or local pickup. Explore our rich and flavorful menu of traditional dishes.",
+  title: "TK Afro Kitchen",
+  description: "Authentic Nigerian cuisine delivered to your door",
 };
 
 export default function RootLayout({
@@ -18,11 +16,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className={`${inter.className} bg-[#121212] text-slate-100`}>
+    <html lang="en">
+      <body className={inter.className}>
         <CartProvider>
-          <main className="min-h-screen bg-gradient-to-b from-[#1a1a1a] to-[#121212] relative">
-            <div className="absolute inset-0 bg-[url('/images/pattern-bg.png')] opacity-10 mix-blend-overlay pointer-events-none" />
+          <main className="min-h-screen bg-gradient-warm relative">
+            <div 
+              className="absolute inset-0 bg-[url('/images/frozen/jollof_rice.jpeg')] bg-cover bg-center opacity-5 pointer-events-none"
+              style={{ 
+                maskImage: 'linear-gradient(to bottom, transparent, black, transparent)',
+                filter: 'saturate(1.2) contrast(1.1)'
+              }}
+            />
             <div className="relative">
               {children}
             </div>

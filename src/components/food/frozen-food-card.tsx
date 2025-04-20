@@ -28,20 +28,20 @@ export function FrozenFoodCard({
   storageInfo,
 }: FrozenFoodCardProps) {
   return (
-    <Card className="overflow-hidden group bg-[#1e1e1e] border-orange-900/20 hover:border-orange-500/50 transition-all duration-300">
+    <Card className="group card-base card-hover overflow-hidden">
       <Link href={`/frozen/${id}`}>
         <div className="relative aspect-[4/3] cursor-pointer overflow-hidden">
           <Image
             src={imageUrl}
             alt={name}
             fill
-            className="object-cover transition-transform group-hover:scale-105"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
           <Button
             size="icon"
-            className="absolute top-4 right-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-orange-500 hover:bg-orange-600 text-white"
+            className="absolute top-4 right-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 bg-white hover:bg-orange-50 text-orange-600"
             onClick={(e) => {
               e.preventDefault();
               // TODO: Implement add to cart functionality
@@ -53,25 +53,31 @@ export function FrozenFoodCard({
           </Button>
         </div>
       </Link>
-      <CardContent className="p-4 bg-[#1e1e1e]">
+      <CardContent className="p-4">
         <Link href={`/frozen/${id}`} className="block">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="font-semibold text-slate-200 hover:text-orange-400 transition-colors">{name}</h3>
-            <span className="font-medium text-orange-400">£{price.toFixed(2)}</span>
+            <h3 className="font-semibold text-gray-900 group-hover:text-orange-600 transition-colors">
+              {name}
+            </h3>
+            <span className="font-medium text-orange-600">£{price.toFixed(2)}</span>
           </div>
-          <p className="text-sm text-slate-400 line-clamp-2 mb-2">{description}</p>
-          <div className="flex items-center gap-2 text-sm text-slate-500">
-            <Users className="h-4 w-4" />
-            <span>{servings}</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-slate-500 mt-1">
-            <Snowflake className="h-4 w-4" />
-            <span>{storageInfo}</span>
+          <p className="text-sm text-gray-600 line-clamp-2 mb-3">{description}</p>
+          <div className="space-y-1.5">
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <Users className="h-4 w-4 text-orange-500" />
+              <span>{servings}</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-gray-500">
+              <Snowflake className="h-4 w-4 text-orange-500" />
+              <span>{storageInfo}</span>
+            </div>
           </div>
         </Link>
       </CardContent>
-      <CardFooter className="p-4 pt-0 bg-[#1e1e1e]">
-        <span className="text-xs text-orange-400/70">{category}</span>
+      <CardFooter className="p-4 pt-0">
+        <span className="text-xs font-medium text-orange-600/90 bg-orange-50 px-2.5 py-1 rounded-full">
+          {category}
+        </span>
       </CardFooter>
     </Card>
   );
