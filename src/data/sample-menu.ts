@@ -23,8 +23,8 @@ export const categories = [
   {
     id: "swallows",
     name: "Swallows",
-    description: "Traditional Nigerian swallows served with various soups",
-    imageUrl: "/images/dishes/amala_ewedu.jpeg"
+    description: "Various types of swallows including Eba, Amala, Pounded Yam (Iyan), and Semolina",
+    imageUrl: "/images/dishes/all-swallows.jpeg"
   },
   {
     id: "proteins",
@@ -100,7 +100,7 @@ export const featuredDishes: MenuItem[] = [
     name: "Amala & Ewedu",
     description: "Smooth yam flour swallow served with ewedu soup",
     price: 13.99,
-    imageUrl: "/images/dishes/amala_ewedu.jpeg",
+    imageUrl: "/images/dishes/all-swallows.jpeg",
     category: "Swallows"
   },
   {
