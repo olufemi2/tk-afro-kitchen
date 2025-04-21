@@ -1,0 +1,123 @@
+'use client';
+
+import { Header } from "@/components/layout/header";
+import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ShoppingCart } from "lucide-react";
+import Image from "next/image";
+import { categories, featuredDishes, MenuItem } from "@/data/sample-menu";
+import { useCart } from "@/contexts/CartContext";
+
+// Transform the data for the menu sections
+const menuSections = categories.map(category => ({
+  title: category.name,
+  description: category.description,
+  imageUrl: category.imageUrl,
+  items: featuredDishes
+    .filter(dish => dish.category === category.name)
+    .map(dish => ({
+      id: dish.id,
+      name: dish.name,
+      description: dish.description,
+      price: dish.price,
+      imageUrl: dish.imageUrl,
+      category: dish.category
+    }))
+})).filter(section => section.items.length > 0);
+
+export default function MenuPage() {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (item: MenuItem) => {
+    const originalItem = featuredDishes.find(dish => dish.id === item.id);
+    if (originalItem) {
+      addToCart(originalItem);
+    }
+  };
+  
+  return (
+    <>
+      <Header />
+      <div className="min-h-screen pt-24 pb-16">
+        {/* Hero Section */}
+        <section className="hero-section">
+          <div className="hero-pattern" />
+          <div className="hero-content text-center">
+            <h1 className="hero-title">Our Menu</h1>
+            <p className="hero-description">
+              Discover the Rich Flavors of Nigeria
+            </p>
+          </div>
+        </section>
+
+        {/* Category Grid */}
+        <div className="container mx-auto px-4 mb-16">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {categories.map((category) => (
+              <Card key={category.id} className="group overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 bg-[#1e1e1e] border-orange-900/20">
+                <div className="relative aspect-[4/3]">
+                  <Image
+                    src={category.imageUrl}
+                    alt={category.name}
+                    fill
+                    className="object-cover transition-transform group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                    <h3 className="text-2xl font-bold mb-2 text-orange-400">{category.name}</h3>
+                    <p className="text-sm text-slate-300">{category.description}</p>
+                  </div>
+                </div>
+              </Card>
+            ))}
+          </div>
+        </div>
+
+        {/* Menu Sections */}
+        <div className="container mx-auto px-4">
+          {menuSections.map((section) => (
+            <section key={section.title} className="mb-16">
+              <h2 className="text-3xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
+                {section.title}
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {section.items.map((item) => (
+                  <Card key={item.id} className="overflow-hidden group hover:shadow-xl transition-all duration-300 bg-[#1e1e1e] border-orange-900/20">
+                    <div className="relative aspect-[16/9]">
+                      <Image
+                        src={item.imageUrl}
+                        alt={item.name}
+                        fill
+                        className="object-cover transition-transform group-hover:scale-105"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+                    </div>
+                    <div className="p-6 bg-[#1e1e1e]/90 backdrop-blur-sm">
+                      <div className="flex justify-between items-start mb-2">
+                        <div className="flex-1">
+                          <h3 className="font-semibold text-lg mb-1 text-orange-400">{item.name}</h3>
+                          <p className="text-sm text-slate-300">{item.description}</p>
+                        </div>
+                        <div className="flex flex-col items-end gap-2">
+                          <span className="font-medium text-yellow-400">£{item.price.toFixed(2)}</span>
+                          <Button 
+                            size="sm" 
+                            className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
+                            onClick={() => handleAddToCart(item)}
+                          >
+                            <ShoppingCart className="h-4 w-4 mr-2" />
+                            Add to Cart
+                          </Button>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      </div>
+    </>
+  );
+} 

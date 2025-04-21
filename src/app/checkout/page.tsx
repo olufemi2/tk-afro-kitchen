@@ -75,28 +75,28 @@ export default function CheckoutPage() {
   return (
     <>
       <Header />
-      <div className="min-h-screen pt-24 pb-16">
+      <div className="min-h-screen pt-24 pb-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">Checkout</h1>
+          <h1 className="text-3xl font-bold mb-8 text-black">Checkout</h1>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Order Summary */}
-            <div className="bg-[#1e1e1e] p-6 rounded-lg border border-orange-900/20">
-              <h2 className="text-xl font-semibold mb-4 text-orange-400">Order Summary</h2>
+            <div className="bg-white p-6 rounded-lg border border-gray-200">
+              <h2 className="text-xl font-semibold mb-4 text-black">Order Summary</h2>
               <div className="space-y-4">
                 {items.map((item) => (
-                  <div key={item.id} className="flex justify-between border-b border-orange-900/20 pb-4">
+                  <div key={item.id} className="flex justify-between border-b border-gray-200 pb-4">
                     <div>
-                      <p className="font-medium text-slate-200">{item.name}</p>
-                      <p className="text-sm text-slate-400">Quantity: {item.quantity}</p>
+                      <p className="font-medium text-black">{item.name}</p>
+                      <p className="text-sm text-gray-600">Quantity: {item.quantity}</p>
                     </div>
-                    <p className="font-medium text-yellow-400">£{(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-medium text-black">£{(item.price * item.quantity).toFixed(2)}</p>
                   </div>
                 ))}
-                <div className="pt-4 border-t border-orange-900/20">
+                <div className="pt-4 border-t border-gray-200">
                   <div className="flex justify-between font-semibold">
-                    <span className="text-slate-200">Total</span>
-                    <span className="text-yellow-400">£{total.toFixed(2)}</span>
+                    <span className="text-black">Total</span>
+                    <span className="text-black">£{total.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
@@ -106,18 +106,18 @@ export default function CheckoutPage() {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="fullName" className="text-slate-200">Full Name</Label>
+                  <Label htmlFor="fullName" className="text-black">Full Name</Label>
                   <Input
                     id="fullName"
                     name="fullName"
                     value={deliveryDetails.fullName}
                     onChange={handleInputChange}
                     required
-                    className="bg-[#242424] border-orange-900/20 text-slate-200 focus:border-orange-500/50 focus:ring-orange-500/50"
+                    className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="email" className="text-slate-200">Email</Label>
+                  <Label htmlFor="email" className="text-black">Email</Label>
                   <Input
                     id="email"
                     name="email"
@@ -125,11 +125,11 @@ export default function CheckoutPage() {
                     value={deliveryDetails.email}
                     onChange={handleInputChange}
                     required
-                    className="bg-[#242424] border-orange-900/20 text-slate-200 focus:border-orange-500/50 focus:ring-orange-500/50"
+                    className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="phone" className="text-slate-200">Phone</Label>
+                  <Label htmlFor="phone" className="text-black">Phone</Label>
                   <Input
                     id="phone"
                     name="phone"
@@ -137,41 +137,41 @@ export default function CheckoutPage() {
                     value={deliveryDetails.phone}
                     onChange={handleInputChange}
                     required
-                    className="bg-[#242424] border-orange-900/20 text-slate-200 focus:border-orange-500/50 focus:ring-orange-500/50"
+                    className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
                   />
                 </div>
                 <div>
-                  <Label htmlFor="address" className="text-slate-200">Delivery Address</Label>
+                  <Label htmlFor="address" className="text-black">Delivery Address</Label>
                   <Input
                     id="address"
                     name="address"
                     value={deliveryDetails.address}
                     onChange={handleInputChange}
                     required
-                    className="bg-[#242424] border-orange-900/20 text-slate-200 focus:border-orange-500/50 focus:ring-orange-500/50"
+                    className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="postcode" className="text-slate-200">Postcode</Label>
+                    <Label htmlFor="postcode" className="text-black">Postcode</Label>
                     <Input
                       id="postcode"
                       name="postcode"
                       value={deliveryDetails.postcode}
                       onChange={handleInputChange}
                       required
-                      className="bg-[#242424] border-orange-900/20 text-slate-200 focus:border-orange-500/50 focus:ring-orange-500/50"
+                      className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="city" className="text-slate-200">City</Label>
+                    <Label htmlFor="city" className="text-black">City</Label>
                     <Input
                       id="city"
                       name="city"
                       value={deliveryDetails.city}
                       onChange={handleInputChange}
                       required
-                      className="bg-[#242424] border-orange-900/20 text-slate-200 focus:border-orange-500/50 focus:ring-orange-500/50"
+                      className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
                     />
                   </div>
                 </div>
@@ -179,7 +179,7 @@ export default function CheckoutPage() {
 
               <Button
                 type="submit"
-                className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? 'Processing...' : 'Place Order'}
