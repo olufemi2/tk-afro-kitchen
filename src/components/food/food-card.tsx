@@ -17,7 +17,7 @@ interface FoodCardProps {
 
 export function FoodCard({ id, name, description, price, imageUrl, category }: FoodCardProps) {
   return (
-    <Card className="overflow-hidden group bg-white/80 backdrop-blur-sm hover:shadow-lg transition-all duration-300 border-orange-100">
+    <Card className="group bg-[#1e1e1e] backdrop-blur-sm hover:shadow-lg transition-all duration-300 border-orange-900/20">
       <Link href={`/product/${id}`}>
         <div className="relative aspect-square cursor-pointer">
           <Image
@@ -32,8 +32,7 @@ export function FoodCard({ id, name, description, price, imageUrl, category }: F
             size="icon"
             className="absolute top-4 right-4 rounded-full opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-r from-orange-600 to-yellow-500 hover:from-orange-700 hover:to-yellow-600 text-white border-none"
             onClick={(e) => {
-              e.preventDefault(); // Prevent navigation when clicking the button
-              // TODO: Implement add to cart functionality
+              e.preventDefault();
               console.log(`Add ${id} to cart`);
             }}
           >
@@ -42,17 +41,17 @@ export function FoodCard({ id, name, description, price, imageUrl, category }: F
           </Button>
         </div>
       </Link>
-      <CardContent className="p-4">
+      <CardContent>
         <Link href={`/product/${id}`} className="block">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="font-semibold hover:text-orange-600 transition-colors">{name}</h3>
-            <span className="font-medium text-orange-600">£{price.toFixed(2)}</span>
+            <h3 className="font-semibold text-slate-200 hover:text-orange-400 transition-colors">{name}</h3>
+            <span className="font-medium text-orange-400">£{price.toFixed(2)}</span>
           </div>
-          <p className="text-sm text-muted-foreground line-clamp-2">{description}</p>
+          <p className="text-sm text-slate-400 line-clamp-2">{description}</p>
         </Link>
       </CardContent>
-      <CardFooter className="p-4 pt-0">
-        <span className="text-xs px-2 py-1 rounded-full bg-gradient-to-r from-orange-100 to-yellow-50 text-orange-700">{category}</span>
+      <CardFooter>
+        <span className="text-xs px-2 py-1 rounded-full bg-orange-400/10 text-orange-400">{category}</span>
       </CardFooter>
     </Card>
   );

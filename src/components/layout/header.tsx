@@ -3,106 +3,78 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Search, ShoppingCart, Menu } from "lucide-react";
-import { useCart, CartItem } from "@/contexts/CartContext";
-import { SearchBar } from "@/components/ui/search-bar";
-import { useState } from "react";
+import { ShoppingCart, Menu, Phone, MapPin } from "lucide-react";
+import { useCart } from "@/contexts/CartContext";
 
 export function Header() {
   const { items } = useCart();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const cartItemCount = items.reduce((sum: number, item: CartItem) => sum + item.quantity, 0);
+  const cartItemCount = items.length;
 
   return (
-    <div className="sticky top-0 z-50 w-full backdrop-blur-sm bg-[#1e1e1e]/95">
-      <header className="border-b border-orange-900/20">
-        <div className="container mx-auto px-4 max-w-7xl h-16 flex items-center justify-between">
-          {/* Logo section */}
-          <Link href="/" className="flex items-center space-x-2 group">
+    <header className="sticky top-0 z-50 w-full backdrop-blur-sm bg-[#1e1e1e]/95 border-b border-orange-900/20">
+      <div className="container mx-auto px-4">
+        {/* Top Bar */}
+        <div className="hidden md:flex justify-between items-center py-2 text-sm border-b border-orange-900/10">
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center text-slate-300">
+              <Phone className="h-4 w-4 mr-2 text-orange-400" />
+              <span>020 1234 5678</span>
+            </div>
+            <div className="flex items-center text-slate-300">
+              <MapPin className="h-4 w-4 mr-2 text-orange-400" />
+              <span>London, UK</span>
+            </div>
+          </div>
+          <nav className="flex items-center space-x-4">
+            <Link href="/about" className="nav-link">About</Link>
+            <Link href="/contact" className="nav-link">Contact</Link>
+          </nav>
+        </div>
+
+        {/* Main Navigation */}
+        <div className="flex items-center justify-between h-16">
+          <Link href="/" className="flex items-center space-x-2">
             <div className="relative w-10 h-10">
               <Image
                 src="/images/brand/tklogo.jpg"
                 alt="TK Afro Kitchen"
                 fill
-                priority
-                sizes="(max-width: 768px) 40px, 40px"
-                className="object-contain rounded-full hover:scale-105 transition-transform duration-300"
-                style={{ filter: 'drop-shadow(0 0 8px rgba(255, 165, 0, 0.2))' }}
+                className="object-contain rounded-full"
               />
             </div>
-            <span className="font-semibold text-xl bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
+            <span className="text-xl font-bold text-gradient">
               TK Afro
             </span>
           </Link>
 
-          {/* Search bar - hidden on mobile */}
-          <div className="hidden md:flex items-center max-w-md w-full mx-4">
-            <SearchBar autoSearch={true} className="w-full" />
-          </div>
-
-          {/* Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
-            {['Menu', 'Frozen', 'Services', 'About'].map((item) => (
-              <Link 
-                key={item}
-                href={`/${item.toLowerCase()}`} 
-                className="text-slate-300 hover:text-orange-400 hover:scale-105 transition-all duration-300"
-              >
-                {item}
-              </Link>
-            ))}
+            <Link href="/menu" className="nav-link">Menu</Link>
+            <Link href="/frozen" className="nav-link">Frozen</Link>
+            <Link href="/catering" className="nav-link">Catering</Link>
           </nav>
 
-          <div className="flex items-center space-x-2">
-            {/* Mobile menu button */}
-            <Button
+          <div className="flex items-center space-x-4">
+            <Button 
               variant="ghost"
               size="icon"
-              className="md:hidden relative group hover:bg-orange-900/20 rounded-full transition-all duration-300"
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="relative"
             >
-              <Menu className="h-5 w-5 text-slate-300 group-hover:text-orange-400 transition-colors duration-300" />
-            </Button>
-
-            {/* Cart button */}
-            <Button 
-              variant="ghost" 
-              size="icon" 
-              className="relative group hover:bg-orange-900/20 rounded-full transition-all duration-300"
-            >
-              <ShoppingCart className="h-5 w-5 text-slate-300 group-hover:text-orange-400 transition-colors duration-300" />
+              <ShoppingCart className="h-5 w-5 text-slate-300" />
               {cartItemCount > 0 && (
-                <span className="absolute -top-1 -right-1 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center animate-bounce shadow-lg">
+                <span className="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                   {cartItemCount}
                 </span>
               )}
             </Button>
+            <Button className="md:hidden" variant="ghost" size="icon">
+              <Menu className="h-5 w-5" />
+            </Button>
+            <Button className="hidden md:flex button-primary">
+              Order Now
+            </Button>
           </div>
         </div>
-      </header>
-
-      {/* Mobile menu */}
-      {isMenuOpen && (
-        <div className="md:hidden border-b border-orange-900/20 bg-[#1e1e1e]/95">
-          <nav className="container mx-auto px-4 py-4">
-            {['Menu', 'Frozen', 'Services', 'About'].map((item) => (
-              <Link 
-                key={item}
-                href={`/${item.toLowerCase()}`} 
-                className="block py-2 text-slate-300 hover:text-orange-400 transition-colors duration-300"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {item}
-              </Link>
-            ))}
-          </nav>
-        </div>
-      )}
-
-      {/* Mobile search bar */}
-      <div className="md:hidden border-b border-orange-900/20 px-4 py-2 bg-[#1e1e1e]/95">
-        <SearchBar autoSearch={true} />
       </div>
-    </div>
+    </header>
   );
 }

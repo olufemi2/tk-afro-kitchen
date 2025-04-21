@@ -1,72 +1,73 @@
 'use client';
 
 import Link from "next/link";
-import { Facebook, Instagram, Twitter } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Instagram, Twitter } from "lucide-react";
 
 export function Footer() {
   return (
-    <footer className="bg-white border-t border-orange-100">
-      <div className="container mx-auto px-4 max-w-7xl py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* About Section */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">About Us</h3>
-            <p className="text-gray-600 text-sm">
-              TK Afro Kitchen brings the authentic taste of Nigeria to your table. Our passion for traditional recipes and quality ingredients sets us apart.
-            </p>
+    <footer className="footer-section">
+      <div className="footer-content">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {/* Contact Info */}
+          <div>
+            <h3 className="footer-title">Contact Us</h3>
+            <div className="space-y-4">
+              <div className="flex items-center">
+                <Phone className="h-5 w-5 mr-2 text-orange-400" />
+                <span className="footer-text">020 1234 5678</span>
+              </div>
+              <div className="flex items-center">
+                <Mail className="h-5 w-5 mr-2 text-orange-400" />
+                <span className="footer-text">info@tkafro.com</span>
+              </div>
+              <div className="flex items-center">
+                <MapPin className="h-5 w-5 mr-2 text-orange-400" />
+                <span className="footer-text">London, UK</span>
+              </div>
+            </div>
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Quick Links</h3>
-            <ul className="space-y-2">
-              {['Menu', 'Frozen', 'Services', 'About'].map((item) => (
-                <li key={item}>
-                  <Link 
-                    href={`/${item.toLowerCase()}`}
-                    className="text-gray-600 hover:text-orange-600 text-sm transition-colors duration-200"
-                  >
-                    {item}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <div>
+            <h3 className="footer-title">Quick Links</h3>
+            <div className="space-y-2">
+              <Link href="/menu" className="block footer-text">Menu</Link>
+              <Link href="/frozen" className="block footer-text">Frozen Food</Link>
+              <Link href="/catering" className="block footer-text">Catering</Link>
+              <Link href="/about" className="block footer-text">About Us</Link>
+            </div>
           </div>
 
-          {/* Contact Info */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Contact Us</h3>
-            <ul className="space-y-2 text-sm text-gray-600">
-              <li>23 Central Milton Keynes, MK9 3ER</li>
-              <li>+1 234 567 890</li>
-              <li>info@tkafrokitchen.com</li>
-            </ul>
+          {/* Opening Hours */}
+          <div>
+            <h3 className="footer-title">Opening Hours</h3>
+            <div className="space-y-2 text-slate-300">
+              <p>Monday - Friday: 11am - 10pm</p>
+              <p>Saturday: 12pm - 10pm</p>
+              <p>Sunday: 12pm - 9pm</p>
+            </div>
           </div>
 
           {/* Social Links */}
-          <div className="space-y-4">
-            <h3 className="text-lg font-semibold text-gray-900">Follow Us</h3>
+          <div>
+            <h3 className="footer-title">Follow Us</h3>
             <div className="flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-orange-600 transition-colors duration-200">
-                <Facebook className="h-5 w-5" />
-                <span className="sr-only">Facebook</span>
+              <a href="#" className="hover-scale text-orange-400">
+                <Facebook className="h-6 w-6" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-orange-600 transition-colors duration-200">
-                <Instagram className="h-5 w-5" />
-                <span className="sr-only">Instagram</span>
+              <a href="#" className="hover-scale text-orange-400">
+                <Instagram className="h-6 w-6" />
               </a>
-              <a href="#" className="text-gray-400 hover:text-orange-600 transition-colors duration-200">
-                <Twitter className="h-5 w-5" />
-                <span className="sr-only">Twitter</span>
+              <a href="#" className="hover-scale text-orange-400">
+                <Twitter className="h-6 w-6" />
               </a>
             </div>
           </div>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-orange-100">
-          <p className="text-center text-sm text-gray-600">
-            © {new Date().getFullYear()} TK Afro Kitchen. All rights reserved.
-          </p>
+        {/* Copyright */}
+        <div className="mt-12 pt-8 border-t border-orange-900/20 text-center text-slate-400">
+          <p>© 2024 TK Afro Kitchen. All rights reserved.</p>
         </div>
       </div>
     </footer>

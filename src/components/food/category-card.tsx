@@ -12,8 +12,8 @@ interface CategoryCardProps {
 export function CategoryCard({ id, name, description, imageUrl }: CategoryCardProps) {
   return (
     <Link href={`/menu#${id}`}>
-      <Card className="overflow-hidden group cursor-pointer hover:shadow-lg transition-all duration-300 border-orange-100">
-        <div className="relative aspect-[4/3]">
+      <Card className="overflow-hidden group cursor-pointer hover:shadow-lg transition-all duration-300 border-orange-900/20 rounded-xl py-0">
+        <div className="relative aspect-[4/3] rounded-xl overflow-hidden">
           <Image
             src={imageUrl}
             alt={name}

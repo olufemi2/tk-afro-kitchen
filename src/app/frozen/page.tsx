@@ -9,75 +9,68 @@ import { frozenCategories, frozenItems } from "@/data/frozen-menu";
 
 export default function FrozenPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
 
   const filteredItems = frozenItems.filter(item => {
-    const matchesCategory = !selectedCategory || item.category === selectedCategory;
-    const matchesSearch = item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         item.description.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
+    return !selectedCategory || item.category === selectedCategory;
   });
 
   return (
     <>
       <Header />
-      <div className="min-h-screen bg-gradient-warm pb-16">
+      <div className="min-h-screen bg-[#1e1e1e] pb-16 pt-24">
         {/* Hero Section */}
-        <section className="hero-section">
-          <div className="hero-pattern" />
-          <div className="hero-content text-center">
-            <h1 className="hero-title">
-              Frozen Nigerian Delicacies
-            </h1>
-            <p className="hero-description">
-              Enjoy authentic Nigerian dishes at your convenience. Our frozen meals are carefully 
-              prepared, portioned, and frozen to preserve their authentic flavors.
-            </p>
+        <section className="relative overflow-hidden py-20">
+          <div className="absolute inset-0 bg-gradient-to-b from-orange-500/5 to-transparent opacity-20" />
+          <div className="relative z-10 container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center space-y-8">
+              <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent 
+                           bg-gradient-to-r from-orange-400 to-yellow-400 
+                           leading-tight md:leading-tight">
+                Frozen Nigerian Delicacies
+              </h1>
+              <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto 
+                          leading-relaxed">
+                Enjoy authentic Nigerian dishes at your convenience. Our frozen meals are carefully 
+                prepared, portioned, and frozen to preserve their authentic flavors.
+              </p>
+            </div>
           </div>
         </section>
 
         <div className="container mx-auto px-4">
-          {/* Search and Filter Section */}
-          <div className="card-base p-6 mb-8">
-            <div className="max-w-xl mx-auto space-y-4">
-              <Input
-                type="search"
-                placeholder="Search frozen items..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full"
-              />
-              <div className="flex gap-2 flex-wrap">
+          {/* Category Filter Section */}
+          <div className="card-base p-4 md:p-6 mb-8">
+            <div className="flex flex-wrap gap-3">
+              <Button
+                variant={selectedCategory === null ? "default" : "outline"}
+                onClick={() => setSelectedCategory(null)}
+                className="rounded-full text-sm"
+                size="sm"
+              >
+                All Categories
+              </Button>
+              {frozenCategories.map((category) => (
                 <Button
-                  variant={selectedCategory === null ? "default" : "outline"}
-                  onClick={() => setSelectedCategory(null)}
-                  className="rounded-full"
+                  key={category.id}
+                  variant={selectedCategory === category.name ? "default" : "outline"}
+                  onClick={() => setSelectedCategory(category.name)}
+                  className="rounded-full text-sm"
+                  size="sm"
                 >
-                  All
+                  {category.name}
                 </Button>
-                {frozenCategories.map((category) => (
-                  <Button
-                    key={category.id}
-                    variant={selectedCategory === category.name ? "default" : "outline"}
-                    onClick={() => setSelectedCategory(category.name)}
-                    className="rounded-full"
-                  >
-                    {category.name}
-                  </Button>
-                ))}
-              </div>
+              ))}
             </div>
           </div>
 
           {/* Results Section */}
           <div>
-            <h2 className="text-2xl font-bold mb-6 text-gray-900">
-              {selectedCategory || "All Items"}
-              {searchQuery && ` - Search results for "${searchQuery}"`}
+            <h2 className="text-2xl font-bold mb-8 text-gradient">
+              {selectedCategory || "All Frozen Items"}
             </h2>
             {filteredItems.length === 0 ? (
               <div className="card-base p-8 text-center">
-                <p className="text-muted-foreground">No items found matching your criteria.</p>
+                <p className="text-slate-400">No items found in this category.</p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 pb-8">
