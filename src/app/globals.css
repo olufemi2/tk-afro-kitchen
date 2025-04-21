@@ -44,41 +44,43 @@
   --radius-xl: calc(var(--radius) + 4px);
 }
 
+/* White theme base variables */
 :root {
   --radius: 0.625rem;
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
+  --card: oklch(1 0 0); /* White */
+  --card-foreground: oklch(0.145 0 0); /* Dark */
+  --popover: oklch(1 0 0); /* White */
+  --popover-foreground: oklch(0.145 0 0); /* Dark */
+  --primary: oklch(0.7 0.15 60); /* Orange/amber for brand consistency */
+  --primary-foreground: oklch(0.985 0 0); /* White text on primary */
+  --secondary: oklch(0.97 0 0); /* Very light gray */
+  --secondary-foreground: oklch(0.205 0 0); /* Near black */
+  --muted: oklch(0.97 0 0); /* Very light gray */
+  --muted-foreground: oklch(0.556 0 0); /* Medium gray */
+  --accent: oklch(0.97 0 0); /* Very light gray */
+  --accent-foreground: oklch(0.205 0 0); /* Near black */
+  --destructive: oklch(0.577 0.245 27.325); /* Red */
+  --border: oklch(0.95 0 0); /* Light gray for borders */
+  --input: oklch(0.97 0 0); /* Very light gray */
+  --ring: oklch(0.85 0.15 60); /* Light orange for focus rings */
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
   --chart-3: oklch(0.398 0.07 227.392);
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
+  --sidebar: oklch(0.985 0 0); /* White */
+  --sidebar-foreground: oklch(0.145 0 0); /* Dark */
+  --sidebar-primary: oklch(0.7 0.15 60); /* Orange/amber */
+  --sidebar-primary-foreground: oklch(0.985 0 0); /* White */
+  --sidebar-accent: oklch(0.97 0 0); /* Very light gray */
+  --sidebar-accent-foreground: oklch(0.205 0 0); /* Dark */
+  --sidebar-border: oklch(0.95 0 0); /* Light gray */
+  --sidebar-ring: oklch(0.85 0.15 60); /* Light orange */
+  --background: oklch(1 0 0); /* White */
+  --foreground: oklch(0.145 0 0); /* Dark */
 }
 
+/* Keep dark mode config for users with dark mode preference */
 .dark {
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
@@ -114,26 +116,27 @@
 }
 
 @layer base {
+  /* White theme tailwind variables */
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 25 95% 53%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 25 95% 53%;
+    --background: 0 0% 100%; /* White */
+    --foreground: 222.2 84% 4.9%; /* Dark gray */
+    --card: 0 0% 100%; /* White */
+    --card-foreground: 222.2 47.4% 11.2%; /* Dark gray */
+    --popover: 0 0% 100%; /* White */
+    --popover-foreground: 222.2 47.4% 11.2%; /* Dark gray */
+    --primary: 25 95% 53%; /* Orange - kept the same for brand consistency */
+    --primary-foreground: 210 40% 98%; /* White text on primary */
+    --secondary: 210 40% 96.1%; /* Very light gray */
+    --secondary-foreground: 222.2 47.4% 11.2%; /* Dark gray */
+    --muted: 210 40% 96.1%; /* Very light gray */
+    --muted-foreground: 215.4 16.3% 46.9%; /* Medium gray */
+    --accent: 25 95% 97%; /* Very light orange */
+    --accent-foreground: 222.2 47.4% 11.2%; /* Dark gray */
+    --destructive: 0 84.2% 60.2%; /* Red */
+    --destructive-foreground: 210 40% 98%; /* White */
+    --border: 214.3 31.8% 91.4%; /* Light gray */
+    --input: 214.3 31.8% 95%; /* Very light gray */
+    --ring: 25 95% 70%; /* Light orange */
     --radius: 0.5rem;
   }
 
@@ -143,6 +146,15 @@
   
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Additional base styles for white theme */
+  a {
+    @apply text-primary hover:text-primary/80 transition-colors;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-foreground font-bold;
   }
 }
 
@@ -163,12 +175,13 @@
     @apply py-12 md:py-16 lg:py-20;
   }
 
+  /* Updated for white theme */
   .hero-section {
-    @apply relative overflow-hidden bg-[#1e1e1e] py-16 mb-12;
+    @apply relative overflow-hidden bg-gradient-to-r from-orange-50 to-amber-50 py-16 mb-12;
   }
 
   .hero-pattern {
-    @apply absolute inset-0 bg-[url('/images/patterns/pattern-bg.svg')] opacity-10 mix-blend-overlay;
+    @apply absolute inset-0 bg-[url('/images/patterns/pattern-bg.svg')] opacity-20 mix-blend-multiply;
   }
 
   .hero-content {
@@ -176,11 +189,12 @@
   }
 
   .hero-title {
-    @apply text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400;
+    @apply text-4xl md:text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-yellow-600;
   }
 
+  /* Updated for white theme */
   .hero-description {
-    @apply text-xl text-slate-300 max-w-2xl mx-auto;
+    @apply text-xl text-gray-600 max-w-2xl mx-auto;
   }
 
   .section-title {
@@ -191,8 +205,29 @@
     @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
   }
 
+  /* Updated for white theme */
   .search-filter-section {
-    @apply bg-white rounded-xl border border-orange-200/20 shadow-sm p-6 mb-8;
+    @apply bg-white rounded-xl border border-gray-100 shadow-sm p-6 mb-8;
+  }
+  
+  /* New white theme menu card */
+  .menu-card {
+    @apply bg-white rounded-xl overflow-hidden border border-gray-100 hover:shadow-lg transition-all duration-300;
+  }
+  
+  /* New white theme menu card content */
+  .menu-card-content {
+    @apply p-6 bg-white;
+  }
+  
+  /* Updated header for white theme */
+  .header-white {
+    @apply sticky top-0 z-50 w-full bg-white shadow-sm border-b border-gray-100;
+  }
+  
+  /* White theme navigation link */
+  .nav-link-white {
+    @apply text-gray-600 hover:text-primary hover:scale-105 transition-all duration-300;
   }
 }
 
@@ -201,6 +236,7 @@
     @apply bg-clip-text text-transparent bg-gradient-to-r from-orange-500 via-orange-600 to-orange-700;
   }
 
+  /* Updated for white theme */
   .bg-gradient-warm {
     @apply bg-gradient-to-r from-orange-50 via-orange-100/50 to-orange-50;
   }
@@ -209,27 +245,40 @@
     @apply hover:scale-105 transition-transform duration-300;
   }
 
+  /* Updated for white theme */
   .card-base {
-    @apply bg-white rounded-xl border border-orange-200/20 shadow-sm;
+    @apply bg-white rounded-xl border border-gray-100 shadow-sm;
   }
 
   .button-base {
     @apply rounded-full transition-all duration-300;
   }
 
+  /* Updated for white theme */
   .input-base {
-    @apply rounded-lg border-orange-200/20 focus:border-orange-500/30 focus:ring-orange-500/20;
+    @apply rounded-lg border-gray-200 focus:border-orange-300 focus:ring-orange-200;
   }
 
   .image-hover {
     @apply transition-transform duration-500 group-hover:scale-105;
   }
 
+  /* Updated for white theme - lighter overlay */
   .image-overlay {
-    @apply absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300;
+    @apply absolute inset-0 bg-gradient-to-t from-black/40 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300;
   }
 
+  /* Updated for white theme */
   .tag-base {
-    @apply text-xs font-medium text-orange-600/90 bg-orange-50 px-2.5 py-1 rounded-full;
+    @apply text-xs font-medium text-orange-600 bg-orange-50 px-2.5 py-1 rounded-full;
+  }
+  
+  /* New utility classes for white theme */
+  .white-card-shadow {
+    @apply shadow-sm hover:shadow-md transition-shadow duration-300;
+  }
+  
+  .white-border {
+    @apply border border-gray-100;
   }
 }
