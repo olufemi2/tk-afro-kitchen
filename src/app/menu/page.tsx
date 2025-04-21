@@ -7,9 +7,11 @@ import { ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import { categories, featuredDishes, MenuItem } from "@/data/sample-menu";
 import { useCart } from "@/contexts/CartContext";
+import { useRef } from "react";
 
 // Transform the data for the menu sections
 const menuSections = categories.map(category => ({
+  id: category.id,
   title: category.name,
   description: category.description,
   imageUrl: category.imageUrl,
@@ -27,11 +29,21 @@ const menuSections = categories.map(category => ({
 
 export default function MenuPage() {
   const { addToCart } = useCart();
+  const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
 
   const handleAddToCart = (item: MenuItem) => {
     const originalItem = featuredDishes.find(dish => dish.id === item.id);
     if (originalItem) {
       addToCart(originalItem);
+    }
+  };
+  
+  const scrollToSection = (categoryId: string) => {
+    if (sectionRefs.current[categoryId]) {
+      sectionRefs.current[categoryId]?.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+      });
     }
   };
   
@@ -54,7 +66,11 @@ export default function MenuPage() {
         <div className="container mx-auto px-4 mb-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {categories.map((category) => (
-              <Card key={category.id} className="group overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 bg-[#1e1e1e] border-orange-900/20">
+              <Card 
+                key={category.id} 
+                className="group overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 bg-[#1e1e1e] border-orange-900/20"
+                onClick={() => scrollToSection(category.id)}
+              >
                 <div className="relative aspect-[4/3]">
                   <Image
                     src={category.imageUrl}
@@ -76,7 +92,12 @@ export default function MenuPage() {
         {/* Menu Sections */}
         <div className="container mx-auto px-4">
           {menuSections.map((section) => (
-            <section key={section.title} className="mb-16">
+            <section 
+              key={section.title} 
+              className="mb-16 pt-6" 
+              id={section.id}
+              ref={el => sectionRefs.current[section.id] = el}
+            >
               <h2 className="text-3xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
                 {section.title}
               </h2>
@@ -120,4 +141,4 @@ export default function MenuPage() {
       </div>
     </>
   );
-} 
+}
