@@ -186,3 +186,68 @@ export const featuredDishes: MenuItem[] = [
     category: "Snacks"
   }
 ];
+  ,
+  {
+    id: "jolof-rice-special",
+    name: "Special Jollof Rice",
+    description: "Premium jollof rice cooked with the finest ingredients and served with assorted vegetables",
+    price: 13.99,
+    imageUrl: "/images/dishes/jolofrice.png",
+    category: "Main Dishes"
+  },
+  {
+    id: "assorted-okro",
+    name: "Assorted Okro Soup",
+    description: "Delicious okro soup cooked with various meats and seafood for a rich flavor",
+    price: 16.99,
+    imageUrl: "/images/dishes/assorted-okro.jpeg",
+    category: "Soups & Stews"
+  },
+  {
+    id: "puff-puff-meat-pie-combo",
+    name: "Puff Puff & Meat Pie Combo",
+    description: "The perfect snack combination of sweet puff puff and savory meat pie",
+    price: 7.99,
+    imageUrl: "/images/dishes/puff-puff-meat-pie.jpeg",
+    category: "Snacks"
+  },
+  {
+    id: "seafood-okro",
+    name: "Seafood Okro Soup",
+    description: "Luxurious okro soup made with premium seafood including prawns, fish and crab",
+    price: 18.99,
+    imageUrl: "/images/dishes/seafood-okro.png",
+    category: "Soups & Stews"
+  },
+  {
+    id: "classic-jollof",
+    name: "Classic Jollof Rice",
+    description: "Traditional Nigerian jollof rice cooked to perfection with the classic recipe",
+    price: 11.99,
+    imageUrl: "/images/dishes/Jollof.jpeg",
+    category: "Main Dishes"
+  },
+  {
+    id: "assorted-stew",
+    name: "Assorted Meat Stew",
+    description: "Rich stew featuring an assortment of Nigerian meats in a flavorful tomato base",
+    price: 15.99,
+    imageUrl: "/images/dishes/assorted-stew.jpeg",
+    category: "Soups & Stews"
+  },
+  {
+    id: "classic-egusi",
+    name: "Classic Egusi Soup",
+    description: "Traditional Nigerian egusi soup made with ground melon seeds and assorted meat",
+    price: 14.99,
+    imageUrl: "/images/dishes/egusi.png",
+    category: "Soups & Stews"
+  },
+  {
+    id: "assorted-beef-fish",
+    name: "Assorted Beef & Fish",
+    description: "Selection of premium beef cuts and fish, perfectly seasoned and prepared",
+    price: 19.99,
+    imageUrl: "/images/dishes/Assorted_beef_fish.jpg",
+    category: "Proteins"
+  }
