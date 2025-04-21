@@ -29,7 +29,7 @@ const menuSections = categories.map(category => ({
 
 export default function MenuPage() {
   const { addToCart } = useCart();
-  const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
+  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
 
   const handleAddToCart = (item: MenuItem) => {
     const originalItem = featuredDishes.find(dish => dish.id === item.id);
@@ -39,8 +39,9 @@ export default function MenuPage() {
   };
   
   const scrollToSection = (categoryId: string) => {
-    if (sectionRefs.current[categoryId]) {
-      sectionRefs.current[categoryId]?.scrollIntoView({ 
+    const element = sectionRefs.current[categoryId];
+    if (element) {
+      element.scrollIntoView({ 
         behavior: 'smooth',
         block: 'start'
       });
@@ -96,7 +97,11 @@ export default function MenuPage() {
               key={section.title} 
               className="mb-16 pt-6" 
               id={section.id}
-              ref={el => sectionRefs.current[section.id] = el}
+              ref={(element: HTMLElement | null) => {
+                if (element) {
+                  sectionRefs.current[section.id] = element;
+                }
+              }}
             >
               <h2 className="text-3xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
                 {section.title}
