@@ -36,7 +36,7 @@ export const categories = [
     id: "snacks",
     name: "Snacks & Small Chops",
     description: "Delicious Nigerian snacks and appetizers",
-    imageUrl: "/images/dishes/puff-puff-meat-pie.jpeg"
+    imageUrl: "/images/dishes/tk-meatpie.png"
   }
 ];
 
