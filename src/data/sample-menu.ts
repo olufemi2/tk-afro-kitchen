@@ -18,7 +18,7 @@ export const categories = [
     id: "soups-stews",
     name: "Soups & Stews",
     description: "Traditional Nigerian soups and stews",
-    imageUrl: "/images/dishes/egusi.png"
+    imageUrl: "/images/dishes/egusi1.png"
   },
   {
     id: "swallows",
@@ -70,7 +70,7 @@ export const featuredDishes: MenuItem[] = [
     name: "Egusi Soup",
     description: "Rich melon seed soup with assorted meat and vegetables",
     price: 15.99,
-    imageUrl: "/images/dishes/egusi.png",
+    imageUrl: "/images/dishes/egusi1.png",
     category: "Soups & Stews"
   },
   {
