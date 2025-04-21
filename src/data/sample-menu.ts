@@ -144,5 +144,45 @@ export const featuredDishes: MenuItem[] = [
     price: 4.99,
     imageUrl: "/images/dishes/moi-moi.png",
     category: "Snacks"
+  },
+  {
+    id: "tk-special-fish",
+    name: "TK Special Fish",
+    description: "Premium fish marinated in traditional spices and slow-cooked to perfection",
+    price: 17.99,
+    imageUrl: "/images/dishes/tkfish3.png",
+    category: "Proteins"
+  },
+  {
+    id: "nigerian-meat-stew",
+    name: "Traditional Meat Stew",
+    description: "Rich and hearty Nigerian meat stew with tender beef in a flavorful tomato base",
+    price: 14.99,
+    imageUrl: "/images/dishes/meat-stew.png",
+    category: "Soups & Stews"
+  },
+  {
+    id: "tk-puff-puff",
+    name: "Nigerian Puff Puff",
+    description: "Fluffy, deep-fried Nigerian dough balls with a perfectly sweet taste",
+    price: 4.99,
+    imageUrl: "/images/dishes/tk-puff-puff.png",
+    category: "Snacks"
+  },
+  {
+    id: "african-grilled-chicken",
+    name: "African Grilled Chicken",
+    description: "Tender chicken pieces marinated in a blend of African spices and perfectly grilled",
+    price: 15.99,
+    imageUrl: "/images/dishes/chicken.png",
+    category: "Proteins"
+  },
+  {
+    id: "nigerian-chin-chin",
+    name: "Nigerian Chin Chin",
+    description: "Crunchy, sweet fried pastry snack, perfect with tea or as a dessert",
+    price: 3.99,
+    imageUrl: "/images/dishes/chin-chin.jpg",
+    category: "Snacks"
   }
-]; 
+];
