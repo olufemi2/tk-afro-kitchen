@@ -9,27 +9,27 @@ export interface MenuItem {
 
 export const categories = [
   {
-    id: "main-dishes",
-    name: "Main Dishes",
-    description: "Hearty and filling Nigerian main courses",
-    imageUrl: "/images/dishes/jollofmeal.png"
-  },
-  {
-    id: "soups-stews",
-    name: "Soups & Stews",
+    id: "soups",
+    name: "Soups",
     description: "Traditional Nigerian soups and stews",
     imageUrl: "/images/dishes/egusi1.png"
   },
   {
     id: "swallows",
-    name: "Swallows",
-    description: "Various types of swallows including Eba, Amala, Pounded Yam (Iyan), and Semolina",
-    imageUrl: "/images/dishes/all-swallows.jpeg"
+    name: "Swallows & Soups",
+    description: "Traditional Nigerian swallows with delicious soups",
+    imageUrl: "/images/dishes/amala_ewedu.jpeg"
   },
   {
-    id: "proteins",
-    name: "Proteins & Sides",
-    description: "Delicious proteins and side dishes",
+    id: "rice",
+    name: "Rice",
+    description: "Flavorful Nigerian rice specialties",
+    imageUrl: "/images/dishes/jollofmeal.png"
+  },
+  {
+    id: "meats",
+    name: "Meats",
+    description: "Premium meat and protein dishes",
     imageUrl: "/images/dishes/Turkey.png"
   },
   {
@@ -37,12 +37,6 @@ export const categories = [
     name: "Snacks & Small Chops",
     description: "Delicious Nigerian snacks and appetizers",
     imageUrl: "/images/dishes/tk-meatpie.png"
-  },
-  {
-    id: "services",
-    name: "Other Services",
-    description: "Catering, events, and private chef services",
-    imageUrl: "/images/dishes/catering.jpg"
   }
 ];
 
@@ -53,7 +47,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Our signature Jollof rice cooked with rich tomato sauce and aromatic spices",
     price: 12.99,
     imageUrl: "/images/dishes/jollofmeal.png",
-    category: "Main Dishes"
+    category: "Rice"
   },
   {
     id: "yam-porridge",
@@ -61,7 +55,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Creamy yam porridge cooked with palm oil, peppers, and assorted seasonings",
     price: 11.99,
     imageUrl: "/images/dishes/Yam porridge_(Asaro).jpg",
-    category: "Main Dishes"
+    category: "Others"
   },
   {
     id: "beans-dodo",
@@ -69,7 +63,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Nigerian beans served with fried plantain (dodo)",
     price: 10.99,
     imageUrl: "/images/dishes/beans_dodo.jpeg",
-    category: "Main Dishes"
+    category: "Others"
   },
   {
     id: "egusi-soup",
@@ -77,7 +71,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Rich melon seed soup with assorted meat and vegetables",
     price: 15.99,
     imageUrl: "/images/dishes/egusi1.png",
-    category: "Soups & Stews"
+    category: "Soups"
   },
   {
     id: "efo-riro",
@@ -85,7 +79,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Rich and nutritious Nigerian spinach stew with assorted meat and fish",
     price: 14.99,
     imageUrl: "/images/dishes/efo-riro.png",
-    category: "Soups & Stews"
+    category: "Soups"
   },
   {
     id: "ayamase-stew",
@@ -93,14 +87,14 @@ export const featuredDishes: MenuItem[] = [
     description: "Spicy green pepper stew with assorted meats, a true Nigerian delicacy",
     price: 15.99,
     imageUrl: "/images/dishes/ayamase.png",
-    category: "Soups & Stews"
+    category: "Soups"
   },
   {
     id: "amala-ewedu",
     name: "Amala & Ewedu",
     description: "Smooth yam flour swallow served with ewedu soup",
     price: 13.99,
-    imageUrl: "/images/dishes/all-swallows.jpeg",
+    imageUrl: "/images/dishes/amala_ewedu.jpeg",
     category: "Swallows"
   },
   {
@@ -109,7 +103,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Smooth pounded yam served with delicious efo riro soup",
     price: 14.99,
     imageUrl: "/images/dishes/Iyan-eforirio.jpg",
-    category: "Swallows"
+    category: "Others"
   },
   {
     id: "assorted-fish",
@@ -117,7 +111,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Selection of perfectly seasoned and fried fish",
     price: 16.99,
     imageUrl: "/images/dishes/assorted_fish.jpg",
-    category: "Proteins"
+    category: "Meats"
   },
   {
     id: "peppered-turkey",
@@ -125,7 +119,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Spicy grilled turkey in our special pepper sauce",
     price: 15.99,
     imageUrl: "/images/dishes/Turkey.png",
-    category: "Proteins"
+    category: "Meats"
   },
   {
     id: "peppered-snails",
@@ -133,7 +127,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Grilled snails in spicy pepper sauce",
     price: 18.99,
     imageUrl: "/images/dishes/peppered_snails.jpeg",
-    category: "Proteins"
+    category: "Meats"
   },
   {
     id: "meat-pie",
@@ -157,7 +151,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Premium fish marinated in traditional spices and slow-cooked to perfection",
     price: 17.99,
     imageUrl: "/images/dishes/tkfish3.png",
-    category: "Proteins"
+    category: "Meats"
   },
   {
     id: "nigerian-meat-stew",
@@ -165,7 +159,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Rich and hearty Nigerian meat stew with tender beef in a flavorful tomato base",
     price: 14.99,
     imageUrl: "/images/dishes/meat-stew.png",
-    category: "Soups & Stews"
+    category: "Soups"
   },
   {
     id: "tk-puff-puff",
@@ -181,7 +175,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Tender chicken pieces marinated in a blend of African spices and perfectly grilled",
     price: 15.99,
     imageUrl: "/images/dishes/chicken.png",
-    category: "Proteins"
+    category: "Meats"
   },
   {
     id: "nigerian-chin-chin",
@@ -197,7 +191,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Premium jollof rice cooked with the finest ingredients and served with assorted vegetables",
     price: 13.99,
     imageUrl: "/images/dishes/jolofrice.png",
-    category: "Main Dishes"
+    category: "Rice"
   },
   {
     id: "assorted-okro",
@@ -205,7 +199,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Delicious okro soup cooked with various meats and seafood for a rich flavor",
     price: 16.99,
     imageUrl: "/images/dishes/assorted-okro.jpeg",
-    category: "Soups & Stews"
+    category: "Soups"
   },
   {
     id: "puff-puff-meat-pie-combo",
@@ -221,7 +215,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Luxurious okro soup made with premium seafood including prawns, fish and crab",
     price: 18.99,
     imageUrl: "/images/dishes/seafood-okro.png",
-    category: "Soups & Stews"
+    category: "Soups"
   },
   {
     id: "classic-jollof",
@@ -229,7 +223,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Traditional Nigerian jollof rice cooked to perfection with the classic recipe",
     price: 11.99,
     imageUrl: "/images/dishes/Jollof.jpeg",
-    category: "Main Dishes"
+    category: "Rice"
   },
   {
     id: "assorted-stew",
@@ -237,7 +231,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Rich stew featuring an assortment of Nigerian meats in a flavorful tomato base",
     price: 15.99,
     imageUrl: "/images/dishes/assorted-stew.jpeg",
-    category: "Soups & Stews"
+    category: "Soups"
   },
   {
     id: "classic-egusi",
@@ -245,7 +239,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Traditional Nigerian egusi soup made with ground melon seeds and assorted meat",
     price: 14.99,
     imageUrl: "/images/dishes/egusi.png",
-    category: "Soups & Stews"
+    category: "Soups"
   },
   {
     id: "assorted-beef-fish",
@@ -253,6 +247,6 @@ export const featuredDishes: MenuItem[] = [
     description: "Selection of premium beef cuts and fish, perfectly seasoned and prepared",
     price: 19.99,
     imageUrl: "/images/dishes/Assorted_beef_fish.jpg",
-    category: "Proteins"
+    category: "Meats"
   }
 ];
