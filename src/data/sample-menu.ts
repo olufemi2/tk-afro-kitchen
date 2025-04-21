@@ -184,9 +184,7 @@ export const featuredDishes: MenuItem[] = [
     price: 3.99,
     imageUrl: "/images/dishes/chin-chin.jpg",
     category: "Snacks"
-  }
-];
-  ,
+  },
   {
     id: "jolof-rice-special",
     name: "Special Jollof Rice",
@@ -251,3 +249,4 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/Assorted_beef_fish.jpg",
     category: "Proteins"
   }
+];
