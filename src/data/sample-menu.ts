@@ -12,7 +12,7 @@ export const categories = [
     id: "main-dishes",
     name: "Main Dishes",
     description: "Hearty and filling Nigerian main courses",
-    imageUrl: "/images/dishes/Jollof.jpeg"
+    imageUrl: "/images/dishes/jollofmeal.png"
   },
   {
     id: "soups-stews",
@@ -46,7 +46,7 @@ export const featuredDishes: MenuItem[] = [
     name: "Jollof Rice",
     description: "Our signature Jollof rice cooked with rich tomato sauce and aromatic spices",
     price: 12.99,
-    imageUrl: "/images/dishes/Jollof.jpeg",
+    imageUrl: "/images/dishes/jollofmeal.png",
     category: "Main Dishes"
   },
   {
