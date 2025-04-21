@@ -22,8 +22,8 @@ export const categories = [
   },
   {
     id: "swallows",
-    name: "Swallows & Soups",
-    description: "Traditional Nigerian swallows with delicious soups",
+    name: "Swallows",
+    description: "Traditional Nigerian swallows served with various soups",
     imageUrl: "/images/dishes/amala_ewedu.jpeg"
   },
   {
@@ -37,6 +37,12 @@ export const categories = [
     name: "Snacks & Small Chops",
     description: "Delicious Nigerian snacks and appetizers",
     imageUrl: "/images/dishes/tk-meatpie.png"
+  },
+  {
+    id: "services",
+    name: "Other Services",
+    description: "Catering, events, and private chef services",
+    imageUrl: "/images/dishes/catering.jpg"
   }
 ];
 
