@@ -7,6 +7,12 @@ const nextConfig = {
   experimental: {
     optimizeCss: false,
   },
+  webpack: (config) => {
+    config.stats = {
+      errorDetails: true,
+    }
+    return config
+  },
 }
 
 module.exports = nextConfig
