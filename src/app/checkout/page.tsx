@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface DeliveryDetails {
   fullName: string;
@@ -29,9 +29,16 @@ export default function CheckoutPage() {
     postcode: '',
     city: ''
   });
+  
+  // Move the cart check to useEffect to avoid navigation during render
+  useEffect(() => {
+    if (items.length === 0) {
+      router.push('/menu');
+    }
+  }, [items, router]);
 
+  // Return early if cart is empty
   if (items.length === 0) {
-    router.push('/menu');
     return null;
   }
 
@@ -183,4 +190,4 @@ export default function CheckoutPage() {
       </div>
     </>
   );
-} 
+}
