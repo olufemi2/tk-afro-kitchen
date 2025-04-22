@@ -18,7 +18,7 @@ interface DeliveryDetails {
 }
 
 export default function CheckoutPage() {
-  const { items, total, clearCart } = useCart();
+  const { items, totalPrice, clearCart } = useCart();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [deliveryDetails, setDeliveryDetails] = useState<DeliveryDetails>({
@@ -96,7 +96,7 @@ export default function CheckoutPage() {
                 <div className="pt-4 border-t border-gray-200">
                   <div className="flex justify-between font-semibold">
                     <span className="text-black">Total</span>
-                    <span className="text-black">£{total.toFixed(2)}</span>
+                    <span className="text-black">£{totalPrice.toFixed(2)}</span>
                   </div>
                 </div>
               </div>
