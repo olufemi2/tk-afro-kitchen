@@ -7,17 +7,9 @@
   NODE_VERSION = "18.17.0"
   NEXT_USE_NETLIFY_EDGE = "true"
   NEXT_TELEMETRY_DISABLED = "1"
-  NETLIFY_NEXT_PLUGIN_SKIP = "true"
-  AUTO_FIX_ENABLED = "true"
-  # Note: Don't put actual tokens here - these will be set via CLI
-  NETLIFY_AUTH_TOKEN = ""
-  NETLIFY_SITE_ID = ""
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
-[[plugins]]
-  package = "/netlify/plugins/auto-fix"
 
 [[headers]]
   for = "/*"
