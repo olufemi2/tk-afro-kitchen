@@ -11,6 +11,9 @@
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
+[[plugins]]
+  package = "/netlify/plugins/build-fail-handler"
+
 [[headers]]
   for = "/*"
   [headers.values]
