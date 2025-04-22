@@ -7,6 +7,7 @@ import { ShoppingCart } from "lucide-react";
 import { featuredDishes } from "@/data/sample-menu";
 import { useState } from "react";
 import { useCart } from "@/contexts/CartContext";
+import { createCartItem } from "@/lib/cart-utils";
 
 type SizeType = 'small' | 'regular' | 'large' | 'family' | 'party' | 'single' | 'box' | 'pack';
 
@@ -21,7 +22,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   }
 
   const currentSizeOption = product.sizeOptions?.[product.defaultSizeIndex ?? 0];
-  const currentPrice = currentSizeOption?.price ?? product.price ?? product.sizeOptions?.[0]?.price ?? 0;
+  const currentPrice = currentSizeOption?.price ?? product.price ?? 0;
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -84,19 +85,8 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
           <Button 
             onClick={() => {
-              if (currentSizeOption) {
-                addToCart({
-                  id: product.id,
-                  name: product.name,
-                  description: product.description,
-                  imageUrl: product.imageUrl,
-                  category: product.category,
-                  quantity: 1,
-                  price: currentPrice,
-                  portionInfo: currentSizeOption.portionInfo,
-                  size: currentSizeOption.size.toLowerCase() as 'small' | 'regular' | 'large'
-                });
-              }
+              const cartItem = createCartItem(product, 1, currentSizeOption);
+              addToCart(cartItem);
             }}
             className="w-full button-primary py-6 text-lg"
           >

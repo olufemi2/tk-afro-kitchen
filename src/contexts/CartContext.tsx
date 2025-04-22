@@ -52,9 +52,15 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [items]);
 
   const addToCart = (newItem: CartItem) => {
+    // Validate the item has all required properties
+    if (!isValidCartItem(newItem)) {
+      console.error('Invalid cart item:', newItem);
+      return;
+    }
+
     setItems(currentItems => {
       const existingItemIndex = currentItems.findIndex(
-        item => item.id === newItem.id && item.size === newItem.size
+        item => item.id === newItem.id && item.selectedSize.size === newItem.selectedSize.size
       );
 
       if (existingItemIndex > -1) {
@@ -69,6 +75,25 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       return [...currentItems, newItem];
     });
   };
+
+  // Helper function to validate cart items
+  function isValidCartItem(item: any): item is CartItem {
+    return (
+      typeof item === 'object' &&
+      typeof item.id === 'string' &&
+      typeof item.name === 'string' &&
+      typeof item.description === 'string' &&
+      typeof item.imageUrl === 'string' &&
+      typeof item.category === 'string' &&
+      typeof item.price === 'number' &&
+      typeof item.quantity === 'number' &&
+      typeof item.portionInfo === 'string' &&
+      item.selectedSize &&
+      typeof item.selectedSize.size === 'string' &&
+      typeof item.selectedSize.price === 'number' &&
+      typeof item.selectedSize.portionInfo === 'string'
+    );
+  }
 
   const removeFromCart = (itemId: string, size: string) => {
     setItems(currentItems => 

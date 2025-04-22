@@ -11,6 +11,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useRef, useState } from "react";
 import Link from "next/link";
 import { FoodCard } from "@/components/food/food-card";
+import { createCartItem } from "@/lib/cart-utils";
 
 // Transform the data for the menu sections
 const menuSections = categories.map(category => ({
@@ -40,48 +41,9 @@ export default function MenuPage() {
   const handleAddToCart = (item: MenuItem) => {
     const originalItem = featuredDishes.find(dish => dish.id === item.id);
     if (originalItem) {
-      if (originalItem.sizeOptions?.length > 0) {
-        // Item has size options
-        const defaultSize = originalItem.sizeOptions[originalItem.defaultSizeIndex];
-        const normalizedSize = defaultSize.size.toLowerCase();
-        
-        // Only add to cart if the size is one of the allowed values
-        if (normalizedSize === 'small' || normalizedSize === 'regular' || normalizedSize === 'large') {
-          addToCart({
-            id: item.id,
-            name: item.name,
-            description: item.description,
-            imageUrl: item.imageUrl,
-            category: item.category,
-            price: defaultSize.price,
-            quantity: 1,
-            portionInfo: defaultSize.portionInfo,
-            size: normalizedSize as 'small' | 'regular' | 'large',
-            selectedSize: {
-              size: defaultSize.size,
-              price: defaultSize.price,
-              portionInfo: defaultSize.portionInfo
-            }
-          });
-        }
-      } else {
-        // Item has no size options
-        addToCart({
-          id: item.id,
-          name: item.name,
-          description: item.description,
-          imageUrl: item.imageUrl,
-          category: item.category,
-          price: item.price,
-          quantity: 1,
-          portionInfo: "Single portion",
-          selectedSize: {
-            size: "Regular",
-            price: item.price,
-            portionInfo: "Single portion"
-          }
-        });
-      }
+      const defaultSize = originalItem.sizeOptions?.[originalItem.defaultSizeIndex];
+      const cartItem = createCartItem(originalItem, 1, defaultSize);
+      addToCart(cartItem);
     }
   };
   
