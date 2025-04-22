@@ -41,17 +41,22 @@ export default function MenuPage() {
     const originalItem = featuredDishes.find(dish => dish.id === item.id);
     if (originalItem && originalItem.sizeOptions?.length > 0) {
       const defaultSize = originalItem.sizeOptions[originalItem.defaultSizeIndex];
-      addToCart({
-        id: item.id,
-        name: item.name,
-        description: item.description,
-        imageUrl: item.imageUrl,
-        category: item.category,
-        price: defaultSize.price,
-        quantity: 1,
-        portionInfo: defaultSize.portionInfo,
-        size: defaultSize.size.toLowerCase() as 'small' | 'regular' | 'large'
-      });
+      const normalizedSize = defaultSize.size.toLowerCase();
+      
+      // Only add to cart if the size is one of the allowed values
+      if (normalizedSize === 'small' || normalizedSize === 'regular' || normalizedSize === 'large') {
+        addToCart({
+          id: item.id,
+          name: item.name,
+          description: item.description,
+          imageUrl: item.imageUrl,
+          category: item.category,
+          price: defaultSize.price,
+          quantity: 1,
+          portionInfo: defaultSize.portionInfo,
+          size: normalizedSize as 'small' | 'regular' | 'large'
+        });
+      }
     }
   };
   

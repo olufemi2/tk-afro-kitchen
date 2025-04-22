@@ -1,5 +1,5 @@
 export interface SizeOption {
-  size: string;
+  size: 'small' | 'regular' | 'large' | 'family' | 'party' | 'single' | 'box' | 'pack';
   price: number;
   portionInfo: string;
 }

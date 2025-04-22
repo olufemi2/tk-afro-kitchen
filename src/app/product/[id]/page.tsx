@@ -8,7 +8,7 @@ import { featuredDishes } from "@/data/sample-menu";
 import { useState } from "react";
 import { useCart } from "@/contexts/CartContext";
 
-type SizeType = 'small' | 'regular' | 'large';
+type SizeType = 'small' | 'regular' | 'large' | 'family' | 'party' | 'single' | 'box' | 'pack';
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const [selectedSize, setSelectedSize] = useState<SizeType>('regular');
@@ -84,12 +84,19 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
           <Button 
             onClick={() => {
-              addToCart({
-                ...product,
-                quantity: 1,
-                price: currentPrice,
-                size: currentSizeOption?.size
-              });
+              if (currentSizeOption) {
+                addToCart({
+                  id: product.id,
+                  name: product.name,
+                  description: product.description,
+                  imageUrl: product.imageUrl,
+                  category: product.category,
+                  quantity: 1,
+                  price: currentPrice,
+                  portionInfo: currentSizeOption.portionInfo,
+                  size: currentSizeOption.size.toLowerCase() as 'small' | 'regular' | 'large'
+                });
+              }
             }}
             className="w-full button-primary py-6 text-lg"
           >
