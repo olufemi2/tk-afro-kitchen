@@ -3,11 +3,14 @@
 import { Header } from "@/components/layout/header";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { ShoppingCart, Search } from "lucide-react";
 import Image from "next/image";
 import { categories, featuredDishes, MenuItem } from "@/data/sample-menu";
 import { useCart } from "@/contexts/CartContext";
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import Link from "next/link";
+import { FoodCard } from "@/components/food/food-card";
 
 // Transform the data for the menu sections
 const menuSections = categories.map(category => ({
@@ -21,20 +24,28 @@ const menuSections = categories.map(category => ({
       id: dish.id,
       name: dish.name,
       description: dish.description,
-      price: dish.price,
       imageUrl: dish.imageUrl,
-      category: dish.category
+      category: dish.category,
+      price: dish.sizeOptions?.[dish.defaultSizeIndex ?? 0]?.price ?? 0,
+      sizeOptions: dish.sizeOptions,
+      defaultSizeIndex: dish.defaultSizeIndex
     }))
 })).filter(section => section.items.length > 0);
 
 export default function MenuPage() {
   const { addToCart } = useCart();
   const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleAddToCart = (item: MenuItem) => {
     const originalItem = featuredDishes.find(dish => dish.id === item.id);
     if (originalItem) {
-      addToCart(originalItem);
+      // Use the default size option for now
+      const defaultSize = originalItem.sizeOptions[originalItem.defaultSizeIndex];
+      addToCart({
+        ...item,
+        price: defaultSize.price
+      });
     }
   };
   
@@ -47,101 +58,104 @@ export default function MenuPage() {
       });
     }
   };
+
+  // Filter menu sections based on search query
+  const filteredMenuSections = menuSections.map(section => ({
+    ...section,
+    items: section.items.filter(item =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      item.description.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+  })).filter(section => section.items.length > 0);
   
   return (
     <>
       <Header />
-      <div className="min-h-screen pt-24 pb-16">
+      <div className="min-h-screen bg-[var(--background)]">
         {/* Hero Section */}
         <section className="hero-section">
           <div className="hero-pattern" />
-          <div className="hero-content text-center">
+          <div className="hero-content">
             <h1 className="hero-title">Our Menu</h1>
             <p className="hero-description">
               Discover the Rich Flavors of Nigeria
             </p>
+            {/* Search Bar */}
+            <div className="w-full max-w-md mx-auto relative">
+              <Input
+                type="text"
+                placeholder="Search dishes..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="search-input w-full pl-10 pr-4 py-3 rounded-full"
+              />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-slate-400" />
+            </div>
           </div>
         </section>
 
         {/* Category Grid */}
-        <div className="container mx-auto px-4 mb-16">
+        <div className="container-padding">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {categories.map((category) => (
-              <Card 
+              <div 
                 key={category.id} 
-                className="group overflow-hidden cursor-pointer hover:shadow-xl transition-all duration-300 bg-[#1e1e1e] border-orange-900/20"
+                className="card-base group cursor-pointer"
                 onClick={() => scrollToSection(category.id)}
               >
-                <div className="relative aspect-[4/3]">
+                <div className="card-image-container">
                   <Image
                     src={category.imageUrl}
                     alt={category.name}
                     fill
-                    className="object-cover transition-transform group-hover:scale-105"
+                    className="card-image"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent opacity-80 group-hover:opacity-90 transition-opacity" />
+                  <div className="card-image-overlay" />
                   <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-2xl font-bold mb-2 text-orange-400">{category.name}</h3>
+                    <h3 className="text-2xl font-bold mb-2 text-gradient">{category.name}</h3>
                     <p className="text-sm text-slate-300">{category.description}</p>
                   </div>
                 </div>
-              </Card>
+              </div>
             ))}
           </div>
         </div>
 
         {/* Menu Sections */}
-        <div className="container mx-auto px-4">
-          {menuSections.map((section) => (
-            <section 
-              key={section.title} 
-              className="mb-16 pt-6" 
-              id={section.id}
-              ref={(element: HTMLElement | null) => {
-                if (element) {
-                  sectionRefs.current[section.id] = element;
-                }
-              }}
-            >
-              <h2 className="text-3xl font-bold mb-8 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
-                {section.title}
-              </h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {section.items.map((item) => (
-                  <Card key={item.id} className="overflow-hidden group hover:shadow-xl transition-all duration-300 bg-[#1e1e1e] border-orange-900/20">
-                    <div className="relative aspect-[16/9]">
-                      <Image
-                        src={item.imageUrl}
-                        alt={item.name}
-                        fill
-                        className="object-cover transition-transform group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
-                    </div>
-                    <div className="p-6 bg-[#1e1e1e]/90 backdrop-blur-sm">
-                      <div className="flex justify-between items-start mb-2">
-                        <div className="flex-1">
-                          <h3 className="font-semibold text-lg mb-1 text-orange-400">{item.name}</h3>
-                          <p className="text-sm text-slate-300">{item.description}</p>
-                        </div>
-                        <div className="flex flex-col items-end gap-2">
-                          <span className="font-medium text-yellow-400">£{item.price.toFixed(2)}</span>
-                          <Button 
-                            size="sm" 
-                            className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
-                            onClick={() => handleAddToCart(item)}
-                          >
-                            <ShoppingCart className="h-4 w-4 mr-2" />
-                            Add to Cart
-                          </Button>
-                        </div>
-                      </div>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            </section>
-          ))}
+        <div className="container-padding">
+          {searchQuery && filteredMenuSections.length === 0 ? (
+            <div className="text-center py-16">
+              <p className="text-xl text-slate-300">No dishes found matching "{searchQuery}"</p>
+            </div>
+          ) : (
+            filteredMenuSections.map((section) => (
+              <section 
+                key={section.title} 
+                className="section-spacing" 
+                id={section.id}
+                ref={(element) => {
+                  if (element) {
+                    sectionRefs.current[section.id] = element;
+                  }
+                }}
+              >
+                <h2 className="text-gradient mb-8">{section.title}</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {section.items.map((item) => (
+                    <FoodCard
+                      key={item.id}
+                      id={item.id}
+                      name={item.name}
+                      description={item.description}
+                      imageUrl={item.imageUrl}
+                      category={item.category}
+                      price={item.price || 0}
+                    />
+                  ))}
+                </div>
+              </section>
+            ))
+          )}
         </div>
       </div>
     </>

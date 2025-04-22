@@ -40,7 +40,7 @@ export function CartModal() {
                   </div>
                   <div className="flex-1">
                     <h3 className="font-semibold text-orange-400">{item.name}</h3>
-                    <p className="text-sm text-slate-300">{item.description}</p>
+                    <p className="text-sm text-slate-400">{item.selectedSize.size} - {item.selectedSize.portionInfo}</p>
                     <div className="mt-2 flex items-center justify-between">
                       <div className="flex items-center gap-2">
                         <Button
@@ -72,7 +72,7 @@ export function CartModal() {
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="font-medium text-yellow-400">£{(item.price * item.quantity).toFixed(2)}</p>
+                    <p className="font-medium text-yellow-400">£{(item.selectedSize.price * item.quantity).toFixed(2)}</p>
                   </div>
                 </div>
               ))}

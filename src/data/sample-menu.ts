@@ -1,13 +1,33 @@
+export interface SizeOption {
+  size: string;
+  price: number;
+  portionInfo: string;
+}
+
 export interface MenuItem {
   id: string;
   name: string;
   description: string;
-  price: number;
   imageUrl: string;
   category: string;
+  sizeOptions: SizeOption[];
+  defaultSizeIndex: number;
+  price: number;
+  sizes?: {
+    small: { price: number; portionInfo: string };
+    regular: { price: number; portionInfo: string };
+    large: { price: number; portionInfo: string };
+  };
 }
 
-export const categories = [
+export interface Category {
+  id: string;
+  name: string;
+  description: string;
+  imageUrl: string;
+}
+
+export const categories: Category[] = [
   {
     id: "soups",
     name: "Soups",
@@ -42,211 +62,347 @@ export const categories = [
 
 export const featuredDishes: MenuItem[] = [
   {
-    id: "jollof-rice",
-    name: "Jollof Rice",
-    description: "Our signature Jollof rice cooked with rich tomato sauce and aromatic spices",
-    price: 12.99,
-    imageUrl: "/images/dishes/jollofmeal.png",
-    category: "Rice"
+    id: "jolof-rice-special",
+    name: "Special Jollof Rice",
+    description: "Premium jollof rice cooked with the finest ingredients and served with assorted vegetables",
+    imageUrl: "/images/dishes/jolofrice.png",
+    category: "Rice",
+    price: 14.99,
+    sizes: {
+      small: { 
+        price: 12.99,
+        portionInfo: "Perfect for one person"
+      },
+      regular: { 
+        price: 14.99,
+        portionInfo: "Serves 1-2 people"
+      },
+      large: { 
+        price: 17.99,
+        portionInfo: "Great for sharing (2-3 people)"
+      }
+    },
+    sizeOptions: [
+      {
+        size: "Regular",
+        price: 12.99,
+        portionInfo: "Serves 1-2"
+      },
+      {
+        size: "Large",
+        price: 19.99,
+        portionInfo: "Serves 2-3"
+      },
+      {
+        size: "Family",
+        price: 29.99,
+        portionInfo: "Serves 4-5"
+      }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "yam-porridge",
     name: "Yam Porridge (Asaro)",
     description: "Creamy yam porridge cooked with palm oil, peppers, and assorted seasonings",
-    price: 11.99,
     imageUrl: "/images/dishes/Yam porridge_(Asaro).jpg",
-    category: "Others"
+    category: "Others",
+    sizeOptions: [
+      { size: "Regular", price: 13.99, portionInfo: "Single portion" },
+      { size: "Large", price: 21.99, portionInfo: "Serves 2-3" },
+      { size: "Family", price: 31.99, portionInfo: "Serves 4-5" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "beans-dodo",
     name: "Beans & Dodo",
     description: "Nigerian beans served with fried plantain (dodo)",
-    price: 10.99,
     imageUrl: "/images/dishes/beans_dodo.jpeg",
-    category: "Others"
+    category: "Others",
+    sizeOptions: [
+      { size: "Regular", price: 12.99, portionInfo: "Single portion" },
+      { size: "Large", price: 20.99, portionInfo: "Serves 2-3" },
+      { size: "Family", price: 29.99, portionInfo: "Serves 4-5" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "egusi-soup",
     name: "Egusi Soup",
     description: "Rich melon seed soup with assorted meat and vegetables",
-    price: 15.99,
     imageUrl: "/images/dishes/egusi1.png",
-    category: "Soups"
+    category: "Soups",
+    sizeOptions: [
+      { size: "Regular", price: 15.99, portionInfo: "Single portion" },
+      { size: "Large", price: 24.99, portionInfo: "Serves 2-3" },
+      { size: "Family", price: 34.99, portionInfo: "Serves 4-5" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "efo-riro",
     name: "Efo Riro",
     description: "Rich and nutritious Nigerian spinach stew with assorted meat and fish",
-    price: 14.99,
     imageUrl: "/images/dishes/efo-riro.png",
-    category: "Soups"
+    category: "Soups",
+    sizeOptions: [
+      { size: "Regular", price: 14.99, portionInfo: "Single portion" },
+      { size: "Large", price: 23.99, portionInfo: "Serves 2-3" },
+      { size: "Family", price: 33.99, portionInfo: "Serves 4-5" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "ayamase-stew",
     name: "Ayamase Stew",
     description: "Spicy green pepper stew with assorted meats, a true Nigerian delicacy",
-    price: 15.99,
     imageUrl: "/images/dishes/ayamase.png",
-    category: "Soups"
+    category: "Soups",
+    sizeOptions: [
+      { size: "Regular", price: 15.99, portionInfo: "Single portion" },
+      { size: "Large", price: 24.99, portionInfo: "Serves 2-3" },
+      { size: "Family", price: 34.99, portionInfo: "Serves 4-5" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "amala-ewedu",
     name: "Amala & Ewedu",
     description: "Smooth yam flour swallow served with ewedu soup",
-    price: 13.99,
     imageUrl: "/images/dishes/amala_ewedu.jpeg",
-    category: "Swallows"
+    category: "Swallows",
+    sizeOptions: [
+      { size: "Regular", price: 13.99, portionInfo: "Single portion" },
+      { size: "Large", price: 21.99, portionInfo: "Serves 2" },
+      { size: "Family", price: 31.99, portionInfo: "Serves 3-4" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "iyan-eforiro",
     name: "Pounded Yam & Efo Riro",
     description: "Smooth pounded yam served with delicious efo riro soup",
-    price: 14.99,
     imageUrl: "/images/dishes/Iyan-eforirio.jpg",
-    category: "Others"
+    category: "Swallows",
+    sizeOptions: [
+      { size: "Regular", price: 14.99, portionInfo: "Single portion" },
+      { size: "Large", price: 22.99, portionInfo: "Serves 2" },
+      { size: "Family", price: 32.99, portionInfo: "Serves 3-4" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "assorted-fish",
     name: "Assorted Fish",
     description: "Selection of perfectly seasoned and fried fish",
-    price: 16.99,
     imageUrl: "/images/dishes/assorted_fish.jpg",
-    category: "Meats"
+    category: "Meats",
+    sizeOptions: [
+      { size: "Regular", price: 16.99, portionInfo: "2 pieces" },
+      { size: "Large", price: 25.99, portionInfo: "4 pieces" },
+      { size: "Party", price: 39.99, portionInfo: "8 pieces" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "peppered-turkey",
     name: "Peppered Turkey",
     description: "Spicy grilled turkey in our special pepper sauce",
-    price: 15.99,
     imageUrl: "/images/dishes/Turkey.png",
-    category: "Meats"
+    category: "Meats",
+    sizeOptions: [
+      { size: "Regular", price: 15.99, portionInfo: "4 pieces" },
+      { size: "Large", price: 24.99, portionInfo: "8 pieces" },
+      { size: "Party", price: 39.99, portionInfo: "15 pieces" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "peppered-snails",
     name: "Peppered Snails",
     description: "Grilled snails in spicy pepper sauce",
-    price: 18.99,
     imageUrl: "/images/dishes/peppered_snails.jpeg",
-    category: "Meats"
+    category: "Meats",
+    sizeOptions: [
+      { size: "Regular", price: 18.99, portionInfo: "4 pieces" },
+      { size: "Large", price: 29.99, portionInfo: "8 pieces" },
+      { size: "Party", price: 45.99, portionInfo: "12 pieces" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "meat-pie",
     name: "Nigerian Meat Pie",
     description: "Flaky pastry filled with seasoned minced meat and vegetables",
-    price: 3.99,
     imageUrl: "/images/dishes/meat-pie.jpeg",
-    category: "Snacks"
+    category: "Snacks",
+    sizeOptions: [
+      { size: "Single", price: 3.99, portionInfo: "1 piece" },
+      { size: "Box", price: 19.99, portionInfo: "6 pieces" },
+      { size: "Party Pack", price: 35.99, portionInfo: "12 pieces" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "moi-moi",
     name: "Moi Moi",
     description: "Steamed bean pudding made from peeled beans, peppers, and spices",
-    price: 4.99,
     imageUrl: "/images/dishes/moi-moi.png",
-    category: "Snacks"
+    category: "Snacks",
+    sizeOptions: [
+      { size: "Single", price: 4.99, portionInfo: "1 piece" },
+      { size: "Pack", price: 22.99, portionInfo: "5 pieces" },
+      { size: "Party Pack", price: 39.99, portionInfo: "10 pieces" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "tk-special-fish",
     name: "TK Special Fish",
     description: "Premium fish marinated in traditional spices and slow-cooked to perfection",
-    price: 17.99,
     imageUrl: "/images/dishes/tkfish3.png",
-    category: "Meats"
+    category: "Meats",
+    sizeOptions: [
+      { size: "Regular", price: 19.99, portionInfo: "1 whole fish" },
+      { size: "Large", price: 29.99, portionInfo: "2 whole fish" },
+      { size: "Party", price: 49.99, portionInfo: "4 whole fish" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "nigerian-meat-stew",
     name: "Traditional Meat Stew",
     description: "Rich and hearty Nigerian meat stew with tender beef in a flavorful tomato base",
-    price: 14.99,
     imageUrl: "/images/dishes/meat-stew.png",
-    category: "Soups"
+    category: "Soups",
+    sizeOptions: [],
+    defaultSizeIndex: 0
   },
   {
     id: "tk-puff-puff",
     name: "Nigerian Puff Puff",
     description: "Fluffy, deep-fried Nigerian dough balls with a perfectly sweet taste",
-    price: 4.99,
     imageUrl: "/images/dishes/tk-puff-puff.png",
-    category: "Snacks"
+    category: "Snacks",
+    sizeOptions: [
+      { size: "Small", price: 4.99, portionInfo: "6 pieces" },
+      { size: "Medium", price: 8.99, portionInfo: "12 pieces" },
+      { size: "Large", price: 15.99, portionInfo: "24 pieces" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "african-grilled-chicken",
     name: "African Grilled Chicken",
     description: "Tender chicken pieces marinated in a blend of African spices and perfectly grilled",
-    price: 15.99,
     imageUrl: "/images/dishes/chicken.png",
-    category: "Meats"
+    category: "Meats",
+    sizeOptions: [
+      { size: "Regular", price: 16.99, portionInfo: "2 pieces (quarter chicken)" },
+      { size: "Large", price: 25.99, portionInfo: "4 pieces (half chicken)" },
+      { size: "Party", price: 39.99, portionInfo: "8 pieces (whole chicken)" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "nigerian-chin-chin",
     name: "Nigerian Chin Chin",
     description: "Crunchy, sweet fried pastry snack, perfect with tea or as a dessert",
-    price: 3.99,
     imageUrl: "/images/dishes/chin-chin.jpg",
-    category: "Snacks"
-  },
-  {
-    id: "jolof-rice-special",
-    name: "Special Jollof Rice",
-    description: "Premium jollof rice cooked with the finest ingredients and served with assorted vegetables",
-    price: 13.99,
-    imageUrl: "/images/dishes/jolofrice.png",
-    category: "Rice"
+    category: "Snacks",
+    sizeOptions: [],
+    defaultSizeIndex: 0
   },
   {
     id: "assorted-okro",
     name: "Assorted Okro Soup",
     description: "Delicious okro soup cooked with various meats and seafood for a rich flavor",
-    price: 16.99,
     imageUrl: "/images/dishes/assorted-okro.jpeg",
-    category: "Soups"
+    category: "Soups",
+    sizeOptions: [
+      { size: "Regular", price: 15.99, portionInfo: "Single portion" },
+      { size: "Large", price: 24.99, portionInfo: "Serves 2-3" },
+      { size: "Family", price: 34.99, portionInfo: "Serves 4-5" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "puff-puff-meat-pie-combo",
     name: "Puff Puff & Meat Pie Combo",
     description: "The perfect snack combination of sweet puff puff and savory meat pie",
-    price: 7.99,
     imageUrl: "/images/dishes/puff-puff-meat-pie.jpeg",
-    category: "Snacks"
+    category: "Snacks",
+    sizeOptions: [
+      { size: "Regular", price: 8.99, portionInfo: "2 pieces each" },
+      { size: "Large", price: 15.99, portionInfo: "4 pieces each" },
+      { size: "Party", price: 29.99, portionInfo: "8 pieces each" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "seafood-okro",
     name: "Seafood Okro Soup",
     description: "Luxurious okro soup made with premium seafood including prawns, fish and crab",
-    price: 18.99,
     imageUrl: "/images/dishes/seafood-okro.png",
-    category: "Soups"
+    category: "Soups",
+    sizeOptions: [
+      { size: "Regular", price: 17.99, portionInfo: "Single portion" },
+      { size: "Large", price: 26.99, portionInfo: "Serves 2-3" },
+      { size: "Family", price: 36.99, portionInfo: "Serves 4-5" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "classic-jollof",
     name: "Classic Jollof Rice",
     description: "Traditional Nigerian jollof rice cooked to perfection with the classic recipe",
-    price: 11.99,
     imageUrl: "/images/dishes/Jollof.jpeg",
-    category: "Rice"
+    category: "Rice",
+    sizeOptions: [
+      { size: "Regular", price: 11.99, portionInfo: "Single portion" },
+      { size: "Large", price: 18.99, portionInfo: "Serves 2-3" },
+      { size: "Party", price: 28.99, portionInfo: "Serves 4-6" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "assorted-stew",
     name: "Assorted Meat Stew",
     description: "Rich stew featuring an assortment of Nigerian meats in a flavorful tomato base",
-    price: 15.99,
     imageUrl: "/images/dishes/assorted-stew.jpeg",
-    category: "Soups"
+    category: "Soups",
+    sizeOptions: [
+      { size: "Regular", price: 16.99, portionInfo: "Single portion" },
+      { size: "Large", price: 25.99, portionInfo: "Serves 2-3" },
+      { size: "Family", price: 35.99, portionInfo: "Serves 4-5" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "classic-egusi",
     name: "Classic Egusi Soup",
     description: "Traditional Nigerian egusi soup made with ground melon seeds and assorted meat",
-    price: 14.99,
     imageUrl: "/images/dishes/egusi.png",
-    category: "Soups"
+    category: "Soups",
+    sizeOptions: [
+      { size: "Regular", price: 15.99, portionInfo: "Single portion" },
+      { size: "Large", price: 24.99, portionInfo: "Serves 2-3" },
+      { size: "Family", price: 34.99, portionInfo: "Serves 4-5" }
+    ],
+    defaultSizeIndex: 0
   },
   {
     id: "assorted-beef-fish",
     name: "Assorted Beef & Fish",
     description: "Selection of premium beef cuts and fish, perfectly seasoned and prepared",
-    price: 19.99,
     imageUrl: "/images/dishes/Assorted_beef_fish.jpg",
-    category: "Meats"
+    category: "Meats",
+    sizeOptions: [
+      { size: "Regular", price: 18.99, portionInfo: "4 pieces" },
+      { size: "Large", price: 27.99, portionInfo: "8 pieces" },
+      { size: "Party", price: 42.99, portionInfo: "12 pieces" }
+    ],
+    defaultSizeIndex: 0
   }
 ];
