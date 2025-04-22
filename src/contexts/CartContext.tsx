@@ -47,7 +47,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
-    const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const total = items.reduce((sum, item) => {
+      // Use selectedSize.price if available, otherwise fall back to item.price
+      const itemPrice = item.selectedSize?.price ?? item.price;
+      return sum + itemPrice * item.quantity;
+    }, 0);
     setTotalPrice(total);
   }, [items]);
 

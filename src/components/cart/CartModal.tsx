@@ -8,7 +8,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export function CartModal() {
-  const { items, isCartOpen, setIsCartOpen, updateQuantity, removeFromCart, total } = useCart();
+  const { items, isCartOpen, setIsCartOpen, updateQuantity, removeFromCart, totalPrice } = useCart();
   const router = useRouter();
 
   const handleCheckout = () => {
@@ -86,7 +86,7 @@ export function CartModal() {
               <div className="pt-4 space-y-4">
                 <div className="flex justify-between text-lg font-semibold">
                   <span className="text-slate-300">Total</span>
-                  <span className="text-yellow-400">£{total.toFixed(2)}</span>
+                  <span className="text-yellow-400">£{totalPrice.toFixed(2)}</span>
                 </div>
                 <Button 
                   className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
