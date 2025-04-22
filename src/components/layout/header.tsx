@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Menu, Phone, MapPin } from "lucide-react";
+import { ShoppingCart, Menu, Phone, MapPin, Instagram, Facebook, Twitter } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
 
 export function Header() {
@@ -25,10 +25,28 @@ export function Header() {
               <span>London, UK</span>
             </div>
           </div>
-          <nav className="flex items-center space-x-4">
-            <Link href="/about" className="nav-link">About</Link>
-            <Link href="/contact" className="nav-link">Contact</Link>
-          </nav>
+          
+          {/* Add Social Media Icons */}
+          <div className="flex items-center space-x-4">
+            {/* Social Media Links */}
+            <div className="flex items-center space-x-3 mr-6">
+              <Link href="https://instagram.com/tkafro" target="_blank" className="text-slate-300 hover:text-orange-400 transition-colors">
+                <Instagram className="h-4 w-4" />
+              </Link>
+              <Link href="https://facebook.com/tkafro" target="_blank" className="text-slate-300 hover:text-orange-400 transition-colors">
+                <Facebook className="h-4 w-4" />
+              </Link>
+              <Link href="https://twitter.com/tkafro" target="_blank" className="text-slate-300 hover:text-orange-400 transition-colors">
+                <Twitter className="h-4 w-4" />
+              </Link>
+            </div>
+            
+            {/* Navigation Links */}
+            <nav className="flex items-center space-x-4">
+              <Link href="/about" className="nav-link">About</Link>
+              <Link href="/contact" className="nav-link">Contact</Link>
+            </nav>
+          </div>
         </div>
 
         {/* Main Navigation */}

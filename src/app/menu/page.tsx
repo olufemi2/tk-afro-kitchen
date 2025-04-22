@@ -39,12 +39,18 @@ export default function MenuPage() {
 
   const handleAddToCart = (item: MenuItem) => {
     const originalItem = featuredDishes.find(dish => dish.id === item.id);
-    if (originalItem) {
-      // Use the default size option for now
+    if (originalItem && originalItem.sizeOptions?.length > 0) {
       const defaultSize = originalItem.sizeOptions[originalItem.defaultSizeIndex];
       addToCart({
-        ...item,
-        price: defaultSize.price
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        imageUrl: item.imageUrl,
+        category: item.category,
+        price: defaultSize.price,
+        quantity: 1,
+        portionInfo: defaultSize.portionInfo,
+        size: defaultSize.size.toLowerCase() as 'small' | 'regular' | 'large'
       });
     }
   };
