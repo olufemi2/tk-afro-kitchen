@@ -10,4 +10,11 @@
   package = "@netlify/plugin-nextjs"
 
 [[plugins]]
-  path = "./netlify/plugins/build-fail-handler"
+  package = "./netlify/plugins/netlify-plugin-build-monitor"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
