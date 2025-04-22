@@ -1,0 +1,38 @@
+name: Netlify Build Monitor
+
+on:
+  repository_dispatch:
+    types: [netlify-build-failed]
+  workflow_dispatch:  # Allows manual triggering
+
+jobs:
+  handle-build-failure:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Run error handler
+        run: npx ts-node scripts/netlify-error-handler.ts
+      
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          title: 'fix: Auto-fix Netlify build errors'
+          commit-message: 'fix: Apply automatic fixes for Netlify build errors'
+          branch: fix/netlify-build-errors
+          delete-branch: true
+          body: |
+            Automatic fixes applied for Netlify build errors.
+            
+            - Error handler script has been run
+            - Changes have been automatically committed
+            - Please review the changes before merging
