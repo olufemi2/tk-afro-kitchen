@@ -1,23 +1,13 @@
- [build]
+[build]
   command = "npm run build"
   publish = ".next"
 
 [build.environment]
-  NEXT_PUBLIC_BASE_URL = "/"
   NODE_VERSION = "18.17.0"
   NEXT_USE_NETLIFY_EDGE = "true"
-  NEXT_TELEMETRY_DISABLED = "1"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
 
 [[plugins]]
-  package = "./netlify/plugins/build-fail-handler"
-
-[[headers]]
-  for = "/*"
-  [headers.values]
-    X-Frame-Options = "DENY"
-    X-Content-Type-Options = "nosniff"
-    Referrer-Policy = "strict-origin-when-cross-origin"
-    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+  path = "./netlify/plugins/build-fail-handler"

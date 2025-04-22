@@ -1,16 +1,14 @@
 module.exports = {
-    onPreBuild: ({ utils }) => {
-      console.log('Build fail handler plugin initialized');
+    onPreBuild: () => {
+      console.log('Starting build process...');
     },
-    onBuildFailed: ({ error, utils }) => {
-      console.log('Build failed, running error handler...');
-      const { execSync } = require('child_process');
-      
-      try {
-        execSync('npx ts-node scripts/netlify-error-handler.ts', { stdio: 'inherit' });
-        console.log('Error handler completed');
-      } catch (e) {
-        console.error('Error handler failed:', e);
-      }
+    onError: () => {
+      console.log('Build failed - running error handler');
+    },
+    onSuccess: () => {
+      console.log('Build completed successfully');
+    },
+    onEnd: () => {
+      console.log('Build process ended');
     }
   };

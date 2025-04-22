@@ -1,2 +1,2 @@
-name: build-fail-handler
-inputs: []
+name: netlify-build-fail-handler
+version: 1.0.0
