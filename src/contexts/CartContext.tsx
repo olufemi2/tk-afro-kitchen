@@ -12,6 +12,11 @@ interface CartItem {
   quantity: number;
   size?: 'small' | 'regular' | 'large';
   portionInfo: string;
+  selectedSize: {
+    size: string;
+    price: number;
+    portionInfo: string;
+  };
 }
 
 interface CartContextType {
@@ -21,6 +26,8 @@ interface CartContextType {
   updateQuantity: (itemId: string, size: string, quantity: number) => void;
   clearCart: () => void;
   totalPrice: number;
+  isCartOpen: boolean;
+  setIsCartOpen: (isOpen: boolean) => void;
 }
 
 const CartContext = createContext<CartContextType>({
@@ -30,11 +37,14 @@ const CartContext = createContext<CartContextType>({
   updateQuantity: () => {},
   clearCart: () => {},
   totalPrice: 0,
+  isCartOpen: false,
+  setIsCartOpen: () => {},
 });
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   useEffect(() => {
     const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
@@ -89,6 +99,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       updateQuantity,
       clearCart,
       totalPrice,
+      isCartOpen,
+      setIsCartOpen,
     }}>
       {children}
     </CartContext.Provider>
