@@ -10,7 +10,7 @@
   package = "@netlify/plugin-nextjs"
 
 [[plugins]]
-  package = "./netlify/plugins/netlify-plugin-build-monitor"
+  package = "netlify-plugin-build-monitor"
 
 [[headers]]
   for = "/*"
