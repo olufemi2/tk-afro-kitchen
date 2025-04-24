@@ -1,11 +1,11 @@
 module.exports = {
-    onPreBuild: () => {
+    onPreBuild: ({ utils }) => {
       console.log('Starting build process...');
     },
-    onError: () => {
+    onError: ({ utils }) => {
       console.log('Build failed - running error handler');
     },
-    onSuccess: () => {
+    onSuccess: ({ utils }) => {
       console.log('Build completed successfully');
     }
   };
