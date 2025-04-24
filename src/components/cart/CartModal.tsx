@@ -51,7 +51,7 @@ export function CartModal() {
                           variant="outline"
                           size="icon"
                           className="h-8 w-8 border-orange-900/20 bg-[#242424] hover:bg-[#2a2a2a]"
-                          onClick={() => updateQuantity(item.id, item.quantity - 1)}
+                          onClick={() => updateQuantity(item.id, item.selectedSize.size, item.quantity - 1)}
                         >
                           <Minus className="h-4 w-4" />
                         </Button>
@@ -60,7 +60,7 @@ export function CartModal() {
                           variant="outline"
                           size="icon"
                           className="h-8 w-8 border-orange-900/20 bg-[#242424] hover:bg-[#2a2a2a]"
-                          onClick={() => updateQuantity(item.id, item.quantity + 1)}
+                          onClick={() => updateQuantity(item.id, item.selectedSize.size, item.quantity + 1)}
                         >
                           <Plus className="h-4 w-4" />
                         </Button>
@@ -69,7 +69,7 @@ export function CartModal() {
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 text-red-400 hover:text-red-300 hover:bg-red-950/20"
-                        onClick={() => removeFromCart(item.id)}
+                        onClick={() => removeFromCart(item.id, item.selectedSize.size)}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
