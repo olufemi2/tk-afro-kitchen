@@ -7,6 +7,12 @@ import Image from "next/image";
 import { useCart } from "@/contexts/CartContext";
 import Link from "next/link";
 
+interface SizeOption {
+  size: string;
+  price: number;
+  portionInfo: string;
+}
+
 interface FoodCardProps {
   id: string;
   name: string;
@@ -14,6 +20,8 @@ interface FoodCardProps {
   imageUrl: string;
   category: string;
   price: number;
+  sizeOptions: SizeOption[];
+  defaultSizeIndex: number;
 }
 
 export function FoodCard({
@@ -22,12 +30,16 @@ export function FoodCard({
   description,
   imageUrl,
   category,
-  price
+  price,
+  sizeOptions,
+  defaultSizeIndex
 }: FoodCardProps) {
   const { addToCart } = useCart();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigation when clicking the button
+    const defaultSize = sizeOptions[defaultSizeIndex];
+    
     addToCart({
       id,
       name,
@@ -35,7 +47,13 @@ export function FoodCard({
       imageUrl,
       category,
       price,
-      quantity: 1
+      quantity: 1,
+      portionInfo: defaultSize.portionInfo,
+      selectedSize: {
+        size: defaultSize.size,
+        price: defaultSize.price,
+        portionInfo: defaultSize.portionInfo
+      }
     });
   };
 
@@ -61,7 +79,10 @@ export function FoodCard({
             <div className="flex flex-col items-end gap-3">
               <div className="text-right">
                 <div className="text-orange-400 font-medium">
-                  £{(price || 0).toFixed(2)}
+                  £{(sizeOptions[defaultSizeIndex].price || 0).toFixed(2)}
+                </div>
+                <div className="text-xs text-slate-400">
+                  {sizeOptions[defaultSizeIndex].portionInfo}
                 </div>
               </div>
               <Button 
