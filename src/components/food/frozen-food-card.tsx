@@ -39,7 +39,14 @@ export function FrozenFoodCard({
       description,
       price,
       imageUrl,
-      category
+      category,
+      quantity: 1,
+      portionInfo: servings,
+      selectedSize: {
+        size: 'regular',
+        price: price,
+        portionInfo: servings
+      }
     });
   };
 
