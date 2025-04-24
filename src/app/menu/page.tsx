@@ -28,8 +28,14 @@ const menuSections = categories.map(category => ({
       imageUrl: dish.imageUrl,
       category: dish.category,
       price: dish.sizeOptions?.[dish.defaultSizeIndex ?? 0]?.price ?? 0,
-      sizeOptions: dish.sizeOptions,
-      defaultSizeIndex: dish.defaultSizeIndex
+      sizeOptions: dish.sizeOptions || [
+        {
+          size: "Regular",
+          price: dish.price,
+          portionInfo: "Single portion"
+        }
+      ],
+      defaultSizeIndex: dish.defaultSizeIndex || 0
     }))
 })).filter(section => section.items.length > 0);
 
@@ -147,7 +153,9 @@ export default function MenuPage() {
                       description={item.description}
                       imageUrl={item.imageUrl}
                       category={item.category}
-                      price={item.price || 0}
+                      price={item.price}
+                      sizeOptions={item.sizeOptions}
+                      defaultSizeIndex={item.defaultSizeIndex}
                     />
                   ))}
                 </div>
