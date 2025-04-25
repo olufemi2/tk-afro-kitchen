@@ -263,9 +263,21 @@ export const featuredDishes: MenuItem[] = [
     category: "Snacks",
     price: 4.99,
     sizeOptions: [
-      { size: "single", price: 4.99, portionInfo: "1 piece" },
-      { size: "pack", price: 22.99, portionInfo: "5 pieces" },
-      { size: "party", price: 39.99, portionInfo: "10 pieces" }
+      {
+        size: "single",
+        price: 4.99,
+        portionInfo: "1 piece"
+      },
+      {
+        size: "pack",
+        price: 22.99,
+        portionInfo: "5 pieces"
+      },
+      {
+        size: "party",
+        price: 39.99,
+        portionInfo: "10 pieces"
+      }
     ],
     defaultSizeIndex: 0
   },
