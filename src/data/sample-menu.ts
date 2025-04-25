@@ -219,6 +219,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Spicy grilled turkey in our special pepper sauce",
     imageUrl: "/images/dishes/Turkey.png",
     category: "Meats",
+    price: 15.99,
     sizeOptions: [
       { size: "regular", price: 15.99, portionInfo: "4 pieces" },
       { size: "large", price: 24.99, portionInfo: "8 pieces" },
@@ -232,6 +233,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Grilled snails in spicy pepper sauce",
     imageUrl: "/images/dishes/peppered_snails.jpeg",
     category: "Meats",
+    price: 18.99,
     sizeOptions: [
       { size: "regular", price: 18.99, portionInfo: "4 pieces" },
       { size: "large", price: 29.99, portionInfo: "8 pieces" },
@@ -245,6 +247,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Flaky pastry filled with seasoned minced meat and vegetables",
     imageUrl: "/images/dishes/meat-pie.jpeg",
     category: "Snacks",
+    price: 3.99,
     sizeOptions: [
       { size: "single", price: 3.99, portionInfo: "1 piece" },
       { size: "box", price: 19.99, portionInfo: "6 pieces" },
