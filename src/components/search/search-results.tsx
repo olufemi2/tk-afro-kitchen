@@ -45,14 +45,42 @@ export function SearchResults() {
   };
 
   const handleAddToCart = (item: MenuItem | FrozenMenuItem) => {
-    addToCart({
-      id: item.id,
-      name: item.name,
-      description: item.description,
-      price: item.price,
-      imageUrl: item.imageUrl,
-      category: item.category
-    });
+    if ('sizeOptions' in item) {
+      // Handle MenuItem type
+      const defaultSize = item.sizeOptions[item.defaultSizeIndex];
+      addToCart({
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        price: item.price,
+        imageUrl: item.imageUrl,
+        category: item.category,
+        quantity: 1,
+        portionInfo: defaultSize.portionInfo,
+        selectedSize: {
+          size: defaultSize.size,
+          price: defaultSize.price,
+          portionInfo: defaultSize.portionInfo
+        }
+      });
+    } else {
+      // Handle FrozenMenuItem type
+      addToCart({
+        id: item.id,
+        name: item.name,
+        description: item.description,
+        price: item.price,
+        imageUrl: item.imageUrl,
+        category: item.category,
+        quantity: 1,
+        portionInfo: item.servings,
+        selectedSize: {
+          size: 'regular',
+          price: item.price,
+          portionInfo: item.servings
+        }
+      });
+    }
   };
 
   const totalResults = menuResults.length + frozenResults.length;
