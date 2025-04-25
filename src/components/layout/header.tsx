@@ -3,12 +3,18 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Menu, Phone, MapPin, Instagram, Facebook, Twitter } from "lucide-react";
+import { ShoppingCart, Menu, Phone, MapPin, Instagram, Facebook, Twitter, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { useState } from "react";
 
 export function Header() {
   const { items } = useCart();
   const cartItemCount = items.length;
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full backdrop-blur-sm bg-[#1e1e1e]/95 border-b border-orange-900/20">
@@ -84,14 +90,66 @@ export function Header() {
                 </span>
               )}
             </Button>
-            <Button className="md:hidden" variant="ghost" size="icon">
-              <Menu className="h-5 w-5" />
+            <Button 
+              className="md:hidden" 
+              variant="ghost" 
+              size="icon"
+              onClick={toggleMobileMenu}
+            >
+              {isMobileMenuOpen ? (
+                <X className="h-5 w-5" />
+              ) : (
+                <Menu className="h-5 w-5" />
+              )}
             </Button>
             <Button className="hidden md:flex button-primary">
               Order Now
             </Button>
           </div>
         </div>
+
+        {/* Mobile Menu */}
+        {isMobileMenuOpen && (
+          <div className="md:hidden bg-[#1e1e1e] border-t border-orange-900/20">
+            <nav className="flex flex-col py-4">
+              <Link 
+                href="/menu" 
+                className="px-4 py-2 text-slate-300 hover:bg-orange-500/10 hover:text-orange-400"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Menu
+              </Link>
+              <Link 
+                href="/frozen" 
+                className="px-4 py-2 text-slate-300 hover:bg-orange-500/10 hover:text-orange-400"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Frozen
+              </Link>
+              <Link 
+                href="/catering" 
+                className="px-4 py-2 text-slate-300 hover:bg-orange-500/10 hover:text-orange-400"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Catering
+              </Link>
+              <Link 
+                href="/about" 
+                className="px-4 py-2 text-slate-300 hover:bg-orange-500/10 hover:text-orange-400"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                About
+              </Link>
+              <Link 
+                href="/contact" 
+                className="px-4 py-2 text-slate-300 hover:bg-orange-500/10 hover:text-orange-400"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                Contact
+              </Link>
+            </nav>
+          </div>
+        )}
       </div>
     </header>
   );

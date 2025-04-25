@@ -1,3 +1,7 @@
+import React, { useState } from 'react';
+
+const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
 export interface SizeOption {
   size: 'small' | 'regular' | 'large' | 'family' | 'party' | 'single' | 'box' | 'pack';
   price: number;
