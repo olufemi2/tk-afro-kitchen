@@ -261,6 +261,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Steamed bean pudding made from peeled beans, peppers, and spices",
     imageUrl: "/images/dishes/moi-moi.png",
     category: "Snacks",
+    price: 4.99,
     sizeOptions: [
       { size: "single", price: 4.99, portionInfo: "1 piece" },
       { size: "pack", price: 22.99, portionInfo: "5 pieces" },
@@ -274,6 +275,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Premium fish marinated in traditional spices and slow-cooked to perfection",
     imageUrl: "/images/dishes/tkfish3.png",
     category: "Meats",
+    price: 19.99,
     sizeOptions: [
       { size: "regular", price: 19.99, portionInfo: "1 whole fish" },
       { size: "large", price: 29.99, portionInfo: "2 whole fish" },
@@ -287,6 +289,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Rich and hearty Nigerian meat stew with tender beef in a flavorful tomato base",
     imageUrl: "/images/dishes/meat-stew.png",
     category: "Soups",
+    price: 15.99,
     sizeOptions: [],
     defaultSizeIndex: 0
   },
@@ -296,9 +299,10 @@ export const featuredDishes: MenuItem[] = [
     description: "Fluffy, deep-fried Nigerian dough balls with a perfectly sweet taste",
     imageUrl: "/images/dishes/tk-puff-puff.png",
     category: "Snacks",
+    price: 4.99,
     sizeOptions: [
       { size: "small", price: 4.99, portionInfo: "6 pieces" },
-      { size: "medium", price: 8.99, portionInfo: "12 pieces" },
+      { size: "regular", price: 8.99, portionInfo: "12 pieces" },
       { size: "large", price: 15.99, portionInfo: "24 pieces" }
     ],
     defaultSizeIndex: 0
@@ -309,6 +313,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Tender chicken pieces marinated in a blend of African spices and perfectly grilled",
     imageUrl: "/images/dishes/chicken.png",
     category: "Meats",
+    price: 16.99,
     sizeOptions: [
       { size: "regular", price: 16.99, portionInfo: "2 pieces (quarter chicken)" },
       { size: "large", price: 25.99, portionInfo: "4 pieces (half chicken)" },
@@ -322,6 +327,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Crunchy, sweet fried pastry snack, perfect with tea or as a dessert",
     imageUrl: "/images/dishes/chin-chin.jpg",
     category: "Snacks",
+    price: 5.99,
     sizeOptions: [],
     defaultSizeIndex: 0
   },
@@ -331,6 +337,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Delicious okro soup cooked with various meats and seafood for a rich flavor",
     imageUrl: "/images/dishes/assorted-okro.jpeg",
     category: "Soups",
+    price: 15.99,
     sizeOptions: [
       { size: "regular", price: 15.99, portionInfo: "Single portion" },
       { size: "large", price: 24.99, portionInfo: "Serves 2-3" },
@@ -344,6 +351,7 @@ export const featuredDishes: MenuItem[] = [
     description: "The perfect snack combination of sweet puff puff and savory meat pie",
     imageUrl: "/images/dishes/puff-puff-meat-pie.jpeg",
     category: "Snacks",
+    price: 8.99,
     sizeOptions: [
       { size: "regular", price: 8.99, portionInfo: "2 pieces each" },
       { size: "large", price: 15.99, portionInfo: "4 pieces each" },
@@ -357,6 +365,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Luxurious okro soup made with premium seafood including prawns, fish and crab",
     imageUrl: "/images/dishes/seafood-okro.png",
     category: "Soups",
+    price: 17.99,
     sizeOptions: [
       { size: "regular", price: 17.99, portionInfo: "Single portion" },
       { size: "large", price: 26.99, portionInfo: "Serves 2-3" },
@@ -370,6 +379,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Traditional Nigerian jollof rice cooked to perfection with the classic recipe",
     imageUrl: "/images/dishes/Jollof.jpeg",
     category: "Rice",
+    price: 11.99,
     sizeOptions: [
       { size: "regular", price: 11.99, portionInfo: "Single portion" },
       { size: "large", price: 18.99, portionInfo: "Serves 2-3" },
@@ -383,6 +393,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Rich stew featuring an assortment of Nigerian meats in a flavorful tomato base",
     imageUrl: "/images/dishes/assorted-stew.jpeg",
     category: "Soups",
+    price: 16.99,
     sizeOptions: [
       { size: "regular", price: 16.99, portionInfo: "Single portion" },
       { size: "large", price: 25.99, portionInfo: "Serves 2-3" },
@@ -396,6 +407,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Traditional Nigerian egusi soup made with ground melon seeds and assorted meat",
     imageUrl: "/images/dishes/egusi.png",
     category: "Soups",
+    price: 15.99,
     sizeOptions: [
       { size: "regular", price: 15.99, portionInfo: "Single portion" },
       { size: "large", price: 24.99, portionInfo: "Serves 2-3" },
@@ -409,6 +421,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Selection of premium beef cuts and fish, perfectly seasoned and prepared",
     imageUrl: "/images/dishes/Assorted_beef_fish.jpg",
     category: "Meats",
+    price: 18.99,
     sizeOptions: [
       { size: "regular", price: 18.99, portionInfo: "4 pieces" },
       { size: "large", price: 27.99, portionInfo: "8 pieces" },
