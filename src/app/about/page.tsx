@@ -4,6 +4,7 @@ import { Header } from "@/components/layout/header";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Award, Truck, Clock, Star, Shield } from "lucide-react";
+import Link from "next/link";
 
 const features = [
   {
@@ -151,7 +152,7 @@ export default function AboutPage() {
               asChild
               className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
             >
-              <a href="/menu">View Menu</a>
+              <Link href="/menu">View Menu</Link>
             </Button>
           </div>
         </section>

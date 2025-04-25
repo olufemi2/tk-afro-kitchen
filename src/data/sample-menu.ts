@@ -84,17 +84,17 @@ export const featuredDishes: MenuItem[] = [
     },
     sizeOptions: [
       {
-        size: "Regular",
+        size: "regular",
         price: 12.99,
         portionInfo: "Serves 1-2"
       },
       {
-        size: "Large",
+        size: "large",
         price: 19.99,
         portionInfo: "Serves 2-3"
       },
       {
-        size: "Family",
+        size: "family",
         price: 29.99,
         portionInfo: "Serves 4-5"
       }
@@ -108,9 +108,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/Yam porridge_(Asaro).jpg",
     category: "Others",
     sizeOptions: [
-      { size: "Regular", price: 13.99, portionInfo: "Single portion" },
-      { size: "Large", price: 21.99, portionInfo: "Serves 2-3" },
-      { size: "Family", price: 31.99, portionInfo: "Serves 4-5" }
+      { size: "regular", price: 13.99, portionInfo: "Single portion" },
+      { size: "large", price: 21.99, portionInfo: "Serves 2-3" },
+      { size: "family", price: 31.99, portionInfo: "Serves 4-5" }
     ],
     defaultSizeIndex: 0
   },
@@ -121,9 +121,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/beans_dodo.jpeg",
     category: "Others",
     sizeOptions: [
-      { size: "Regular", price: 12.99, portionInfo: "Single portion" },
-      { size: "Large", price: 20.99, portionInfo: "Serves 2-3" },
-      { size: "Family", price: 29.99, portionInfo: "Serves 4-5" }
+      { size: "regular", price: 12.99, portionInfo: "Single portion" },
+      { size: "large", price: 20.99, portionInfo: "Serves 2-3" },
+      { size: "family", price: 29.99, portionInfo: "Serves 4-5" }
     ],
     defaultSizeIndex: 0
   },
@@ -134,9 +134,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/egusi1.png",
     category: "Soups",
     sizeOptions: [
-      { size: "Regular", price: 15.99, portionInfo: "Single portion" },
-      { size: "Large", price: 24.99, portionInfo: "Serves 2-3" },
-      { size: "Family", price: 34.99, portionInfo: "Serves 4-5" }
+      { size: "regular", price: 15.99, portionInfo: "Single portion" },
+      { size: "large", price: 24.99, portionInfo: "Serves 2-3" },
+      { size: "family", price: 34.99, portionInfo: "Serves 4-5" }
     ],
     defaultSizeIndex: 0
   },
@@ -147,9 +147,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/efo-riro.png",
     category: "Soups",
     sizeOptions: [
-      { size: "Regular", price: 14.99, portionInfo: "Single portion" },
-      { size: "Large", price: 23.99, portionInfo: "Serves 2-3" },
-      { size: "Family", price: 33.99, portionInfo: "Serves 4-5" }
+      { size: "regular", price: 14.99, portionInfo: "Single portion" },
+      { size: "large", price: 23.99, portionInfo: "Serves 2-3" },
+      { size: "family", price: 33.99, portionInfo: "Serves 4-5" }
     ],
     defaultSizeIndex: 0
   },
@@ -160,9 +160,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/ayamase.png",
     category: "Soups",
     sizeOptions: [
-      { size: "Regular", price: 15.99, portionInfo: "Single portion" },
-      { size: "Large", price: 24.99, portionInfo: "Serves 2-3" },
-      { size: "Family", price: 34.99, portionInfo: "Serves 4-5" }
+      { size: "regular", price: 15.99, portionInfo: "Single portion" },
+      { size: "large", price: 24.99, portionInfo: "Serves 2-3" },
+      { size: "family", price: 34.99, portionInfo: "Serves 4-5" }
     ],
     defaultSizeIndex: 0
   },
@@ -173,9 +173,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/amala_ewedu.jpeg",
     category: "Swallows",
     sizeOptions: [
-      { size: "Regular", price: 13.99, portionInfo: "Single portion" },
-      { size: "Large", price: 21.99, portionInfo: "Serves 2" },
-      { size: "Family", price: 31.99, portionInfo: "Serves 3-4" }
+      { size: "regular", price: 13.99, portionInfo: "Single portion" },
+      { size: "large", price: 21.99, portionInfo: "Serves 2" },
+      { size: "family", price: 31.99, portionInfo: "Serves 3-4" }
     ],
     defaultSizeIndex: 0
   },
@@ -186,9 +186,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/Iyan-eforirio.jpg",
     category: "Swallows",
     sizeOptions: [
-      { size: "Regular", price: 14.99, portionInfo: "Single portion" },
-      { size: "Large", price: 22.99, portionInfo: "Serves 2" },
-      { size: "Family", price: 32.99, portionInfo: "Serves 3-4" }
+      { size: "regular", price: 14.99, portionInfo: "Single portion" },
+      { size: "large", price: 22.99, portionInfo: "Serves 2" },
+      { size: "family", price: 32.99, portionInfo: "Serves 3-4" }
     ],
     defaultSizeIndex: 0
   },
@@ -199,9 +199,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/assorted_fish.jpg",
     category: "Meats",
     sizeOptions: [
-      { size: "Regular", price: 16.99, portionInfo: "2 pieces" },
-      { size: "Large", price: 25.99, portionInfo: "4 pieces" },
-      { size: "Party", price: 39.99, portionInfo: "8 pieces" }
+      { size: "regular", price: 16.99, portionInfo: "2 pieces" },
+      { size: "large", price: 25.99, portionInfo: "4 pieces" },
+      { size: "party", price: 39.99, portionInfo: "8 pieces" }
     ],
     defaultSizeIndex: 0
   },
@@ -212,9 +212,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/Turkey.png",
     category: "Meats",
     sizeOptions: [
-      { size: "Regular", price: 15.99, portionInfo: "4 pieces" },
-      { size: "Large", price: 24.99, portionInfo: "8 pieces" },
-      { size: "Party", price: 39.99, portionInfo: "15 pieces" }
+      { size: "regular", price: 15.99, portionInfo: "4 pieces" },
+      { size: "large", price: 24.99, portionInfo: "8 pieces" },
+      { size: "party", price: 39.99, portionInfo: "15 pieces" }
     ],
     defaultSizeIndex: 0
   },
@@ -225,9 +225,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/peppered_snails.jpeg",
     category: "Meats",
     sizeOptions: [
-      { size: "Regular", price: 18.99, portionInfo: "4 pieces" },
-      { size: "Large", price: 29.99, portionInfo: "8 pieces" },
-      { size: "Party", price: 45.99, portionInfo: "12 pieces" }
+      { size: "regular", price: 18.99, portionInfo: "4 pieces" },
+      { size: "large", price: 29.99, portionInfo: "8 pieces" },
+      { size: "party", price: 45.99, portionInfo: "12 pieces" }
     ],
     defaultSizeIndex: 0
   },
@@ -238,9 +238,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/meat-pie.jpeg",
     category: "Snacks",
     sizeOptions: [
-      { size: "Single", price: 3.99, portionInfo: "1 piece" },
-      { size: "Box", price: 19.99, portionInfo: "6 pieces" },
-      { size: "Party Pack", price: 35.99, portionInfo: "12 pieces" }
+      { size: "single", price: 3.99, portionInfo: "1 piece" },
+      { size: "box", price: 19.99, portionInfo: "6 pieces" },
+      { size: "pack", price: 35.99, portionInfo: "12 pieces" }
     ],
     defaultSizeIndex: 0
   },
@@ -251,9 +251,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/moi-moi.png",
     category: "Snacks",
     sizeOptions: [
-      { size: "Single", price: 4.99, portionInfo: "1 piece" },
-      { size: "Pack", price: 22.99, portionInfo: "5 pieces" },
-      { size: "Party Pack", price: 39.99, portionInfo: "10 pieces" }
+      { size: "single", price: 4.99, portionInfo: "1 piece" },
+      { size: "pack", price: 22.99, portionInfo: "5 pieces" },
+      { size: "party pack", price: 39.99, portionInfo: "10 pieces" }
     ],
     defaultSizeIndex: 0
   },
@@ -264,9 +264,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/tkfish3.png",
     category: "Meats",
     sizeOptions: [
-      { size: "Regular", price: 19.99, portionInfo: "1 whole fish" },
-      { size: "Large", price: 29.99, portionInfo: "2 whole fish" },
-      { size: "Party", price: 49.99, portionInfo: "4 whole fish" }
+      { size: "regular", price: 19.99, portionInfo: "1 whole fish" },
+      { size: "large", price: 29.99, portionInfo: "2 whole fish" },
+      { size: "party", price: 49.99, portionInfo: "4 whole fish" }
     ],
     defaultSizeIndex: 0
   },
@@ -286,9 +286,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/tk-puff-puff.png",
     category: "Snacks",
     sizeOptions: [
-      { size: "Small", price: 4.99, portionInfo: "6 pieces" },
-      { size: "Medium", price: 8.99, portionInfo: "12 pieces" },
-      { size: "Large", price: 15.99, portionInfo: "24 pieces" }
+      { size: "small", price: 4.99, portionInfo: "6 pieces" },
+      { size: "medium", price: 8.99, portionInfo: "12 pieces" },
+      { size: "large", price: 15.99, portionInfo: "24 pieces" }
     ],
     defaultSizeIndex: 0
   },
@@ -299,9 +299,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/chicken.png",
     category: "Meats",
     sizeOptions: [
-      { size: "Regular", price: 16.99, portionInfo: "2 pieces (quarter chicken)" },
-      { size: "Large", price: 25.99, portionInfo: "4 pieces (half chicken)" },
-      { size: "Party", price: 39.99, portionInfo: "8 pieces (whole chicken)" }
+      { size: "regular", price: 16.99, portionInfo: "2 pieces (quarter chicken)" },
+      { size: "large", price: 25.99, portionInfo: "4 pieces (half chicken)" },
+      { size: "party", price: 39.99, portionInfo: "8 pieces (whole chicken)" }
     ],
     defaultSizeIndex: 0
   },
@@ -321,9 +321,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/assorted-okro.jpeg",
     category: "Soups",
     sizeOptions: [
-      { size: "Regular", price: 15.99, portionInfo: "Single portion" },
-      { size: "Large", price: 24.99, portionInfo: "Serves 2-3" },
-      { size: "Family", price: 34.99, portionInfo: "Serves 4-5" }
+      { size: "regular", price: 15.99, portionInfo: "Single portion" },
+      { size: "large", price: 24.99, portionInfo: "Serves 2-3" },
+      { size: "family", price: 34.99, portionInfo: "Serves 4-5" }
     ],
     defaultSizeIndex: 0
   },
@@ -334,9 +334,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/puff-puff-meat-pie.jpeg",
     category: "Snacks",
     sizeOptions: [
-      { size: "Regular", price: 8.99, portionInfo: "2 pieces each" },
-      { size: "Large", price: 15.99, portionInfo: "4 pieces each" },
-      { size: "Party", price: 29.99, portionInfo: "8 pieces each" }
+      { size: "regular", price: 8.99, portionInfo: "2 pieces each" },
+      { size: "large", price: 15.99, portionInfo: "4 pieces each" },
+      { size: "party", price: 29.99, portionInfo: "8 pieces each" }
     ],
     defaultSizeIndex: 0
   },
@@ -347,9 +347,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/seafood-okro.png",
     category: "Soups",
     sizeOptions: [
-      { size: "Regular", price: 17.99, portionInfo: "Single portion" },
-      { size: "Large", price: 26.99, portionInfo: "Serves 2-3" },
-      { size: "Family", price: 36.99, portionInfo: "Serves 4-5" }
+      { size: "regular", price: 17.99, portionInfo: "Single portion" },
+      { size: "large", price: 26.99, portionInfo: "Serves 2-3" },
+      { size: "family", price: 36.99, portionInfo: "Serves 4-5" }
     ],
     defaultSizeIndex: 0
   },
@@ -360,9 +360,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/Jollof.jpeg",
     category: "Rice",
     sizeOptions: [
-      { size: "Regular", price: 11.99, portionInfo: "Single portion" },
-      { size: "Large", price: 18.99, portionInfo: "Serves 2-3" },
-      { size: "Party", price: 28.99, portionInfo: "Serves 4-6" }
+      { size: "regular", price: 11.99, portionInfo: "Single portion" },
+      { size: "large", price: 18.99, portionInfo: "Serves 2-3" },
+      { size: "party", price: 28.99, portionInfo: "Serves 4-6" }
     ],
     defaultSizeIndex: 0
   },
@@ -373,9 +373,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/assorted-stew.jpeg",
     category: "Soups",
     sizeOptions: [
-      { size: "Regular", price: 16.99, portionInfo: "Single portion" },
-      { size: "Large", price: 25.99, portionInfo: "Serves 2-3" },
-      { size: "Family", price: 35.99, portionInfo: "Serves 4-5" }
+      { size: "regular", price: 16.99, portionInfo: "Single portion" },
+      { size: "large", price: 25.99, portionInfo: "Serves 2-3" },
+      { size: "family", price: 35.99, portionInfo: "Serves 4-5" }
     ],
     defaultSizeIndex: 0
   },
@@ -386,9 +386,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/egusi.png",
     category: "Soups",
     sizeOptions: [
-      { size: "Regular", price: 15.99, portionInfo: "Single portion" },
-      { size: "Large", price: 24.99, portionInfo: "Serves 2-3" },
-      { size: "Family", price: 34.99, portionInfo: "Serves 4-5" }
+      { size: "regular", price: 15.99, portionInfo: "Single portion" },
+      { size: "large", price: 24.99, portionInfo: "Serves 2-3" },
+      { size: "family", price: 34.99, portionInfo: "Serves 4-5" }
     ],
     defaultSizeIndex: 0
   },
@@ -399,9 +399,9 @@ export const featuredDishes: MenuItem[] = [
     imageUrl: "/images/dishes/Assorted_beef_fish.jpg",
     category: "Meats",
     sizeOptions: [
-      { size: "Regular", price: 18.99, portionInfo: "4 pieces" },
-      { size: "Large", price: 27.99, portionInfo: "8 pieces" },
-      { size: "Party", price: 42.99, portionInfo: "12 pieces" }
+      { size: "regular", price: 18.99, portionInfo: "4 pieces" },
+      { size: "large", price: 27.99, portionInfo: "8 pieces" },
+      { size: "party", price: 42.99, portionInfo: "12 pieces" }
     ],
     defaultSizeIndex: 0
   }

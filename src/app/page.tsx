@@ -3,6 +3,7 @@ import { CategoryCard } from "@/components/food/category-card";
 import { FoodCard } from "@/components/food/food-card";
 import { categories, featuredDishes } from "@/data/sample-menu";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -28,7 +29,7 @@ export default function Home() {
                 size="lg" 
                 className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
               >
-                <a href="/menu">View Menu</a>
+                <Link href="/menu">Browse Our Menu</Link>
               </Button>
               <Button 
                 asChild 
@@ -36,7 +37,7 @@ export default function Home() {
                 variant="outline" 
                 className="border-orange-900/20 bg-[#242424] hover:bg-[#2a2a2a] text-slate-200"
               >
-                <a href="/about">Learn More</a>
+                <Link href="/about">About Us</Link>
               </Button>
             </div>
           </div>
@@ -74,7 +75,7 @@ export default function Home() {
                 size="lg" 
                 className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
               >
-                <a href="/menu">View Full Menu</a>
+                <Link href="/menu">Browse Full Menu</Link>
               </Button>
             </div>
           </div>

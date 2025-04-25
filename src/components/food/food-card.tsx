@@ -38,7 +38,7 @@ export function FoodCard({
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigation when clicking the button
-    const defaultSize = sizeOptions[defaultSizeIndex];
+    const defaultSize = sizeOptions?.length > 0 ? sizeOptions[defaultSizeIndex] : null;
     
     addToCart({
       id,
@@ -48,11 +48,11 @@ export function FoodCard({
       category,
       price,
       quantity: 1,
-      portionInfo: defaultSize.portionInfo,
+      portionInfo: defaultSize?.portionInfo || 'Standard portion',
       selectedSize: {
-        size: defaultSize.size,
-        price: defaultSize.price,
-        portionInfo: defaultSize.portionInfo
+        size: defaultSize?.size || 'regular',
+        price: defaultSize?.price || price,
+        portionInfo: defaultSize?.portionInfo || 'Standard portion'
       }
     });
   };
@@ -79,10 +79,10 @@ export function FoodCard({
             <div className="flex flex-col items-end gap-3">
               <div className="text-right">
                 <div className="text-orange-400 font-medium">
-                  £{(sizeOptions[defaultSizeIndex].price || 0).toFixed(2)}
+                  £{((sizeOptions?.length > 0 ? sizeOptions[defaultSizeIndex]?.price : price) || 0).toFixed(2)}
                 </div>
                 <div className="text-xs text-slate-400">
-                  {sizeOptions[defaultSizeIndex].portionInfo}
+                  {(sizeOptions?.length > 0 ? sizeOptions[defaultSizeIndex]?.portionInfo : 'Standard portion')}
                 </div>
               </div>
               <Button 
