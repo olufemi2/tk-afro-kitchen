@@ -107,6 +107,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Creamy yam porridge cooked with palm oil, peppers, and assorted seasonings",
     imageUrl: "/images/dishes/Yam porridge_(Asaro).jpg",
     category: "Others",
+    price: 13.99,
     sizeOptions: [
       { size: "regular", price: 13.99, portionInfo: "Single portion" },
       { size: "large", price: 21.99, portionInfo: "Serves 2-3" },
@@ -120,6 +121,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Nigerian beans served with fried plantain (dodo)",
     imageUrl: "/images/dishes/beans_dodo.jpeg",
     category: "Others",
+    price: 12.99,
     sizeOptions: [
       { size: "regular", price: 12.99, portionInfo: "Single portion" },
       { size: "large", price: 20.99, portionInfo: "Serves 2-3" },
@@ -133,6 +135,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Rich melon seed soup with assorted meat and vegetables",
     imageUrl: "/images/dishes/egusi1.png",
     category: "Soups",
+    price: 15.99,
     sizeOptions: [
       { size: "regular", price: 15.99, portionInfo: "Single portion" },
       { size: "large", price: 24.99, portionInfo: "Serves 2-3" },
@@ -146,6 +149,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Rich and nutritious Nigerian spinach stew with assorted meat and fish",
     imageUrl: "/images/dishes/efo-riro.png",
     category: "Soups",
+    price: 14.99,
     sizeOptions: [
       { size: "regular", price: 14.99, portionInfo: "Single portion" },
       { size: "large", price: 23.99, portionInfo: "Serves 2-3" },
@@ -159,6 +163,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Spicy green pepper stew with assorted meats, a true Nigerian delicacy",
     imageUrl: "/images/dishes/ayamase.png",
     category: "Soups",
+    price: 15.99,
     sizeOptions: [
       { size: "regular", price: 15.99, portionInfo: "Single portion" },
       { size: "large", price: 24.99, portionInfo: "Serves 2-3" },
@@ -172,6 +177,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Smooth yam flour swallow served with ewedu soup",
     imageUrl: "/images/dishes/amala_ewedu.jpeg",
     category: "Swallows",
+    price: 13.99,
     sizeOptions: [
       { size: "regular", price: 13.99, portionInfo: "Single portion" },
       { size: "large", price: 21.99, portionInfo: "Serves 2" },
@@ -185,6 +191,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Smooth pounded yam served with delicious efo riro soup",
     imageUrl: "/images/dishes/Iyan-eforirio.jpg",
     category: "Swallows",
+    price: 14.99,
     sizeOptions: [
       { size: "regular", price: 14.99, portionInfo: "Single portion" },
       { size: "large", price: 22.99, portionInfo: "Serves 2" },
@@ -198,6 +205,7 @@ export const featuredDishes: MenuItem[] = [
     description: "Selection of perfectly seasoned and fried fish",
     imageUrl: "/images/dishes/assorted_fish.jpg",
     category: "Meats",
+    price: 16.99,
     sizeOptions: [
       { size: "regular", price: 16.99, portionInfo: "2 pieces" },
       { size: "large", price: 25.99, portionInfo: "4 pieces" },
