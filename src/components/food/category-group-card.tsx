@@ -66,7 +66,6 @@ export function CategoryGroupCard({
               <FoodCard
                 key={item.id}
                 {...item}
-                price={item.sizeOptions[item.defaultSizeIndex].price}
               />
             ))}
           </div>
