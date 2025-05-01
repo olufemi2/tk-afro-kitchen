@@ -1,9 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['images.unsplash.com'], // Add any other image domains you're using
+    domains: ['images.unsplash.com'],
+    unoptimized: true, // This helps with Netlify deployment
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
+    ],
   },
-  output: 'standalone',
+  output: 'export', // Change from 'standalone' to 'export' for static deployment
   // Remove experimental features that might cause issues
   experimental: {
     optimizeCss: false,
