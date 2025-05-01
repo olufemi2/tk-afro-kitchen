@@ -16,6 +16,9 @@ const nextConfig = {
     optimizeCss: false,
   },
   webpack: (config) => {
+    // Add next-auth to externals to prevent build issues
+    config.externals = [...(config.externals || []), 'next-auth'];
+    
     config.stats = {
       errorDetails: true,
     }
