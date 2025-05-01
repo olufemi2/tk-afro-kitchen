@@ -2,13 +2,23 @@
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Minus, Plus, Trash2 } from "lucide-react";
+import { Minus, Plus, Trash2, ChefHat } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
+import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 export function CartModal() {
-  const { items, isCartOpen, setIsCartOpen, updateQuantity, removeFromCart, totalPrice } = useCart();
+  const { 
+    items, 
+    isCartOpen, 
+    setIsCartOpen, 
+    updateQuantity, 
+    removeFromCart, 
+    totalPrice,
+    specialInstructions,
+    setSpecialInstructions
+  } = useCart();
   const router = useRouter();
 
   const handleCheckout = () => {
@@ -23,7 +33,7 @@ export function CartModal() {
           <SheetTitle className="text-orange-400">Your Cart</SheetTitle>
         </SheetHeader>
         
-        <div className="mt-8 space-y-4">
+        <div className="mt-8 space-y-4 overflow-y-auto max-h-[calc(100vh-200px)]">
           {items.length === 0 ? (
             <p className="text-center text-slate-400">Your cart is empty</p>
           ) : (
@@ -88,6 +98,23 @@ export function CartModal() {
                   <span className="text-slate-300">Total</span>
                   <span className="text-yellow-400">£{totalPrice.toFixed(2)}</span>
                 </div>
+
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 text-slate-300">
+                    <ChefHat className="h-4 w-4 text-orange-400" />
+                    <span className="text-sm font-medium">Special Instructions</span>
+                  </div>
+                  <Textarea
+                    placeholder="Optional: Add any special requests for your order (e.g., 'Extra spicy please', 'No onions', 'Allergies: nuts')"
+                    className="min-h-[100px] bg-[#242424] border-orange-900/20 text-slate-300 placeholder:text-slate-500 resize-none"
+                    value={specialInstructions}
+                    onChange={(e) => setSpecialInstructions(e.target.value)}
+                  />
+                  <p className="text-xs text-slate-400">
+                    * Our chef will do their best to accommodate your requests
+                  </p>
+                </div>
+
                 <Button 
                   className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
                   onClick={handleCheckout}
