@@ -1,28 +1,41 @@
 'use client';
 
-import { notFound } from "next/navigation";
-import Image from "next/image";
+import { useState } from 'react';
+import { useParams } from 'next/navigation';
+import { featuredDishes, MenuItemVariant } from '@/data/sample-menu';
 import { Button } from "@/components/ui/button";
-import { ShoppingCart } from "lucide-react";
-import { featuredDishes } from "@/data/sample-menu";
-import { useState } from "react";
 import { useCart } from "@/contexts/CartContext";
-import { createCartItem } from "@/lib/cart-utils";
+import Image from "next/image";
 
-type SizeType = 'small' | 'regular' | 'large' | 'family' | 'party' | 'single' | 'box' | 'pack';
+export default function ProductPage() {
+  const params = useParams();
+  const product = featuredDishes.find(dish => dish.id === params.id);
+  
+  const [selectedVariant, setSelectedVariant] = useState<MenuItemVariant | null>(
+    product?.variants ? product.variants[product.defaultVariantIndex || 0] : null
+  );
+  const [selectedSizeIndex, setSelectedSizeIndex] = useState(0);
 
-export default function ProductPage({ params }: { params: { id: string } }) {
-  const [selectedSize, setSelectedSize] = useState<SizeType>('regular');
   const { addToCart } = useCart();
 
-  const product = featuredDishes.find(dish => dish.id === params.id);
+  if (!product) return <div>Product not found</div>;
 
-  if (!product) {
-    return notFound();
-  }
-
-  const currentSizeOption = product.sizeOptions?.[product.defaultSizeIndex ?? 0];
-  const currentPrice = currentSizeOption?.price ?? product.price ?? 0;
+  const handleAddToCart = () => {
+    if (!selectedVariant) return;
+    
+    const selectedSize = selectedVariant.sizeOptions[selectedSizeIndex];
+    const cartItem = {
+      id: product.id,
+      name: product.name,
+      price: selectedSize.price,
+      size: selectedSize.size,
+      quantity: 1,
+      imageUrl: product.imageUrl,
+      description: product.description,
+      portionInfo: selectedSize.portionInfo
+    };
+    addToCart(cartItem);
+  };
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -41,10 +54,10 @@ export default function ProductPage({ params }: { params: { id: string } }) {
         <div className="space-y-6">
           <div>
             <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-            <p className="text-2xl font-semibold">£{currentPrice.toFixed(2)}</p>
-            {currentSizeOption?.portionInfo && (
+            <p className="text-2xl font-semibold">£{selectedVariant?.price.toFixed(2)}</p>
+            {selectedVariant?.portionInfo && (
               <p className="text-sm text-gray-400">
-                {currentSizeOption.portionInfo}
+                {selectedVariant.portionInfo}
               </p>
             )}
           </div>
@@ -56,7 +69,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                 {product.sizeOptions.map((option, index) => (
                   <button
                     key={option.size}
-                    onClick={() => setSelectedSize(option.size as SizeType)}
+                    onClick={() => setSelectedSizeIndex(index)}
                     className={`w-full p-4 rounded-lg border transition-all ${
                       index === product.defaultSizeIndex 
                         ? 'border-orange-500 bg-orange-500/10' 
@@ -84,14 +97,10 @@ export default function ProductPage({ params }: { params: { id: string } }) {
           </div>
 
           <Button 
-            onClick={() => {
-              const cartItem = createCartItem(product, 1, currentSizeOption);
-              addToCart(cartItem);
-            }}
+            onClick={handleAddToCart}
             className="w-full button-primary py-6 text-lg"
           >
-            <ShoppingCart className="h-5 w-5 mr-2" />
-            Add to Cart - £{currentPrice.toFixed(2)}
+            Add to Cart - £{selectedVariant?.price.toFixed(2)}
           </Button>
         </div>
       </div>

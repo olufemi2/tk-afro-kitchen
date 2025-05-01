@@ -1,5 +1,5 @@
 export interface SizeOption {
-  size: 'small' | 'regular' | 'large' | 'family' | 'party' | 'single' | 'box' | 'pack';
+  size: '2L' | '4L' | 'half-cooler' | 'pack' | 'tray' | 'combo';
   price: number;
   portionInfo: string;
 }
@@ -12,12 +12,6 @@ export interface MenuItem {
   category: string;
   sizeOptions: SizeOption[];
   defaultSizeIndex: number;
-  price: number;
-  sizes?: {
-    small: { price: number; portionInfo: string };
-    regular: { price: number; portionInfo: string };
-    large: { price: number; portionInfo: string };
-  };
 }
 
 export interface Category {
@@ -29,416 +23,641 @@ export interface Category {
 
 export const categories: Category[] = [
   {
-    id: "soups",
-    name: "Soups",
+    id: "rice",
+    name: "Rice Dishes",
+    description: "Authentic Nigerian rice specialties",
+    imageUrl: "/images/dishes/jollofmeal.png"
+  },
+  {
+    id: "soups-stews",
+    name: "Soups & Stews",
     description: "Traditional Nigerian soups and stews",
     imageUrl: "/images/dishes/egusi1.png"
   },
   {
-    id: "swallows",
-    name: "Swallows & Soups",
-    description: "Traditional Nigerian swallows with delicious soups",
-    imageUrl: "/images/dishes/amala_ewedu.jpeg"
-  },
-  {
-    id: "rice",
-    name: "Rice",
-    description: "Flavorful Nigerian rice specialties",
-    imageUrl: "/images/dishes/jollofmeal.png"
-  },
-  {
-    id: "meats",
-    name: "Meats",
-    description: "Premium meat and protein dishes",
+    id: "proteins",
+    name: "Protein Dishes",
+    description: "Variety of peppered meats and fish",
     imageUrl: "/images/dishes/Turkey.png"
   },
   {
+    id: "sides",
+    name: "Side Dishes",
+    description: "Delicious sides including plantain and beans",
+    imageUrl: "/images/dishes/beans_dodo.jpeg"
+  },
+  {
     id: "snacks",
-    name: "Snacks & Small Chops",
-    description: "Delicious Nigerian snacks and appetizers",
+    name: "Snacks & Pastries",
+    description: "Nigerian snacks and pastries",
     imageUrl: "/images/dishes/tk-meatpie.png"
+  },
+  {
+    id: "platters",
+    name: "Fish Platters",
+    description: "Special fish platters",
+    imageUrl: "/images/dishes/tkfish3.png"
   }
 ];
 
 export const featuredDishes: MenuItem[] = [
+  // Rice Dishes
   {
-    id: "jolof-rice-special",
-    name: "Special Jollof Rice",
-    description: "Premium jollof rice cooked with the finest ingredients and served with assorted vegetables",
-    imageUrl: "/images/dishes/jolofrice.png",
-    category: "Rice",
-    price: 14.99,
-    sizes: {
-      small: { 
-        price: 12.99,
-        portionInfo: "Perfect for one person"
-      },
-      regular: { 
-        price: 14.99,
-        portionInfo: "Serves 1-2 people"
-      },
-      large: { 
-        price: 17.99,
-        portionInfo: "Great for sharing (2-3 people)"
-      }
-    },
+    id: "jollof-rice",
+    name: "Jollof Rice",
+    description: "Our signature Jollof rice cooked with rich tomato sauce and aromatic spices",
+    imageUrl: "/images/dishes/Jollof.jpeg",
+    category: "Rice Dishes",
     sizeOptions: [
-      {
-        size: "regular",
-        price: 12.99,
-        portionInfo: "Serves 1-2"
-      },
-      {
-        size: "large",
-        price: 19.99,
-        portionInfo: "Serves 2-3"
-      },
-      {
-        size: "family",
-        price: 29.99,
-        portionInfo: "Serves 4-5"
-      }
+      { size: "2L", price: 30, portionInfo: "2 Litres" },
+      { size: "4L", price: 50, portionInfo: "4 Litres" },
+      { size: "half-cooler", price: 90, portionInfo: "Half Cooler" }
     ],
     defaultSizeIndex: 0
   },
   {
-    id: "yam-porridge",
-    name: "Yam Porridge (Asaro)",
-    description: "Creamy yam porridge cooked with palm oil, peppers, and assorted seasonings",
-    imageUrl: "/images/dishes/Yam porridge_(Asaro).jpg",
-    category: "Others",
-    price: 13.99,
+    id: "peppered-fried-rice",
+    name: "Peppered Fried Rice",
+    description: "Flavorful fried rice with a perfect blend of peppers and seasonings",
+    imageUrl: "/images/dishes/friedrice.jpg",
+    category: "Rice Dishes",
     sizeOptions: [
-      { size: "regular", price: 13.99, portionInfo: "Single portion" },
-      { size: "large", price: 21.99, portionInfo: "Serves 2-3" },
-      { size: "family", price: 31.99, portionInfo: "Serves 4-5" }
+      { size: "2L", price: 40, portionInfo: "2 Litres" },
+      { size: "4L", price: 60, portionInfo: "4 Litres" }
     ],
     defaultSizeIndex: 0
   },
   {
-    id: "beans-dodo",
-    name: "Beans & Dodo",
-    description: "Nigerian beans served with fried plantain (dodo)",
-    imageUrl: "/images/dishes/beans_dodo.jpeg",
-    category: "Others",
-    price: 12.99,
+    id: "peppered-coconut-rice",
+    name: "Peppered Coconut Rice",
+    description: "Aromatic coconut rice with a perfect blend of peppers",
+    imageUrl: "/images/dishes/jollofmeal.png",
+    category: "Rice Dishes",
     sizeOptions: [
-      { size: "regular", price: 12.99, portionInfo: "Single portion" },
-      { size: "large", price: 20.99, portionInfo: "Serves 2-3" },
-      { size: "family", price: 29.99, portionInfo: "Serves 4-5" }
+      { size: "2L", price: 45, portionInfo: "2 Litres" },
+      { size: "4L", price: 70, portionInfo: "4 Litres" }
     ],
     defaultSizeIndex: 0
   },
   {
-    id: "egusi-soup",
-    name: "Egusi Soup",
-    description: "Rich melon seed soup with assorted meat and vegetables",
-    imageUrl: "/images/dishes/egusi1.png",
-    category: "Soups",
-    price: 15.99,
+    id: "peppered-native-rice",
+    name: "Peppered Native Rice",
+    description: "Traditional Nigerian native rice with peppered sauce",
+    imageUrl: "/images/dishes/pepperednativerice.jpg",
+    category: "Rice Dishes",
     sizeOptions: [
-      { size: "regular", price: 15.99, portionInfo: "Single portion" },
-      { size: "large", price: 24.99, portionInfo: "Serves 2-3" },
-      { size: "family", price: 34.99, portionInfo: "Serves 4-5" }
+      { size: "2L", price: 35, portionInfo: "2 Litres" },
+      { size: "4L", price: 55, portionInfo: "4 Litres" },
+      { size: "half-cooler", price: 95, portionInfo: "Half Cooler" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "ofada-rice",
+    name: "Ofada Rice",
+    description: "Traditional Nigerian brown rice variety",
+    imageUrl: "/images/dishes/jollofmeal.png",
+    category: "Rice Dishes",
+    sizeOptions: [
+      { size: "2L", price: 40, portionInfo: "2 Litres" },
+      { size: "4L", price: 70, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+
+  // Protein Dishes
+  {
+    id: "peppered-beef-chicken",
+    name: "Peppered Beef and Chicken",
+    description: "Perfectly seasoned combination of beef and chicken",
+    imageUrl: "/images/dishes/chicken.png",
+    category: "Protein Dishes",
+    sizeOptions: [
+      { size: "2L", price: 55, portionInfo: "2 Litres" },
+      { size: "4L", price: 85, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "peppered-assorted-meat",
+    name: "Peppered Assorted Meat",
+    description: "Mix of various meats in pepper sauce",
+    imageUrl: "/images/dishes/assorted-meat stew.jpg",
+    category: "Protein Dishes",
+    sizeOptions: [
+      { size: "2L", price: 60, portionInfo: "2 Litres" },
+      { size: "4L", price: 90, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "peppered-beef-fish",
+    name: "Peppered Beef and Fish",
+    description: "Perfectly seasoned beef and fish in pepper sauce",
+    imageUrl: "/images/dishes/peppered_fish.jpg",
+    category: "Protein Dishes",
+    sizeOptions: [
+      { size: "2L", price: 65, portionInfo: "2 Litres" },
+      { size: "4L", price: 95, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "peppered-beef-turkey",
+    name: "Peppered Beef and Turkey",
+    description: "Combination of beef and turkey in pepper sauce",
+    imageUrl: "/images/dishes/Turkey.png",
+    category: "Protein Dishes",
+    sizeOptions: [
+      { size: "2L", price: 60, portionInfo: "2 Litres" },
+      { size: "4L", price: 90, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "peppered-beef",
+    name: "Peppered Beef Only",
+    description: "Premium beef in pepper sauce",
+    imageUrl: "/images/dishes/Assortedmeat.png",
+    category: "Protein Dishes",
+    sizeOptions: [
+      { size: "2L", price: 70, portionInfo: "2 Litres" },
+      { size: "4L", price: 105, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "peppered-chicken-hard",
+    name: "Peppered Chicken Hard",
+    description: "Hard chicken in pepper sauce",
+    imageUrl: "/images/dishes/chicken.png",
+    category: "Protein Dishes",
+    sizeOptions: [
+      { size: "2L", price: 50, portionInfo: "2 Litres" },
+      { size: "4L", price: 80, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "peppered-grilled-chicken",
+    name: "Peppered Grilled Soft Chicken",
+    description: "Grilled soft chicken in pepper sauce",
+    imageUrl: "/images/dishes/grilled-chicken.png",
+    category: "Protein Dishes",
+    sizeOptions: [
+      { size: "2L", price: 50, portionInfo: "2 Litres" },
+      { size: "4L", price: 80, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "turkey-wings",
+    name: "Turkey Wings",
+    description: "Seasoned and grilled turkey wings",
+    imageUrl: "/images/dishes/Turkey.png",
+    category: "Protein Dishes",
+    sizeOptions: [
+      { size: "2L", price: 55, portionInfo: "2 Litres" },
+      { size: "4L", price: 85, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "peppered-goat",
+    name: "Peppered Goat Meat",
+    description: "Premium goat meat in pepper sauce",
+    imageUrl: "/images/dishes/pepperedgoatmeat.jpeg",
+    category: "Protein Dishes",
+    sizeOptions: [
+      { size: "2L", price: 70, portionInfo: "2 Litres" },
+      { size: "4L", price: 105, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "peppered-fish",
+    name: "Peppered Fish",
+    description: "Fish in pepper sauce",
+    imageUrl: "/images/dishes/peppered_fish.jpg",
+    category: "Protein Dishes",
+    sizeOptions: [
+      { size: "2L", price: 60, portionInfo: "2 Litres" },
+      { size: "4L", price: 90, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+
+  // Soups and Stews
+  {
+    id: "assorted-stew",
+    name: "Assorted Stew",
+    description: "Rich stew with assorted meat",
+    imageUrl: "/images/dishes/assorted-stew.jpeg",
+    category: "Soups & Stews",
+    sizeOptions: [
+      { size: "2L", price: 60, portionInfo: "2 Litres" },
+      { size: "4L", price: 90, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "chicken-stew",
+    name: "Chicken Stew",
+    description: "Rich stew with chicken",
+    imageUrl: "/images/dishes/chicken-stew.png",
+    category: "Soups & Stews",
+    sizeOptions: [
+      { size: "2L", price: 50, portionInfo: "2 Litres" },
+      { size: "4L", price: 80, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "fish-stew",
+    name: "Fish Stew",
+    description: "Rich stew with fish",
+    imageUrl: "/images/dishes/Fish-stew.png",
+    category: "Soups & Stews",
+    sizeOptions: [
+      { size: "2L", price: 60, portionInfo: "2 Litres" },
+      { size: "4L", price: 90, portionInfo: "4 Litres" }
     ],
     defaultSizeIndex: 0
   },
   {
     id: "efo-riro",
     name: "Efo Riro",
-    description: "Rich and nutritious Nigerian spinach stew with assorted meat and fish",
-    imageUrl: "/images/dishes/efo-riro.png",
-    category: "Soups",
-    price: 14.99,
+    description: "Rich and nutritious Nigerian spinach stew",
+    imageUrl: "/images/dishes/efo-riro.jpg",
+    category: "Soups & Stews",
     sizeOptions: [
-      { size: "regular", price: 14.99, portionInfo: "Single portion" },
-      { size: "large", price: 23.99, portionInfo: "Serves 2-3" },
-      { size: "family", price: 33.99, portionInfo: "Serves 4-5" }
+      { size: "2L", price: 60, portionInfo: "2 Litres" },
+      { size: "4L", price: 90, portionInfo: "4 Litres" }
     ],
     defaultSizeIndex: 0
   },
   {
-    id: "ayamase-stew",
-    name: "Ayamase Stew",
-    description: "Spicy green pepper stew with assorted meats, a true Nigerian delicacy",
-    imageUrl: "/images/dishes/ayamase.png",
-    category: "Soups",
-    price: 15.99,
+    id: "efo-riro-fish",
+    name: "Efo Riro with Fish",
+    description: "Spinach stew with fish",
+    imageUrl: "/images/dishes/eforiro-with-assortedmeat.jpg",
+    category: "Soups & Stews",
     sizeOptions: [
-      { size: "regular", price: 15.99, portionInfo: "Single portion" },
-      { size: "large", price: 24.99, portionInfo: "Serves 2-3" },
-      { size: "family", price: 34.99, portionInfo: "Serves 4-5" }
+      { size: "2L", price: 60, portionInfo: "2 Litres" },
+      { size: "4L", price: 90, portionInfo: "4 Litres" }
     ],
     defaultSizeIndex: 0
   },
   {
-    id: "amala-ewedu",
-    name: "Amala & Ewedu",
-    description: "Smooth yam flour swallow served with ewedu soup",
-    imageUrl: "/images/dishes/amala_ewedu.jpeg",
-    category: "Swallows",
-    price: 13.99,
+    id: "egusi-soup",
+    name: "Egusi Soup",
+    description: "Rich melon seed soup",
+    imageUrl: "/images/dishes/egusi1.png",
+    category: "Soups & Stews",
     sizeOptions: [
-      { size: "regular", price: 13.99, portionInfo: "Single portion" },
-      { size: "large", price: 21.99, portionInfo: "Serves 2" },
-      { size: "family", price: 31.99, portionInfo: "Serves 3-4" }
+      { size: "2L", price: 65, portionInfo: "2 Litres" },
+      { size: "4L", price: 100, portionInfo: "4 Litres" }
     ],
     defaultSizeIndex: 0
   },
   {
-    id: "iyan-eforiro",
-    name: "Pounded Yam & Efo Riro",
-    description: "Smooth pounded yam served with delicious efo riro soup",
-    imageUrl: "/images/dishes/Iyan-eforirio.jpg",
-    category: "Swallows",
-    price: 14.99,
+    id: "okra-soup",
+    name: "Assorted Okra Soup",
+    description: "Okra soup with assorted meat",
+    imageUrl: "/images/dishes/okro soup ilaalasepo.jpg",
+    category: "Soups & Stews",
     sizeOptions: [
-      { size: "regular", price: 14.99, portionInfo: "Single portion" },
-      { size: "large", price: 22.99, portionInfo: "Serves 2" },
-      { size: "family", price: 32.99, portionInfo: "Serves 3-4" }
+      { size: "2L", price: 60, portionInfo: "2 Litres" },
+      { size: "4L", price: 90, portionInfo: "4 Litres" }
     ],
     defaultSizeIndex: 0
   },
   {
-    id: "assorted-fish",
-    name: "Assorted Fish",
-    description: "Selection of perfectly seasoned and fried fish",
-    imageUrl: "/images/dishes/assorted_fish.jpg",
-    category: "Meats",
-    price: 16.99,
-    sizeOptions: [
-      { size: "regular", price: 16.99, portionInfo: "2 pieces" },
-      { size: "large", price: 25.99, portionInfo: "4 pieces" },
-      { size: "party", price: 39.99, portionInfo: "8 pieces" }
-    ],
-    defaultSizeIndex: 0
-  },
-  {
-    id: "peppered-turkey",
-    name: "Peppered Turkey",
-    description: "Spicy grilled turkey in our special pepper sauce",
-    imageUrl: "/images/dishes/Turkey.png",
-    category: "Meats",
-    price: 15.99,
-    sizeOptions: [
-      { size: "regular", price: 15.99, portionInfo: "4 pieces" },
-      { size: "large", price: 24.99, portionInfo: "8 pieces" },
-      { size: "party", price: 39.99, portionInfo: "15 pieces" }
-    ],
-    defaultSizeIndex: 0
-  },
-  {
-    id: "peppered-snails",
-    name: "Peppered Snails",
-    description: "Grilled snails in spicy pepper sauce",
-    imageUrl: "/images/dishes/peppered_snails.jpeg",
-    category: "Meats",
-    price: 18.99,
-    sizeOptions: [
-      { size: "regular", price: 18.99, portionInfo: "4 pieces" },
-      { size: "large", price: 29.99, portionInfo: "8 pieces" },
-      { size: "party", price: 45.99, portionInfo: "12 pieces" }
-    ],
-    defaultSizeIndex: 0
-  },
-  {
-    id: "meat-pie",
-    name: "Nigerian Meat Pie",
-    description: "Flaky pastry filled with seasoned minced meat and vegetables",
-    imageUrl: "/images/dishes/meat-pie.jpeg",
-    category: "Snacks",
-    price: 3.99,
-    sizeOptions: [
-      { size: "single", price: 3.99, portionInfo: "1 piece" },
-      { size: "box", price: 19.99, portionInfo: "6 pieces" },
-      { size: "pack", price: 35.99, portionInfo: "12 pieces" }
-    ],
-    defaultSizeIndex: 0
-  },
-  {
-    id: "moi-moi",
-    name: "Moi Moi",
-    description: "Steamed bean pudding made from peeled beans, peppers, and spices",
-    imageUrl: "/images/dishes/moi-moi.png",
-    category: "Snacks",
-    price: 4.99,
-    sizeOptions: [
-      {
-        size: "single",
-        price: 4.99,
-        portionInfo: "1 piece"
-      },
-      {
-        size: "pack",
-        price: 22.99,
-        portionInfo: "5 pieces"
-      },
-      {
-        size: "party",
-        price: 39.99,
-        portionInfo: "10 pieces"
-      }
-    ],
-    defaultSizeIndex: 0
-  },
-  {
-    id: "tk-special-fish",
-    name: "TK Special Fish",
-    description: "Premium fish marinated in traditional spices and slow-cooked to perfection",
-    imageUrl: "/images/dishes/tkfish3.png",
-    category: "Meats",
-    price: 19.99,
-    sizeOptions: [
-      { size: "regular", price: 19.99, portionInfo: "1 whole fish" },
-      { size: "large", price: 29.99, portionInfo: "2 whole fish" },
-      { size: "party", price: 49.99, portionInfo: "4 whole fish" }
-    ],
-    defaultSizeIndex: 0
-  },
-  {
-    id: "nigerian-meat-stew",
-    name: "Traditional Meat Stew",
-    description: "Rich and hearty Nigerian meat stew with tender beef in a flavorful tomato base",
-    imageUrl: "/images/dishes/meat-stew.png",
-    category: "Soups",
-    price: 15.99,
-    sizeOptions: [],
-    defaultSizeIndex: 0
-  },
-  {
-    id: "tk-puff-puff",
-    name: "Nigerian Puff Puff",
-    description: "Fluffy, deep-fried Nigerian dough balls with a perfectly sweet taste",
-    imageUrl: "/images/dishes/tk-puff-puff.png",
-    category: "Snacks",
-    price: 4.99,
-    sizeOptions: [
-      { size: "small", price: 4.99, portionInfo: "6 pieces" },
-      { size: "regular", price: 8.99, portionInfo: "12 pieces" },
-      { size: "large", price: 15.99, portionInfo: "24 pieces" }
-    ],
-    defaultSizeIndex: 0
-  },
-  {
-    id: "african-grilled-chicken",
-    name: "African Grilled Chicken",
-    description: "Tender chicken pieces marinated in a blend of African spices and perfectly grilled",
-    imageUrl: "/images/dishes/chicken.png",
-    category: "Meats",
-    price: 16.99,
-    sizeOptions: [
-      { size: "regular", price: 16.99, portionInfo: "2 pieces (quarter chicken)" },
-      { size: "large", price: 25.99, portionInfo: "4 pieces (half chicken)" },
-      { size: "party", price: 39.99, portionInfo: "8 pieces (whole chicken)" }
-    ],
-    defaultSizeIndex: 0
-  },
-  {
-    id: "nigerian-chin-chin",
-    name: "Nigerian Chin Chin",
-    description: "Crunchy, sweet fried pastry snack, perfect with tea or as a dessert",
-    imageUrl: "/images/dishes/chin-chin.jpg",
-    category: "Snacks",
-    price: 5.99,
-    sizeOptions: [],
-    defaultSizeIndex: 0
-  },
-  {
-    id: "assorted-okro",
-    name: "Assorted Okro Soup",
-    description: "Delicious okro soup cooked with various meats and seafood for a rich flavor",
-    imageUrl: "/images/dishes/assorted-okro.jpeg",
-    category: "Soups",
-    price: 15.99,
-    sizeOptions: [
-      { size: "regular", price: 15.99, portionInfo: "Single portion" },
-      { size: "large", price: 24.99, portionInfo: "Serves 2-3" },
-      { size: "family", price: 34.99, portionInfo: "Serves 4-5" }
-    ],
-    defaultSizeIndex: 0
-  },
-  {
-    id: "puff-puff-meat-pie-combo",
-    name: "Puff Puff & Meat Pie Combo",
-    description: "The perfect snack combination of sweet puff puff and savory meat pie",
-    imageUrl: "/images/dishes/puff-puff-meat-pie.jpeg",
-    category: "Snacks",
-    price: 8.99,
-    sizeOptions: [
-      { size: "regular", price: 8.99, portionInfo: "2 pieces each" },
-      { size: "large", price: 15.99, portionInfo: "4 pieces each" },
-      { size: "party", price: 29.99, portionInfo: "8 pieces each" }
-    ],
-    defaultSizeIndex: 0
-  },
-  {
-    id: "seafood-okro",
-    name: "Seafood Okro Soup",
-    description: "Luxurious okro soup made with premium seafood including prawns, fish and crab",
+    id: "seafood-okra",
+    name: "Seafood Okra Soup",
+    description: "Okra soup with seafood",
     imageUrl: "/images/dishes/seafood-okro.png",
-    category: "Soups",
-    price: 17.99,
+    category: "Soups & Stews",
     sizeOptions: [
-      { size: "regular", price: 17.99, portionInfo: "Single portion" },
-      { size: "large", price: 26.99, portionInfo: "Serves 2-3" },
-      { size: "family", price: 36.99, portionInfo: "Serves 4-5" }
+      { size: "2L", price: 70, portionInfo: "2 Litres" },
+      { size: "4L", price: 105, portionInfo: "4 Litres" }
     ],
     defaultSizeIndex: 0
   },
   {
-    id: "classic-jollof",
-    name: "Classic Jollof Rice",
-    description: "Traditional Nigerian jollof rice cooked to perfection with the classic recipe",
-    imageUrl: "/images/dishes/Jollof.jpeg",
-    category: "Rice",
-    price: 11.99,
+    id: "ayamase",
+    name: "Ayamase Sauce",
+    description: "Spicy green pepper sauce",
+    imageUrl: "/images/dishes/ayamase.jpg",
+    category: "Soups & Stews",
     sizeOptions: [
-      { size: "regular", price: 11.99, portionInfo: "Single portion" },
-      { size: "large", price: 18.99, portionInfo: "Serves 2-3" },
-      { size: "party", price: 28.99, portionInfo: "Serves 4-6" }
+      { size: "2L", price: 65, portionInfo: "2 Litres" },
+      { size: "4L", price: 100, portionInfo: "4 Litres" }
     ],
     defaultSizeIndex: 0
   },
   {
-    id: "assorted-stew",
-    name: "Assorted Meat Stew",
-    description: "Rich stew featuring an assortment of Nigerian meats in a flavorful tomato base",
-    imageUrl: "/images/dishes/assorted-stew.jpeg",
-    category: "Soups",
-    price: 16.99,
+    id: "ofada-sauce",
+    name: "Ofada Sauce",
+    description: "Traditional sauce for Ofada rice",
+    imageUrl: "/images/dishes/ofada_sauce.jpg",
+    category: "Soups & Stews",
     sizeOptions: [
-      { size: "regular", price: 16.99, portionInfo: "Single portion" },
-      { size: "large", price: 25.99, portionInfo: "Serves 2-3" },
-      { size: "family", price: 35.99, portionInfo: "Serves 4-5" }
+      { size: "2L", price: 65, portionInfo: "2 Litres" },
+      { size: "4L", price: 100, portionInfo: "4 Litres" }
     ],
     defaultSizeIndex: 0
   },
   {
-    id: "classic-egusi",
-    name: "Classic Egusi Soup",
-    description: "Traditional Nigerian egusi soup made with ground melon seeds and assorted meat",
-    imageUrl: "/images/dishes/egusi.png",
-    category: "Soups",
-    price: 15.99,
+    id: "ogbono-soup",
+    name: "Ogbono Soup",
+    description: "Traditional Nigerian Ogbono soup",
+    imageUrl: "/images/dishes/ogbono soup.jpeg",
+    category: "Soups & Stews",
     sizeOptions: [
-      { size: "regular", price: 15.99, portionInfo: "Single portion" },
-      { size: "large", price: 24.99, portionInfo: "Serves 2-3" },
-      { size: "family", price: 34.99, portionInfo: "Serves 4-5" }
+      { size: "2L", price: 60, portionInfo: "2 Litres" },
+      { size: "4L", price: 90, portionInfo: "4 Litres" }
     ],
     defaultSizeIndex: 0
   },
   {
-    id: "assorted-beef-fish",
-    name: "Assorted Beef & Fish",
-    description: "Selection of premium beef cuts and fish, perfectly seasoned and prepared",
-    imageUrl: "/images/dishes/Assorted_beef_fish.jpg",
-    category: "Meats",
-    price: 18.99,
+    id: "fish-pepper-soup",
+    name: "Fish Pepper Soup",
+    description: "Spicy Nigerian fish pepper soup",
+    imageUrl: "/images/dishes/fishpeppersoup.jpg",
+    category: "Soups & Stews",
     sizeOptions: [
-      { size: "regular", price: 18.99, portionInfo: "4 pieces" },
-      { size: "large", price: 27.99, portionInfo: "8 pieces" },
-      { size: "party", price: 42.99, portionInfo: "12 pieces" }
+      { size: "2L", price: 60, portionInfo: "2 Litres" },
+      { size: "4L", price: 90, portionInfo: "4 Litres" }
     ],
     defaultSizeIndex: 0
+  },
+
+  // Side Dishes
+  {
+    id: "dodo-gizzards",
+    name: "Dodo Gizzards",
+    description: "Fried plantain with gizzards",
+    imageUrl: "/images/dishes/dodogizzard.jpeg",
+    category: "Side Dishes",
+    sizeOptions: [
+      { size: "2L", price: 60, portionInfo: "2 Litres" },
+      { size: "4L", price: 90, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "assorted-pepper-soup",
+    name: "Assorted Pepper Soup",
+    description: "Spicy pepper soup with assorted meat",
+    imageUrl: "/images/dishes/psoup.png",
+    category: "Side Dishes",
+    sizeOptions: [
+      { size: "2L", price: 55, portionInfo: "2 Litres" },
+      { size: "4L", price: 85, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "fish-pepper-soup",
+    name: "Fish Pepper Soup",
+    description: "Spicy pepper soup with fish",
+    imageUrl: "/images/dishes/fish-pepper-soup.png",
+    category: "Side Dishes",
+    sizeOptions: [
+      { size: "2L", price: 50, portionInfo: "2 Litres" },
+      { size: "4L", price: 80, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "plantain",
+    name: "Plantain",
+    description: "Fried plantain (Dodo)",
+    imageUrl: "/images/dishes/dodo.png",
+    category: "Side Dishes",
+    sizeOptions: [
+      { size: "2L", price: 40, portionInfo: "2 Litres" },
+      { size: "4L", price: 70, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "ewa-agoyin",
+    name: "Ewa Agoyin and Sauce",
+    description: "Mashed beans with special sauce",
+    imageUrl: "/images/dishes/aganyin.png",
+    category: "Side Dishes",
+    sizeOptions: [
+      { size: "2L", price: 60, portionInfo: "2 Litres" },
+      { size: "4L", price: 90, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "yam-porridge",
+    name: "Yam Porridge (Asaro)",
+    description: "Creamy yam porridge cooked with palm oil and peppers",
+    imageUrl: "/images/dishes/Yam porridge_(Asaro).jpg",
+    category: "Side Dishes",
+    sizeOptions: [
+      { size: "2L", price: 50, portionInfo: "2 Litres" },
+      { size: "4L", price: 80, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "beans-porridge",
+    name: "Beans Porridge",
+    description: "Nigerian style beans porridge",
+    imageUrl: "/images/dishes/beans_porridge.jpg",
+    category: "Side Dishes",
+    sizeOptions: [
+      { size: "2L", price: 50, portionInfo: "2 Litres" },
+      { size: "4L", price: 80, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "beans-dodo",
+    name: "Beans & Dodo",
+    description: "Nigerian beans served with fried plantain",
+    imageUrl: "/images/dishes/beans_dodo.jpeg",
+    category: "Side Dishes",
+    sizeOptions: [
+      { size: "2L", price: 50, portionInfo: "2 Litres" },
+      { size: "4L", price: 80, portionInfo: "4 Litres" }
+    ],
+    defaultSizeIndex: 0
+  },
+
+  // Snacks and Pastries
+  {
+    id: "meat-pies",
+    name: "Meat Pies",
+    description: "Nigerian style meat pies",
+    imageUrl: "/images/dishes/meat-pie.jpeg",
+    category: "Snacks & Pastries",
+    sizeOptions: [
+      { size: "pack", price: 20, portionInfo: "Pack of 10" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "sausage-rolls",
+    name: "Sausage Rolls",
+    description: "Nigerian style sausage rolls",
+    imageUrl: "/images/dishes/sausageroll.jpeg",
+    category: "Snacks & Pastries",
+    sizeOptions: [
+      { size: "pack", price: 20, portionInfo: "Pack of 10" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "chicken-pies",
+    name: "Chicken Pies",
+    description: "Nigerian style chicken pies",
+    imageUrl: "/images/dishes/tk-meatpie.png",
+    category: "Snacks & Pastries",
+    sizeOptions: [
+      { size: "pack", price: 20, portionInfo: "Pack of 10" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "fish-pies",
+    name: "Fish Pies",
+    description: "Nigerian style fish pies",
+    imageUrl: "/images/dishes/tk-meatpie.png",
+    category: "Snacks & Pastries",
+    sizeOptions: [
+      { size: "pack", price: 20, portionInfo: "Pack of 10" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "puff-puff",
+    name: "Puff Puff",
+    description: "Nigerian deep-fried dough balls",
+    imageUrl: "/images/dishes/tk-puff-puff.png",
+    category: "Snacks & Pastries",
+    sizeOptions: [
+      { size: "tray", price: 40, portionInfo: "Full Tray" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "mix-and-match",
+    name: "Mix and Match",
+    description: "Assorted Nigerian snacks",
+    imageUrl: "/images/dishes/puff-puff-meat-pie.jpeg",
+    category: "Snacks & Pastries",
+    sizeOptions: [
+      { size: "tray", price: 50, portionInfo: "Full Tray" }
+    ],
+    defaultSizeIndex: 0
+  },
+
+  // Fish Platters
+  {
+    id: "tilapia-platter",
+    name: "Tilapia Fish Platter",
+    description: "Grilled Tilapia fish platter with sides",
+    imageUrl: "/images/dishes/tkfish3.png",
+    category: "Fish Platters",
+    sizeOptions: [
+      { size: "combo", price: 30, portionInfo: "Combo Platter" }
+    ],
+    defaultSizeIndex: 0
+  },
+  {
+    id: "croker-platter",
+    name: "Croker Fish Platter",
+    description: "Grilled Croker fish platter with sides",
+    imageUrl: "/images/dishes/assorted_fish.jpg",
+    category: "Fish Platters",
+    sizeOptions: [
+      { size: "combo", price: 35, portionInfo: "Combo Platter" }
+    ],
+    defaultSizeIndex: 0
+  }
+];
+
+export const menuGroups = [
+  {
+    id: "chicken-dishes",
+    name: "Chicken Dishes",
+    description: "Our signature chicken dishes in various styles",
+    imageUrl: "/images/dishes/chicken.png",
+    menuOptions: [
+      {
+        id: "peppered-beef-chicken",
+        name: "Peppered Beef and Chicken",
+        description: "Perfectly seasoned combination of beef and chicken",
+        imageUrl: "/images/dishes/chicken.png",
+        sizeOptions: [
+          { size: "2L", price: 55, portionInfo: "2 Litres" },
+          { size: "4L", price: 85, portionInfo: "4 Litres" }
+        ]
+      },
+      {
+        id: "peppered-chicken-hard",
+        name: "Peppered Chicken Hard",
+        description: "Hard chicken in pepper sauce",
+        imageUrl: "/images/dishes/chicken.png",
+        sizeOptions: [
+          { size: "2L", price: 50, portionInfo: "2 Litres" },
+          { size: "4L", price: 80, portionInfo: "4 Litres" }
+        ]
+      },
+      {
+        id: "peppered-grilled-soft-chicken",
+        name: "Peppered Grilled Soft Chicken",
+        description: "Grilled soft chicken in pepper sauce",
+        imageUrl: "/images/dishes/chicken.png",
+        sizeOptions: [
+          { size: "2L", price: 50, portionInfo: "2 Litres" },
+          { size: "4L", price: 80, portionInfo: "4 Litres" }
+        ]
+      },
+      {
+        id: "chicken-stew",
+        name: "Chicken Stew",
+        description: "Traditional chicken stew",
+        imageUrl: "/images/dishes/chicken-stew.png",
+        sizeOptions: [
+          { size: "2L", price: 50, portionInfo: "2 Litres" },
+          { size: "4L", price: 80, portionInfo: "4 Litres" }
+        ]
+      }
+    ]
+  },
+  {
+    id: "snacks-pastries",
+    name: "Snacks & Pastries",
+    description: "Nigerian snacks and pastries",
+    imageUrl: "/images/dishes/tk-meatpie.png",
+    menuOptions: [
+      {
+        id: "meat-pies",
+        name: "Meat Pies",
+        description: "Nigerian style meat pies",
+        imageUrl: "/images/dishes/meat-pie.jpeg",
+        sizeOptions: [
+          { size: "pack", price: 20, portionInfo: "Pack of 10" }
+        ]
+      },
+      {
+        id: "chicken-pies",
+        name: "Chicken Pies",
+        description: "Nigerian style chicken pies",
+        imageUrl: "/images/dishes/tk-meatpie.png",
+        sizeOptions: [
+          { size: "pack", price: 20, portionInfo: "Pack of 10" }
+        ]
+      },
+      // ... other snacks and pastries ...
+    ]
   }
 ];

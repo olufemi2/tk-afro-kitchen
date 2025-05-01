@@ -2,16 +2,12 @@
 
 import { Header } from "@/components/layout/header";
 import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ShoppingCart, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import Image from "next/image";
-import { categories, featuredDishes, MenuItem } from "@/data/sample-menu";
-import { useCart } from "@/contexts/CartContext";
+import { categories, featuredDishes } from "@/data/sample-menu";
 import { useRef, useState } from "react";
-import Link from "next/link";
 import { FoodCard } from "@/components/food/food-card";
-import { createCartItem } from "@/lib/cart-utils";
 
 // Transform the data for the menu sections
 const menuSections = categories.map(category => ({
@@ -27,42 +23,14 @@ const menuSections = categories.map(category => ({
       description: dish.description,
       imageUrl: dish.imageUrl,
       category: dish.category,
-      price: dish.sizeOptions?.[dish.defaultSizeIndex ?? 0]?.price ?? 0,
-      sizeOptions: dish.sizeOptions || [
-        {
-          size: "Regular",
-          price: dish.price,
-          portionInfo: "Single portion"
-        }
-      ],
-      defaultSizeIndex: dish.defaultSizeIndex || 0
+      sizeOptions: dish.sizeOptions,
+      defaultSizeIndex: dish.defaultSizeIndex
     }))
 })).filter(section => section.items.length > 0);
 
 export default function MenuPage() {
-  const { addToCart } = useCart();
-  const sectionRefs = useRef<Record<string, HTMLElement | null>>({});
   const [searchQuery, setSearchQuery] = useState('');
-
-  const handleAddToCart = (item: MenuItem) => {
-    const originalItem = featuredDishes.find(dish => dish.id === item.id);
-    if (originalItem) {
-      const defaultSize = originalItem.sizeOptions?.[originalItem.defaultSizeIndex];
-      const cartItem = createCartItem(originalItem, 1, defaultSize);
-      addToCart(cartItem);
-    }
-  };
   
-  const scrollToSection = (categoryId: string) => {
-    const element = sectionRefs.current[categoryId];
-    if (element) {
-      element.scrollIntoView({ 
-        behavior: 'smooth',
-        block: 'start'
-      });
-    }
-  };
-
   // Filter menu sections based on search query
   const filteredMenuSections = menuSections.map(section => ({
     ...section,
@@ -98,70 +66,31 @@ export default function MenuPage() {
           </div>
         </section>
 
-        {/* Category Grid */}
-        <div className="container-padding">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {categories.map((category) => (
-              <div 
-                key={category.id} 
-                className="card-base group cursor-pointer"
-                onClick={() => scrollToSection(category.id)}
-              >
-                <div className="card-image-container">
-                  <Image
-                    src={category.imageUrl}
-                    alt={category.name}
-                    fill
-                    className="card-image"
-                  />
-                  <div className="card-image-overlay" />
-                  <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                    <h3 className="text-2xl font-bold mb-2 text-gradient">{category.name}</h3>
-                    <p className="text-sm text-slate-300">{category.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Menu Sections */}
-        <div className="container-padding">
-          {searchQuery && filteredMenuSections.length === 0 ? (
-            <div className="text-center py-16">
-              <p className="text-xl text-slate-300">No dishes found matching "{searchQuery}"</p>
+        <div className="container mx-auto px-4 py-8">
+          {filteredMenuSections.map((section) => (
+            <div key={section.id} className="mb-12">
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-white">{section.title}</h2>
+                <p className="text-gray-400">{section.description}</p>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {section.items.map((item) => (
+                  <FoodCard
+                    key={item.id}
+                    id={item.id}
+                    name={item.name}
+                    description={item.description}
+                    imageUrl={item.imageUrl}
+                    category={item.category}
+                    sizeOptions={item.sizeOptions}
+                    defaultSizeIndex={item.defaultSizeIndex}
+                  />
+                ))}
+              </div>
             </div>
-          ) : (
-            filteredMenuSections.map((section) => (
-              <section 
-                key={section.title} 
-                className="section-spacing" 
-                id={section.id}
-                ref={(element) => {
-                  if (element) {
-                    sectionRefs.current[section.id] = element;
-                  }
-                }}
-              >
-                <h2 className="text-gradient mb-8">{section.title}</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {section.items.map((item) => (
-                    <FoodCard
-                      key={item.id}
-                      id={item.id}
-                      name={item.name}
-                      description={item.description}
-                      imageUrl={item.imageUrl}
-                      category={item.category}
-                      price={item.price}
-                      sizeOptions={item.sizeOptions}
-                      defaultSizeIndex={item.defaultSizeIndex}
-                    />
-                  ))}
-                </div>
-              </section>
-            ))
-          )}
+          ))}
         </div>
       </div>
     </>

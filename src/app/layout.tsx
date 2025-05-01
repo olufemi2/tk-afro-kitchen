@@ -2,6 +2,7 @@ import '@/app/globals.css';
 import type { Metadata } from 'next';
 import { CartProvider } from '@/contexts/CartContext';
 import { SearchProvider } from '@/contexts/SearchContext';
+import { CartModal } from "@/components/cart/CartModal";
 
 export const metadata: Metadata = {
   title: 'TK Afro Kitchen',
@@ -19,6 +20,7 @@ export default function RootLayout({
         <SearchProvider>
           <CartProvider>
             {children}
+            <CartModal />
           </CartProvider>
         </SearchProvider>
       </body>

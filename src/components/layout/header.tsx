@@ -8,7 +8,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useState } from "react";
 
 export function Header() {
-  const { items } = useCart();
+  const { items, setIsCartOpen } = useCart();
   const cartItemCount = items.length;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -67,7 +67,7 @@ export function Header() {
               />
             </div>
             <span className="text-xl font-bold text-gradient">
-              TK Afro
+              TKAfro Kitchen
             </span>
           </Link>
 
@@ -82,6 +82,7 @@ export function Header() {
               variant="ghost"
               size="icon"
               className="relative"
+              onClick={() => setIsCartOpen(true)}
             >
               <ShoppingCart className="h-5 w-5 text-slate-300" />
               {cartItemCount > 0 && (
