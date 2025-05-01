@@ -10,7 +10,6 @@ export interface CartItem {
   category: string;
   price: number;
   quantity: number;
-  size?: 'small' | 'regular' | 'large';
   portionInfo: string;
   selectedSize: {
     size: string;
@@ -51,18 +50,33 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [specialInstructions, setSpecialInstructions] = useState('');
 
+  // Load cart from localStorage on mount
+  useEffect(() => {
+    const savedCart = localStorage.getItem('cart');
+    if (savedCart) {
+      try {
+        const parsedCart = JSON.parse(savedCart);
+        setItems(parsedCart);
+      } catch (error) {
+        console.error('Error loading cart from localStorage:', error);
+      }
+    }
+  }, []);
+
+  // Save cart to localStorage whenever it changes
+  useEffect(() => {
+    localStorage.setItem('cart', JSON.stringify(items));
+  }, [items]);
+
   useEffect(() => {
     const total = items.reduce((sum, item) => {
-      // Use selectedSize.price if available, otherwise fall back to item.price
-      const itemPrice = item.selectedSize?.price ?? item.price;
-      return sum + itemPrice * item.quantity;
+      return sum + item.selectedSize.price * item.quantity;
     }, 0);
     setTotalPrice(total);
   }, [items]);
 
   const addToCart = (newItem: CartItem) => {
-    // Validate the item has all required properties
-    if (!isValidCartItem(newItem)) {
+    if (!newItem.id || !newItem.selectedSize) {
       console.error('Invalid cart item:', newItem);
       return;
     }
@@ -73,6 +87,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       );
 
       if (existingItemIndex > -1) {
+        // Update quantity of existing item
         return currentItems.map((item, index) => {
           if (index === existingItemIndex) {
             return { ...item, quantity: item.quantity + 1 };
@@ -81,39 +96,29 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         });
       }
 
-      return [...currentItems, newItem];
+      // Add new item
+      return [...currentItems, { ...newItem, quantity: 1 }];
     });
-  };
 
-  // Helper function to validate cart items
-  function isValidCartItem(item: any): item is CartItem {
-    return (
-      typeof item === 'object' &&
-      typeof item.id === 'string' &&
-      typeof item.name === 'string' &&
-      typeof item.description === 'string' &&
-      typeof item.imageUrl === 'string' &&
-      typeof item.category === 'string' &&
-      typeof item.price === 'number' &&
-      typeof item.quantity === 'number' &&
-      typeof item.portionInfo === 'string' &&
-      item.selectedSize &&
-      typeof item.selectedSize.size === 'string' &&
-      typeof item.selectedSize.price === 'number' &&
-      typeof item.selectedSize.portionInfo === 'string'
-    );
-  }
+    // Open the cart modal when an item is added
+    setIsCartOpen(true);
+  };
 
   const removeFromCart = (itemId: string, size: string) => {
     setItems(currentItems => 
-      currentItems.filter(item => !(item.id === itemId && item.size === size))
+      currentItems.filter(item => !(item.id === itemId && item.selectedSize.size === size))
     );
   };
 
   const updateQuantity = (itemId: string, size: string, quantity: number) => {
+    if (quantity < 1) {
+      removeFromCart(itemId, size);
+      return;
+    }
+
     setItems(currentItems =>
       currentItems.map(item => {
-        if (item.id === itemId && item.size === size) {
+        if (item.id === itemId && item.selectedSize.size === size) {
           return { ...item, quantity };
         }
         return item;
@@ -123,6 +128,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   const clearCart = () => {
     setItems([]);
+    localStorage.removeItem('cart');
   };
 
   return (
