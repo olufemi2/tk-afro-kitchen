@@ -52,7 +52,7 @@ export function SearchResults() {
         id: item.id,
         name: item.name,
         description: item.description,
-        price: item.price,
+        price: defaultSize.price,
         imageUrl: item.imageUrl,
         category: item.category,
         quantity: 1,
