@@ -1,5 +1,6 @@
 import { CartItem } from '@/contexts/CartContext';
 import { MenuItem, SizeOption } from '@/data/sample-menu';
+import { featuredDishes } from "@/data/sample-menu";
 
 // Helper function to create a cart item with all required properties
 export function createCartItem(
@@ -39,4 +40,9 @@ export async function generateStaticParams() {
   return featuredDishes.map(dish => ({
     id: dish.id
   }));
-} 
+}
+
+export default function ProductPage({ params }) {
+  const { id } = params;
+  // ...rest of your code
+}
