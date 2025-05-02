@@ -62,10 +62,14 @@ export default function ProductPage({ params }: ProductPageProps) {
     return null;
   }
 
-  return (
-    <div>
-      <h1>{product?.name}</h1>
-      {/* Render the rest of your product details here */}
-    </div>
-  );
+  return {
+    id: product.id,
+    name: product.name,
+    description: product.description,
+    imageUrl: product.imageUrl,
+    category: product.category,
+    price: product.price,
+    portionInfo: product.portionInfo,
+    selectedSize: product.selectedSize
+  };
 }
