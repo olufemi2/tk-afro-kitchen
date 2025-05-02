@@ -1,6 +1,8 @@
 import { CartItem } from '@/contexts/CartContext';
 import { MenuItem, SizeOption } from '@/data/sample-menu';
 import { featuredDishes } from "@/data/sample-menu";
+import { type GetStaticParams, type GetStaticPropsContext } from "next";
+import { notFound } from "next/navigation";
 
 // Helper function to create a cart item with all required properties
 export function createCartItem(
@@ -42,7 +44,26 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function ProductPage({ params }) {
+// If using the app directory (Next.js 13+ with /app), use this type:
+type ProductPageProps = {
+  params: {
+    id: string;
+  };
+};
+
+export default function ProductPage({ params }: ProductPageProps) {
   const { id } = params;
-  // ...rest of your code
+  const product = featuredDishes.find(dish => dish.id === id);
+
+  if (!product) {
+    // Optionally handle not found
+    return <div>Product not found</div>;
+  }
+
+  return (
+    <div>
+      <h1>{product.name}</h1>
+      {/* Render the rest of your product details here */}
+    </div>
+  );
 }
