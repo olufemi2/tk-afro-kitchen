@@ -68,8 +68,8 @@ export default function ProductPage({ params }: ProductPageProps) {
     description: product.description,
     imageUrl: product.imageUrl,
     category: product.category,
-    price: product.selectedSize?.price ?? product.sizeOptions?.[0]?.price ?? 0,
-    portionInfo: product.selectedSize?.portionInfo ?? product.sizeOptions?.[0]?.portionInfo ?? "",
-    selectedSize: product.selectedSize ?? product.sizeOptions?.[0] ?? null
+    price: product.sizeOptions?.[0]?.price ?? 0,
+    portionInfo: product.sizeOptions?.[0]?.portionInfo ?? "",
+    selectedSize: product.sizeOptions?.[0] ?? null
   };
 }
