@@ -27,9 +27,6 @@ export function createCartItem(
     quantity: quantity,
     price: itemPrice,
     portionInfo: defaultSize?.portionInfo ?? "Single portion",
-    // Convert size to lowercase and ensure it matches allowed types
-    size: (defaultSize?.size.toLowerCase() as 'small' | 'regular' | 'large') || 'regular',
-    // Always include selectedSize object
     selectedSize: {
       size: defaultSize?.size ?? "Regular",
       price: itemPrice,
