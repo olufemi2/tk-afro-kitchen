@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { MenuItemVariant } from "@/data/sample-menu";
+import { MenuItem, SizeOption } from "@/data/sample-menu";
 
 interface VariantFoodCardProps {
   id: string;
@@ -13,8 +13,8 @@ interface VariantFoodCardProps {
   description: string;
   imageUrl: string;
   category: string;
-  variants: MenuItemVariant[];
-  defaultVariantIndex: number;
+  sizeOptions: SizeOption[];
+  defaultSizeIndex: number;
 }
 
 export function VariantFoodCard({
@@ -23,11 +23,10 @@ export function VariantFoodCard({
   description,
   imageUrl,
   category,
-  variants,
-  defaultVariantIndex
+  sizeOptions,
+  defaultSizeIndex
 }: VariantFoodCardProps) {
-  const defaultVariant = variants[defaultVariantIndex];
-  const defaultSize = defaultVariant.sizeOptions[defaultVariant.defaultSizeIndex];
+  const defaultVariant = sizeOptions[defaultSizeIndex];
 
   return (
     <Link href={`/product/${id}`}>
@@ -48,16 +47,16 @@ export function VariantFoodCard({
               <h3 className="text-gradient text-lg mb-1">{name}</h3>
               <p className="text-sm text-slate-300 line-clamp-2">{description}</p>
               <div className="mt-2 text-xs text-orange-400">
-                {variants.length} variations available
+                {sizeOptions.length} variations available
               </div>
             </div>
             <div className="flex flex-col items-end gap-3">
               <div className="text-right">
                 <div className="text-orange-400 font-medium">
-                  From £{defaultSize.price.toFixed(2)}
+                  From £{defaultVariant.price.toFixed(2)}
                 </div>
                 <div className="text-xs text-slate-400">
-                  Select variant to order
+                  Select size to order
                 </div>
               </div>
               <Button 
