@@ -1,7 +1,6 @@
 import { CartItem } from '@/contexts/CartContext';
 import { MenuItem, SizeOption } from '@/data/sample-menu';
 import { featuredDishes } from "@/data/sample-menu";
-import { type GetStaticParams, type GetStaticPropsContext } from "next";
 import { notFound } from "next/navigation";
 
 // Helper function to create a cart item with all required properties
