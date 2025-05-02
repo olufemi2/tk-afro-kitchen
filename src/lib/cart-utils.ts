@@ -14,6 +14,9 @@ export function createCartItem(
       : null
   );
 
+  // Get the price from the size option or use the first available price as fallback
+  const itemPrice = defaultSize?.price ?? item.sizeOptions[0].price;
+
   // Create the cart item with all required properties
   return {
     id: item.id,
@@ -22,14 +25,14 @@ export function createCartItem(
     imageUrl: item.imageUrl,
     category: item.category,
     quantity: quantity,
-    price: defaultSize?.price ?? item.price,
+    price: itemPrice,
     portionInfo: defaultSize?.portionInfo ?? "Single portion",
     // Convert size to lowercase and ensure it matches allowed types
     size: (defaultSize?.size.toLowerCase() as 'small' | 'regular' | 'large') || 'regular',
     // Always include selectedSize object
     selectedSize: {
       size: defaultSize?.size ?? "Regular",
-      price: defaultSize?.price ?? item.price,
+      price: itemPrice,
       portionInfo: defaultSize?.portionInfo ?? "Single portion"
     }
   };
