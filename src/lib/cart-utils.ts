@@ -59,7 +59,7 @@ export default function ProductPage({ params }: ProductPageProps) {
   const product = getProductById(id);
 
   if (!product) {
-    return <div>Product not found</div>;
+    return null;
   }
 
   return (
