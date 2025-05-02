@@ -50,9 +50,13 @@ type ProductPageProps = {
   };
 };
 
+export function getProductById(id: string) {
+  return featuredDishes.find(dish => dish.id === id) || null;
+}
+
 export default function ProductPage({ params }: ProductPageProps) {
   const { id } = params;
-  const product = featuredDishes.find(dish => dish.id === id);
+  const product = getProductById(id);
 
   if (!product) {
     return <div>Product not found</div>;
@@ -60,7 +64,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
   return (
     <div>
-      <h1>{product.name}</h1>
+      <h1>{product?.name}</h1>
       {/* Render the rest of your product details here */}
     </div>
   );
