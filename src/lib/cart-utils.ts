@@ -33,4 +33,10 @@ export function createCartItem(
       portionInfo: defaultSize?.portionInfo ?? "Single portion"
     }
   };
+}
+
+export async function generateStaticParams() {
+  return featuredDishes.map(dish => ({
+    id: dish.id
+  }));
 } 
