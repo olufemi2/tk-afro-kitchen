@@ -55,7 +55,6 @@ export default function ProductPage({ params }: ProductPageProps) {
   const product = featuredDishes.find(dish => dish.id === id);
 
   if (!product) {
-    // Optionally handle not found
     return <div>Product not found</div>;
   }
 
