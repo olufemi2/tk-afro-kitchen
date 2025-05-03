@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useParams } from 'next/navigation';
-import { featuredDishes, MenuItem } from '@/data/sample-menu';
+import { featuredDishes } from '@/data/sample-menu';
 import { Button } from "@/components/ui/button";
 import { useCart } from "@/contexts/CartContext";
 import Image from "next/image";
