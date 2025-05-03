@@ -1,5 +1,3 @@
-import { SizeOption } from "../../data/sample-menu";
-
 export interface MenuItem {
   id: string;
   name: string;
@@ -15,6 +13,12 @@ export interface Category {
   name: string;
   description: string;
   imageUrl: string;
+}
+
+export interface SizeOption {
+  size: string;
+  price: number;
+  portionInfo: string;
 }
 
 export const categories: Category[] = [
