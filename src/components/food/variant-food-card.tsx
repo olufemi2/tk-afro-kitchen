@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ShoppingCart, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { MenuItem, SizeOption } from "@/data/sample-menu";
+import { SizeOption } from "../../data/sample-menu";
 
 interface VariantFoodCardProps {
   id: string;

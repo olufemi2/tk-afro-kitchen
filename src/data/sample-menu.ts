@@ -1,8 +1,4 @@
-export interface SizeOption {
-  size: '2L' | '4L' | 'half-cooler' | 'pack' | 'tray' | 'combo';
-  price: number;
-  portionInfo: string;
-}
+import { SizeOption } from "../../data/sample-menu";
 
 export interface MenuItem {
   id: string;
