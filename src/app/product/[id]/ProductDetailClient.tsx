@@ -1,8 +1,12 @@
-// src/app/product/[id]/ProductDetailClient.tsx
 "use client";
 import { useState } from "react";
+import type { MenuItem } from "@/data/sample-menu"; // <-- Import the type
 
-export default function ProductDetailClient({ dish }) {
+type ProductDetailClientProps = {
+  dish: MenuItem;
+};
+
+export default function ProductDetailClient({ dish }: ProductDetailClientProps) {
   // Your client-side logic here
   return (
     <div>
