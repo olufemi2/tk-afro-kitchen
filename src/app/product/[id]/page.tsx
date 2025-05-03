@@ -107,4 +107,10 @@ export default function ProductPage() {
       </div>
     </div>
   );
+}
+
+export async function generateStaticParams() {
+  return featuredDishes.map(dish => ({
+    id: dish.id
+  }));
 } 
