@@ -1,3 +1,9 @@
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { ReactNode, useState } from "react";
+import { Button } from "@/components/ui/button";
+
+export function QuoteFormModal({ trigger }: { trigger: ReactNode }) {
+}
 <form onSubmit={handleSubmit}>
   <div>
     <label>Name</label>
