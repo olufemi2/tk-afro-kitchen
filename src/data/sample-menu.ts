@@ -324,7 +324,7 @@ export const featuredDishes: MenuItem[] = [
     id: "okra-soup",
     name: "Assorted Okra Soup",
     description: "Okra soup with assorted meat",
-    imageUrl: "/images/dishes/okro soup ilaalasepo.jpg",
+    imageUrl: "/images/dishes/assorted-okro.jpg",
     category: "Soups & Stews",
     sizeOptions: [
       { size: "2L", price: 60, portionInfo: "2 Litres" },
@@ -336,7 +336,7 @@ export const featuredDishes: MenuItem[] = [
     id: "seafood-okra",
     name: "Seafood Okra Soup",
     description: "Okra soup with seafood",
-    imageUrl: "/images/dishes/seafood-okro.png",
+    imageUrl: "/images/dishes/seafood-okro.jpg",
     category: "Soups & Stews",
     sizeOptions: [
       { size: "2L", price: 70, portionInfo: "2 Litres" },
@@ -615,7 +615,7 @@ export const menuGroups = [
         id: "peppered-grilled-soft-chicken",
         name: "Peppered Grilled Soft Chicken",
         description: "Grilled soft chicken in pepper sauce",
-        imageUrl: "/images/dishes/chicken.png",
+        imageUrl: "/images/dishes/softchicken.jpg",
         sizeOptions: [
           { size: "2L", price: 50, portionInfo: "2 Litres" },
           { size: "4L", price: 80, portionInfo: "4 Litres" }
