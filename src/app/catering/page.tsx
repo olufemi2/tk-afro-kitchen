@@ -27,13 +27,18 @@ export default function CateringPage() {
                 Elevate your events with authentic Nigerian and African cuisine. 
                 From intimate gatherings to large celebrations.
               </p>
-              <Button 
-                className="button-primary text-lg" 
-                size="lg"
-                onClick={() => setIsQuoteModalOpen(true)}
-              >
-                Request a Quote
-              </Button>
+              <QuoteFormModal 
+                isOpen={isQuoteModalOpen}
+                onClose={() => setIsQuoteModalOpen(false)}
+                trigger={
+                  <Button 
+                    className="button-primary text-lg" 
+                    size="lg"
+                  >
+                    Request a Quote
+                  </Button>
+                }
+              />
             </div>
           </div>
         </section>
@@ -73,24 +78,21 @@ export default function CateringPage() {
               Let us help you plan your next event. Contact us for a personalized quote and menu consultation.
             </p>
             <div className="flex justify-center gap-4">
-              <Button 
-                className="button-primary"
-                onClick={() => setIsQuoteModalOpen(true)}
-              >
-                Contact Us
-              </Button>
+              <QuoteFormModal 
+                isOpen={isQuoteModalOpen}
+                onClose={() => setIsQuoteModalOpen(false)}
+                trigger={
+                  <Button className="button-primary">
+                    Contact Us
+                  </Button>
+                }
+              />
               <Button variant="outline">
                 View Menu
               </Button>
             </div>
           </div>
         </section>
-
-        {/* Quote Form Modal */}
-        <QuoteFormModal 
-          isOpen={isQuoteModalOpen}
-          onClose={() => setIsQuoteModalOpen(false)}
-        />
       </div>
     </>
   );

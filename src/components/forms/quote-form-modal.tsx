@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,9 +20,10 @@ import { CalendarIcon, Building2, Cake, Heart } from "lucide-react";
 interface QuoteFormModalProps {
   isOpen: boolean;
   onClose: () => void;
+  trigger?: React.ReactNode;
 }
 
-export function QuoteFormModal({ isOpen, onClose }: QuoteFormModalProps) {
+export function QuoteFormModal({ isOpen, onClose, trigger }: QuoteFormModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     eventType: '',
@@ -58,6 +60,7 @@ export function QuoteFormModal({ isOpen, onClose }: QuoteFormModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
+      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-gradient">Request a Quote</DialogTitle>
