@@ -18,12 +18,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { CalendarIcon, Building2, Cake, Heart } from "lucide-react";
 
 interface QuoteFormModalProps {
-  isOpen: boolean;
-  onClose: () => void;
   trigger?: React.ReactNode;
 }
 
-export function QuoteFormModal({ isOpen, onClose, trigger }: QuoteFormModalProps) {
+export function QuoteFormModal({ trigger }: QuoteFormModalProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     eventType: '',
@@ -50,7 +48,18 @@ export function QuoteFormModal({ isOpen, onClose, trigger }: QuoteFormModalProps
       
       if (!response.ok) throw new Error('Failed to submit');
       
-      onClose();
+      // Reset form and close dialog
+      setFormData({
+        eventType: '',
+        eventDate: '',
+        guestCount: '',
+        location: '',
+        contactName: '',
+        email: '',
+        phone: '',
+        budget: '',
+        additionalDetails: ''
+      });
     } catch (error) {
       console.error('Error submitting form:', error);
     } finally {
@@ -59,7 +68,7 @@ export function QuoteFormModal({ isOpen, onClose, trigger }: QuoteFormModalProps
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog>
       {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
@@ -198,14 +207,6 @@ export function QuoteFormModal({ isOpen, onClose, trigger }: QuoteFormModalProps
 
           {/* Form Actions */}
           <div className="flex justify-end space-x-4">
-            <Button 
-              type="button" 
-              variant="outline" 
-              onClick={onClose}
-              disabled={isSubmitting}
-            >
-              Cancel
-            </Button>
             <Button 
               type="submit" 
               className="button-primary"

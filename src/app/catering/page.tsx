@@ -1,13 +1,10 @@
 'use client';
 
-import { useState } from 'react';
 import { Header } from "@/components/layout/header";
 import { Button } from "@/components/ui/button";
 import { QuoteFormModal } from "@/components/forms/quote-form-modal";
 
 export default function CateringPage() {
-  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
-
   return (
     <>
       <Header />
@@ -28,8 +25,6 @@ export default function CateringPage() {
                 From intimate gatherings to large celebrations.
               </p>
               <QuoteFormModal 
-                isOpen={isQuoteModalOpen}
-                onClose={() => setIsQuoteModalOpen(false)}
                 trigger={
                   <Button 
                     className="button-primary text-lg" 
@@ -79,8 +74,6 @@ export default function CateringPage() {
             </p>
             <div className="flex justify-center gap-4">
               <QuoteFormModal 
-                isOpen={isQuoteModalOpen}
-                onClose={() => setIsQuoteModalOpen(false)}
                 trigger={
                   <Button className="button-primary">
                     Contact Us
