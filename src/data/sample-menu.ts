@@ -202,7 +202,7 @@ export const featuredDishes: MenuItem[] = [
     id: "peppered-grilled-chicken",
     name: "Peppered Grilled Soft Chicken",
     description: "Grilled soft chicken in pepper sauce",
-    imageUrl: "/images/dishes/grilled-chicken.png",
+    imageUrl: "/images/dishes/softchicken.jpg",
     category: "Protein Dishes",
     sizeOptions: [
       { size: "2L", price: 50, portionInfo: "2 Litres" },
@@ -422,7 +422,7 @@ export const featuredDishes: MenuItem[] = [
     id: "fish-pepper-soup",
     name: "Fish Pepper Soup",
     description: "Spicy pepper soup with fish",
-    imageUrl: "/images/dishes/fish-pepper-soup.png",
+    imageUrl: "/images/dishes/fishpeppersoup.jpg",
     category: "Side Dishes",
     sizeOptions: [
       { size: "2L", price: 50, portionInfo: "2 Litres" },

@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 interface DeliveryDetails {
   fullName: string;
@@ -30,14 +31,12 @@ export default function CheckoutPage() {
     city: ''
   });
   
-  // Move the cart check to useEffect to avoid navigation during render
   useEffect(() => {
     if (items.length === 0) {
       router.push('/menu');
     }
   }, [items, router]);
 
-  // Return early if cart is empty
   if (items.length === 0) {
     return null;
   }
@@ -54,15 +53,8 @@ export default function CheckoutPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simulate order processing
     try {
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Here you would typically:
-      // 1. Process payment
-      // 2. Save order to database
-      // 3. Send confirmation email
-      
       clearCart();
       router.push('/order-confirmation');
     } catch (error) {
@@ -102,89 +94,118 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            {/* Delivery Details Form */}
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-4">
-                <div>
-                  <Label htmlFor="fullName" className="text-black">Full Name</Label>
-                  <Input
-                    id="fullName"
-                    name="fullName"
-                    value={deliveryDetails.fullName}
-                    onChange={handleInputChange}
-                    required
-                    className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="email" className="text-black">Email</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={deliveryDetails.email}
-                    onChange={handleInputChange}
-                    required
-                    className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="phone" className="text-black">Phone</Label>
-                  <Input
-                    id="phone"
-                    name="phone"
-                    type="tel"
-                    value={deliveryDetails.phone}
-                    onChange={handleInputChange}
-                    required
-                    className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="address" className="text-black">Delivery Address</Label>
-                  <Input
-                    id="address"
-                    name="address"
-                    value={deliveryDetails.address}
-                    onChange={handleInputChange}
-                    required
-                    className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-4">
+            {/* Delivery Details Form and PayPal */}
+            <div>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="space-y-4">
                   <div>
-                    <Label htmlFor="postcode" className="text-black">Postcode</Label>
+                    <Label htmlFor="fullName" className="text-black">Full Name</Label>
                     <Input
-                      id="postcode"
-                      name="postcode"
-                      value={deliveryDetails.postcode}
+                      id="fullName"
+                      name="fullName"
+                      value={deliveryDetails.fullName}
                       onChange={handleInputChange}
                       required
                       className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="city" className="text-black">City</Label>
+                    <Label htmlFor="email" className="text-black">Email</Label>
                     <Input
-                      id="city"
-                      name="city"
-                      value={deliveryDetails.city}
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={deliveryDetails.email}
                       onChange={handleInputChange}
                       required
                       className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
                     />
                   </div>
+                  <div>
+                    <Label htmlFor="phone" className="text-black">Phone</Label>
+                    <Input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      value={deliveryDetails.phone}
+                      onChange={handleInputChange}
+                      required
+                      className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="address" className="text-black">Delivery Address</Label>
+                    <Input
+                      id="address"
+                      name="address"
+                      value={deliveryDetails.address}
+                      onChange={handleInputChange}
+                      required
+                      className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <Label htmlFor="postcode" className="text-black">Postcode</Label>
+                      <Input
+                        id="postcode"
+                        name="postcode"
+                        value={deliveryDetails.postcode}
+                        onChange={handleInputChange}
+                        required
+                        className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
+                      />
+                    </div>
+                    <div>
+                      <Label htmlFor="city" className="text-black">City</Label>
+                      <Input
+                        id="city"
+                        name="city"
+                        value={deliveryDetails.city}
+                        onChange={handleInputChange}
+                        required
+                        className="mt-1 bg-white border-gray-300 text-black placeholder-gray-400 focus:border-gray-500"
+                      />
+                    </div>
+                  </div>
                 </div>
-              </div>
 
-              <Button
-                type="submit"
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? 'Processing...' : 'Place Order'}
-              </Button>
-            </form>
+                <Button
+                  type="submit"
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Processing...' : 'Place Order'}
+                </Button>
+              </form>
+
+              {/* PayPal Payment Section */}
+              <div className="mt-8">
+                <PayPalScriptProvider options={{ "client-id": "AUXsT9usz6t_M71kTf7CBEG2DfORzABp2R3aNLQIFYeKDDyifju1GmhNvgpUosYdrXV-K2qfb9jvh2eM" }}>
+                  <PayPalButtons
+                    style={{ layout: "vertical" }}
+                    createOrder={(data, actions) => {
+                      return actions.order.create({
+                        purchase_units: [{
+                          amount: {
+                            value: totalPrice.toFixed(2),
+                          },
+                        }],
+                      });
+                    }}
+                    onApprove={async (data, actions) => {
+                      const details = await actions.order.capture();
+                      alert("Transaction completed by " + details.payer.name.given_name);
+                      clearCart();
+                      router.push('/order-confirmation');
+                    }}
+                    onError={(err) => {
+                      alert("Payment error: " + err);
+                    }}
+                  />
+                </PayPalScriptProvider>
+              </div>
+            </div>
           </div>
         </div>
       </div>
