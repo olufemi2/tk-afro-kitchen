@@ -48,7 +48,7 @@ export function QuoteFormModal({ trigger }: QuoteFormModalProps) {
       
       if (!response.ok) throw new Error('Failed to submit');
       
-      // Reset form and close dialog
+      // Reset form
       setFormData({
         eventType: '',
         eventDate: '',
@@ -69,7 +69,9 @@ export function QuoteFormModal({ trigger }: QuoteFormModalProps) {
 
   return (
     <Dialog>
-      {trigger && <DialogTrigger asChild>{trigger}</DialogTrigger>}
+      <DialogTrigger asChild>
+        {trigger}
+      </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
         <DialogHeader>
           <DialogTitle className="text-2xl font-bold text-gradient">Request a Quote</DialogTitle>

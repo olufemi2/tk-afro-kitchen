@@ -6,9 +6,9 @@ import { QuoteFormModal } from "@/components/forms/quote-form-modal";
 
 export default function CateringPage() {
   return (
-    <>
+    <div className="min-h-screen bg-[#1e1e1e]">
       <Header />
-      <div className="min-h-screen bg-[#1e1e1e] pb-16 pt-24">
+      <main className="pb-16 pt-24">
         {/* Hero Section */}
         <section className="relative overflow-hidden py-20">
           <div className="absolute inset-0 bg-gradient-to-b from-orange-500/5 to-transparent opacity-20" />
@@ -24,16 +24,18 @@ export default function CateringPage() {
                 Elevate your events with authentic Nigerian and African cuisine. 
                 From intimate gatherings to large celebrations.
               </p>
-              <QuoteFormModal 
-                trigger={
-                  <Button 
-                    className="button-primary text-lg" 
-                    size="lg"
-                  >
-                    Request a Quote
-                  </Button>
-                }
-              />
+              <div className="flex justify-center">
+                <QuoteFormModal 
+                  trigger={
+                    <Button 
+                      className="button-primary text-lg" 
+                      size="lg"
+                    >
+                      Request a Quote
+                    </Button>
+                  }
+                />
+              </div>
             </div>
           </div>
         </section>
@@ -86,7 +88,7 @@ export default function CateringPage() {
             </div>
           </div>
         </section>
-      </div>
-    </>
+      </main>
+    </div>
   );
 } 
