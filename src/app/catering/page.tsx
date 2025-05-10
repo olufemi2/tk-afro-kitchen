@@ -91,4 +91,4 @@ export default function CateringPage() {
       </main>
     </div>
   );
-} 
+}
