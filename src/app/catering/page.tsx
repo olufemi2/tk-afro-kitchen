@@ -1,35 +1,38 @@
-import Image from 'next/image';
+'use client';
+
+import { Header } from "@/components/layout/header";
 import { Button } from "@/components/ui/button";
+import Image from 'next/image';
 
 export default function CateringPage() {
   return (
-    <div className="min-h-screen">
+    <>
+      <Header />
+      <div className="min-h-screen bg-[#1e1e1e] pb-16 pt-24">
       {/* Hero Section */}
-      <section className="relative h-[500px] flex items-center justify-center">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="/images/catering/hero-catering.jpg"
-            alt="Catering Services"
-            fill
-            className="object-cover brightness-50"
-            priority
-          />
-        </div>
-        <div className="relative z-10 text-center px-4">
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+        <section className="relative overflow-hidden py-20">
+          <div className="absolute inset-0 bg-gradient-to-b from-orange-500/5 to-transparent opacity-20" />
+          <div className="relative z-10 container mx-auto px-4">
+            <div className="max-w-3xl mx-auto text-center space-y-8">
+              <h1 className="text-4xl md:text-5xl font-bold bg-clip-text text-transparent 
+                           bg-gradient-to-r from-orange-400 to-yellow-400 
+                           leading-tight md:leading-tight">
             Premium Catering Services
           </h1>
-          <p className="text-lg md:text-xl text-slate-200 max-w-2xl mx-auto mb-8">
-            Elevate your events with authentic Nigerian and African cuisine. From intimate gatherings to large celebrations.
+              <p className="text-lg md:text-xl text-slate-300 max-w-2xl mx-auto 
+                          leading-relaxed">
+                Elevate your events with authentic Nigerian and African cuisine. 
+                From intimate gatherings to large celebrations.
           </p>
           <Button className="button-primary text-lg" size="lg">
             Request a Quote
           </Button>
+            </div>
         </div>
       </section>
 
       {/* Services Section */}
-      <section className="py-16 px-4 bg-[#1e1e1e]">
+        <section className="py-16 px-4">
         <div className="container mx-auto">
           <h2 className="text-3xl font-bold text-center mb-12 text-gradient">Our Catering Services</h2>
           
@@ -73,5 +76,6 @@ export default function CateringPage() {
         </div>
       </section>
     </div>
+    </>
   );
 } 
