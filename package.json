@@ -21,6 +21,7 @@
     "lucide-react": "0.501.0",
     "netlify-plugin-build-monitor": "file:plugins/netlify-plugin-build-monitor",
     "next": "14.1.0",
+    "nodemailer": "^6.10.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "tailwind-merge": "3.2.0",
