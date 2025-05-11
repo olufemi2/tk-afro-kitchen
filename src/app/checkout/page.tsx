@@ -196,8 +196,8 @@ export default function CheckoutPage() {
                       });
                     }}
                     onApprove={async (data, actions) => {
-                      const details = await actions.order.capture();
-                      alert("Transaction completed by " + details.payer.name.given_name);
+                      const details = await actions?.order?.capture();
+                      alert("Transaction completed by " + details?.payer?.name?.given_name);
                       clearCart();
                       router.push('/order-confirmation');
                     }}
