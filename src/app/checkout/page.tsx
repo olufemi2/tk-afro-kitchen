@@ -181,8 +181,8 @@ export default function CheckoutPage() {
 
               {/* PayPal Payment Section */}
               <div className="mt-8">
-                <PayPalScriptProvider options={{ "clientId": "AUXsT9usz6t_M71kTf7CBEG2DfORzABp2R3aNLQIFYeKDDyifju1GmhNvgpUosYdrXV-K2qfb9jvh2eM" }}>
-                  <PayPalButtons
+              <PayPalScriptProvider options={{ clientId: "AUXsT9usz6t_M71kTf7CBEG2DfORzABp2R3aNLQIFYeKDDyifju1GmhNvgpUosYdrXV-K2qfb9jvh2eM", currency: "GBP" }}>
+                <PayPalButtons
                     style={{ layout: "vertical" }}
                     createOrder={(data, actions) => {
                       return actions.order.create({
