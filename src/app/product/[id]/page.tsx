@@ -6,12 +6,13 @@ export async function generateStaticParams() {
 }
 
 type Props = {
-  params: { id: string }
+  params: Promise<{ id: string }>
   searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export default function ProductPage({ params }: Props) {
-  const dish = featuredDishes.find(d => d.id === params.id);
+export default async function ProductPage({ params }: Props) {
+  const resolvedParams = await params;
+  const dish = featuredDishes.find(d => d.id === resolvedParams.id);
   if (!dish) return <div>Not found</div>;
   return <ProductDetailClient dish={dish} />;
 }
