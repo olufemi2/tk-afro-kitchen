@@ -18,10 +18,14 @@ interface DeliveryDetails {
   city: string;
 }
 
+// Move this to an environment variable
+const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "AUXsT9usz6t_M71kTf7CBEG2DfORzABp2R3aNLQIFYeKDDyifju1GmhNvgpUosYdrXV-K2qfb9jvh2eM";
+
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [deliveryDetails, setDeliveryDetails] = useState<DeliveryDetails>({
     fullName: '',
     email: '',
@@ -51,14 +55,21 @@ export default function CheckoutPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!paymentSuccess) {
+      alert('Please complete the PayPal payment first');
+      return;
+    }
+    
     setIsSubmitting(true);
 
     try {
+      // Here you would typically send the order details to your backend
       await new Promise(resolve => setTimeout(resolve, 2000));
       clearCart();
       router.push('/order-confirmation');
     } catch (error) {
       console.error('Error processing order:', error);
+      alert('There was an error processing your order. Please try again.');
     } finally {
       setIsSubmitting(false);
     }
@@ -170,43 +181,59 @@ export default function CheckoutPage() {
                   </div>
                 </div>
 
+                {/* PayPal Payment Section */}
+                <div className="mt-8">
+                  <PayPalScriptProvider options={{ 
+                    clientId: PAYPAL_CLIENT_ID,
+                    currency: "GBP",
+                    intent: "capture"
+                  }}>
+                    <PayPalButtons
+                      style={{ layout: "vertical" }}
+                      createOrder={(data, actions) => {
+                        return actions.order.create({
+                          purchase_units: [{
+                            amount: {
+                              currency_code: "GBP",
+                              value: totalPrice.toFixed(2),
+                            },
+                            description: `Order from TK Afro Kitchen - ${items.length} items`
+                          }],
+                        });
+                      }}
+                      onApprove={async (data, actions) => {
+                        if (!actions.order) return;
+                        
+                        try {
+                          const details = await actions.order.capture();
+                          console.log('Payment successful:', details);
+                          setPaymentSuccess(true);
+                          alert("Payment successful! Please complete the delivery details and submit the order.");
+                        } catch (error) {
+                          console.error('Payment error:', error);
+                          alert("There was an error processing your payment. Please try again.");
+                        }
+                      }}
+                      onError={(err) => {
+                        console.error('PayPal error:', err);
+                        alert("There was an error with PayPal. Please try again.");
+                      }}
+                      onCancel={() => {
+                        setPaymentSuccess(false);
+                        alert("Payment cancelled. Please try again.");
+                      }}
+                    />
+                  </PayPalScriptProvider>
+                </div>
+
                 <Button
                   type="submit"
                   className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !paymentSuccess}
                 >
-                  {isSubmitting ? 'Processing...' : 'Place Order'}
+                  {isSubmitting ? 'Processing...' : 'Complete Order'}
                 </Button>
               </form>
-
-              {/* PayPal Payment Section */}
-              <div className="mt-8">
-              <PayPalScriptProvider options={{ clientId: "AUXsT9usz6t_M71kTf7CBEG2DfORzABp2R3aNLQIFYeKDDyifju1GmhNvgpUosYdrXV-K2qfb9jvh2eM", currency: "GBP" }}>
-                <PayPalButtons
-                    style={{ layout: "vertical" }}
-                    createOrder={(data, actions) => {
-                      return actions.order.create({
-                        intent: "CAPTURE",
-                        purchase_units: [{
-                          amount: {
-                              currency_code: "GBP",
-                            value: totalPrice.toFixed(2),
-                          },
-                        }],
-                      });
-                    }}
-                    onApprove={async (data, actions) => {
-                      const details = await actions?.order?.capture();
-                      alert("Transaction completed by " + details?.payer?.name?.given_name);
-                      clearCart();
-                      router.push('/order-confirmation');
-                    }}
-                    onError={(err) => {
-                      alert("Payment error: " + err);
-                    }}
-                  />
-                </PayPalScriptProvider>
-              </div>
             </div>
           </div>
         </div>
