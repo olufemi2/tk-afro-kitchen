@@ -18,8 +18,11 @@ interface DeliveryDetails {
   city: string;
 }
 
-// Move this to an environment variable
-const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID || "AUXsT9usz6t_M71kTf7CBEG2DfORzABp2R3aNLQIFYeKDDyifju1GmhNvgpUosYdrXV-K2qfb9jvh2eM";
+const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+
+if (!PAYPAL_CLIENT_ID) {
+  console.error('PayPal client ID is not configured');
+}
 
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
@@ -183,14 +186,20 @@ export default function CheckoutPage() {
 
                 {/* PayPal Payment Section */}
                 <div className="mt-8">
-                  <PayPalScriptProvider options={{ 
-                    clientId: PAYPAL_CLIENT_ID,
-                    currency: "GBP",
-                    intent: "capture"
-                  }}>
+                  <PayPalScriptProvider 
+                    options={{ 
+                      clientId: PAYPAL_CLIENT_ID || '',
+                      currency: "GBP",
+                      intent: "capture",
+                      components: "buttons"
+                    }}
+                  >
                     <PayPalButtons
                       style={{ layout: "vertical" }}
                       createOrder={(data, actions) => {
+                        if (!actions.order) {
+                          throw new Error('PayPal order actions not available');
+                        }
                         return actions.order.create({
                           purchase_units: [{
                             amount: {
@@ -202,8 +211,9 @@ export default function CheckoutPage() {
                         });
                       }}
                       onApprove={async (data, actions) => {
-                        if (!actions.order) return;
-                        
+                        if (!actions.order) {
+                          throw new Error('PayPal order actions not available');
+                        }
                         try {
                           const details = await actions.order.capture();
                           console.log('Payment successful:', details);
