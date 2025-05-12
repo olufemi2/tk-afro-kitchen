@@ -173,3 +173,15 @@
     @apply transition-transform duration-500 group-hover:scale-105;
   }
 }
+
+.paypal-button-container {
+  min-height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+}
+
+.paypal-button-container iframe {
+  min-height: 150px !important;
+}

@@ -191,49 +191,64 @@ export default function CheckoutPage() {
                       clientId: PAYPAL_CLIENT_ID || '',
                       currency: "GBP",
                       intent: "capture",
-                      components: "buttons"
+                      components: "buttons",
+                      'enable-funding': 'paylater,venmo',
+                      'disable-funding': 'paylater,venmo',
+                      'data-sdk-integration-source': 'button-factory'
                     }}
                   >
-                    <PayPalButtons
-                      style={{ layout: "vertical" }}
-                      createOrder={(data, actions) => {
-                        if (!actions.order) {
-                          throw new Error('PayPal order actions not available');
-                        }
-                        return actions.order.create({
-                          intent: "CAPTURE",
-                          purchase_units: [{
-                            amount: {
-                              currency_code: "GBP",
-                              value: totalPrice.toFixed(2),
-                            },
-                            description: `Order from TK Afro Kitchen - ${items.length} items`
-                          }],
-                        });
-                      }}
-                      onApprove={async (data, actions) => {
-                        if (!actions.order) {
-                          throw new Error('PayPal order actions not available');
-                        }
-                        try {
-                          const details = await actions.order.capture();
-                          console.log('Payment successful:', details);
-                          setPaymentSuccess(true);
-                          alert("Payment successful! Please complete the delivery details and submit the order.");
-                        } catch (error) {
-                          console.error('Payment error:', error);
-                          alert("There was an error processing your payment. Please try again.");
-                        }
-                      }}
-                      onError={(err) => {
-                        console.error('PayPal error:', err);
-                        alert("There was an error with PayPal. Please try again.");
-                      }}
-                      onCancel={() => {
-                        setPaymentSuccess(false);
-                        alert("Payment cancelled. Please try again.");
-                      }}
-                    />
+                    <div className="paypal-button-container" role="region" aria-label="PayPal payment options">
+                      <PayPalButtons
+                        style={{ 
+                          layout: "vertical",
+                          color: "gold",
+                          shape: "rect",
+                          label: "pay",
+                          height: 55
+                        }}
+                        fundingSource="paypal"
+                        createOrder={(data, actions) => {
+                          if (!actions.order) {
+                            throw new Error('PayPal order actions not available');
+                          }
+                          return actions.order.create({
+                            intent: "CAPTURE",
+                            purchase_units: [{
+                              amount: {
+                                currency_code: "GBP",
+                                value: totalPrice.toFixed(2),
+                              },
+                              description: `Order from TK Afro Kitchen - ${items.length} items`
+                            }],
+                            application_context: {
+                              shipping_preference: "NO_SHIPPING"
+                            }
+                          });
+                        }}
+                        onApprove={async (data, actions) => {
+                          if (!actions.order) {
+                            throw new Error('PayPal order actions not available');
+                          }
+                          try {
+                            const details = await actions.order.capture();
+                            console.log('Payment successful:', details);
+                            setPaymentSuccess(true);
+                            alert("Payment successful! Please complete the delivery details and submit the order.");
+                          } catch (error) {
+                            console.error('Payment error:', error);
+                            alert("There was an error processing your payment. Please try again.");
+                          }
+                        }}
+                        onError={(err) => {
+                          console.error('PayPal error:', err);
+                          alert("There was an error with PayPal. Please try again.");
+                        }}
+                        onCancel={() => {
+                          setPaymentSuccess(false);
+                          alert("Payment cancelled. Please try again.");
+                        }}
+                      />
+                    </div>
                   </PayPalScriptProvider>
                 </div>
 
