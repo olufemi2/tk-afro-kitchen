@@ -5,14 +5,12 @@ export async function generateStaticParams() {
   return featuredDishes.map(dish => ({ id: dish.id }));
 }
 
-interface PageProps {
-  params: {
-    id: string;
-  };
-  searchParams: { [key: string]: string | string[] | undefined };
+type Props = {
+  params: { id: string }
+  searchParams: { [key: string]: string | string[] | undefined }
 }
 
-export default async function ProductPage({ params }: PageProps) {
+export default function ProductPage({ params }: Props) {
   const dish = featuredDishes.find(d => d.id === params.id);
   if (!dish) return <div>Not found</div>;
   return <ProductDetailClient dish={dish} />;
