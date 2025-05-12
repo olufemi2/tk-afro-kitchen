@@ -201,6 +201,7 @@ export default function CheckoutPage() {
                           throw new Error('PayPal order actions not available');
                         }
                         return actions.order.create({
+                          intent: "CAPTURE",
                           purchase_units: [{
                             amount: {
                               currency_code: "GBP",
