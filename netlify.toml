@@ -8,6 +8,7 @@
   NEXT_USE_NETLIFY_EDGE = "true"
   NEXT_TELEMETRY_DISABLED = "1"
   NPM_FLAGS = "--legacy-peer-deps"
+  NEXT_PUBLIC_PAYPAL_CLIENT_ID = "AUXsT9usz6t_M71kTf7CBEG2DfORzABp2R3aNLQIFYeKDDyifju1GmhNvgpUosYdrXV-K2qfb9jvh2eM"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
@@ -22,4 +23,4 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-XSS-Protection = "1; mode=block"
-    Content-Security-Policy = "default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.paypal.com https://www.paypalobjects.com; style-src 'self' 'unsafe-inline';"
+    Content-Security-Policy = "default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.paypal.com https://www.paypalobjects.com https://www.sandbox.paypal.com; style-src 'self' 'unsafe-inline'; connect-src 'self' https://www.paypal.com https://www.sandbox.paypal.com;"
