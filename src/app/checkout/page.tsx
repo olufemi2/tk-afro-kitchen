@@ -206,7 +206,6 @@ export default function CheckoutPage() {
                           label: "pay",
                           height: 55
                         }}
-                        #fundingSource="paypal"
                         createOrder={(data, actions) => {
                           if (!actions.order) {
                             throw new Error('PayPal order actions not available');
