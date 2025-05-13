@@ -192,8 +192,8 @@ export default function CheckoutPage() {
                       currency: "GBP",
                       intent: "capture",
                       components: "buttons",
-                      'enable-funding': 'paylater,venmo',
-                      'disable-funding': 'paylater,venmo',
+                      'enable-funding': 'card,venmo',
+                      'disable-funding': 'paylater',
                       'data-sdk-integration-source': 'button-factory'
                     }}
                   >
@@ -221,7 +221,10 @@ export default function CheckoutPage() {
                               description: `Order from TK Afro Kitchen - ${items.length} items`
                             }],
                             application_context: {
-                              shipping_preference: "NO_SHIPPING"
+                              shipping_preference: "NO_SHIPPING",
+                              brand_name: "TK Afro Kitchen",
+                              landing_page: "LOGIN",
+                              user_action: "PAY_NOW"
                             }
                           });
                         }}
