@@ -194,7 +194,10 @@ export default function CheckoutPage() {
                       components: "buttons",
                       "enable-funding": "paylater,venmo,card",
                       "disable-funding": "paypal",
-                      "data-sdk-integration-source": "button-factory"
+                      "data-sdk-integration-source": "button-factory",
+                      "data-namespace": "PayPalSDK",
+                      "data-client-token": "test",
+                      "data-page-type": "checkout"
                     }}
                   >
                     <div className="paypal-button-container">
@@ -204,8 +207,10 @@ export default function CheckoutPage() {
                           color: "black",
                           shape: "rect",
                           label: "pay",
-                          height: 55
+                          height: 55,
+                          tagline: false
                         }}
+                        fundingSource="card"
                         createOrder={(data, actions) => {
                           return actions.order.create({
                             intent: "CAPTURE",
