@@ -179,11 +179,15 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 1rem 0;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
 }
 
 .paypal-button-container iframe {
-  min-height: 150px !important;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 150px;
 }
 
 /* Add these styles to your existing CSS */

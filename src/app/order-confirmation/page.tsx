@@ -4,8 +4,27 @@ import { Header } from "@/components/layout/header";
 import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
+
+interface OrderDetails {
+  orderId: string;
+  status: string;
+  amount: string;
+  timestamp: string;
+}
 
 export default function OrderConfirmationPage() {
+  const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
+
+  useEffect(() => {
+    const storedDetails = localStorage.getItem('lastOrderDetails');
+    if (storedDetails) {
+      setOrderDetails(JSON.parse(storedDetails));
+      // Clear the stored details after reading
+      localStorage.removeItem('lastOrderDetails');
+    }
+  }, []);
+
   return (
     <>
       <Header />
@@ -24,6 +43,14 @@ export default function OrderConfirmationPage() {
               <p className="text-lg mb-4 text-slate-200">
                 Thank you for your order. We've received your order and will begin preparing it shortly.
               </p>
+              {orderDetails && (
+                <div className="text-left space-y-2 text-slate-300 mb-4">
+                  <p><span className="text-orange-400">Order ID:</span> {orderDetails.orderId}</p>
+                  <p><span className="text-orange-400">Amount:</span> £{orderDetails.amount}</p>
+                  <p><span className="text-orange-400">Status:</span> {orderDetails.status}</p>
+                  <p><span className="text-orange-400">Date:</span> {new Date(orderDetails.timestamp).toLocaleString()}</p>
+                </div>
+              )}
               <p className="text-slate-400">
                 You will receive an email confirmation with your order details and tracking information.
               </p>
@@ -38,7 +65,7 @@ export default function OrderConfirmationPage() {
               </div>
             </div>
 
-            <div className="pt-8 space-x-4">
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
               <Button 
                 asChild 
                 variant="outline" 

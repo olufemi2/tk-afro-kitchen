@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 interface DeliveryDetails {
   fullName: string;
@@ -186,68 +186,45 @@ export default function CheckoutPage() {
 
                 {/* PayPal Payment Section */}
                 <div className="mt-8">
-                  <PayPalScriptProvider 
-                    options={{ 
+                  <PayPalScriptProvider
+                    options={{
                       clientId: PAYPAL_CLIENT_ID || '',
-                      currency: "GBP",
+                      currency: "USD",
                       intent: "capture",
                       components: "buttons",
-                      'enable-funding': 'card,venmo',
-                      'disable-funding': 'paylater',
-                      'data-sdk-integration-source': 'button-factory'
                     }}
                   >
-                    <div className="paypal-button-container" role="region" aria-label="PayPal payment options">
+                    <div className="paypal-button-container">
                       <PayPalButtons
-                        style={{ 
+                        style={{
                           layout: "vertical",
-                          color: "gold",
+                          color: "black",
                           shape: "rect",
                           label: "pay",
-                          height: 55
                         }}
                         createOrder={(data, actions) => {
-                          if (!actions.order) {
-                            throw new Error('PayPal order actions not available');
-                          }
                           return actions.order.create({
                             intent: "CAPTURE",
-                            purchase_units: [{
-                              amount: {
-                                currency_code: "GBP",
-                                value: totalPrice.toFixed(2),
+                            purchase_units: [
+                              {
+                                amount: {
+                                  value: totalPrice.toFixed(2),
+                                  currency_code: "USD",
+                                },
                               },
-                              description: `Order from TK Afro Kitchen - ${items.length} items`
-                            }],
-                            application_context: {
-                              shipping_preference: "NO_SHIPPING",
-                              brand_name: "TK Afro Kitchen",
-                              landing_page: "LOGIN",
-                              user_action: "PAY_NOW"
-                            }
+                            ],
                           });
                         }}
                         onApprove={async (data, actions) => {
-                          if (!actions.order) {
-                            throw new Error('PayPal order actions not available');
-                          }
-                          try {
-                            const details = await actions.order.capture();
-                            console.log('Payment successful:', details);
-                            setPaymentSuccess(true);
-                            alert("Payment successful! Please complete the delivery details and submit the order.");
-                          } catch (error) {
-                            console.error('Payment error:', error);
-                            alert("There was an error processing your payment. Please try again.");
+                          if (actions.order) {
+                            const order = await actions.order.capture();
+                            console.log("Order completed:", order);
+                            // Handle successful payment
+                            router.push("/success");
                           }
                         }}
                         onError={(err) => {
-                          console.error('PayPal error:', err);
-                          alert("There was an error with PayPal. Please try again.");
-                        }}
-                        onCancel={() => {
-                          setPaymentSuccess(false);
-                          alert("Payment cancelled. Please try again.");
+                          console.error("PayPal error:", err);
                         }}
                       />
                     </div>
