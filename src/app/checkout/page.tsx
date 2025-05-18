@@ -192,6 +192,9 @@ export default function CheckoutPage() {
                       currency: "USD",
                       intent: "capture",
                       components: "buttons",
+                      "enable-funding": "paylater,venmo,card",
+                      "disable-funding": "paypal",
+                      "data-sdk-integration-source": "button-factory"
                     }}
                   >
                     <div className="paypal-button-container">
@@ -201,6 +204,7 @@ export default function CheckoutPage() {
                           color: "black",
                           shape: "rect",
                           label: "pay",
+                          height: 55
                         }}
                         createOrder={(data, actions) => {
                           return actions.order.create({
@@ -217,10 +221,27 @@ export default function CheckoutPage() {
                         }}
                         onApprove={async (data, actions) => {
                           if (actions.order) {
-                            const order = await actions.order.capture();
-                            console.log("Order completed:", order);
-                            // Handle successful payment
-                            router.push("/success");
+                            try {
+                              const order = await actions.order.capture();
+                              console.log("Order completed:", order);
+                              setPaymentSuccess(true);
+                              
+                              // Store order details in localStorage for confirmation page
+                              if (order.purchase_units && order.purchase_units[0]?.amount?.value) {
+                                localStorage.setItem('lastOrderDetails', JSON.stringify({
+                                  orderId: order.id,
+                                  status: order.status,
+                                  amount: order.purchase_units[0].amount.value,
+                                  timestamp: new Date().toISOString()
+                                }));
+                              }
+                              
+                              // Redirect to success page
+                              router.push('/success');
+                            } catch (error) {
+                              console.error("Payment error:", error);
+                              alert("There was an error processing your payment. Please try again.");
+                            }
                           }
                         }}
                         onError={(err) => {
