@@ -248,6 +248,7 @@ export default function CheckoutPage() {
                             }
 
                             return actions.order.create({
+                              intent: "CAPTURE",
                               purchase_units: [
                                 {
                                   amount: {
@@ -258,7 +259,7 @@ export default function CheckoutPage() {
                                 }
                               ],
                               application_context: {
-                                shipping_preference: 'NO_SHIPPING' // Since this is a food delivery service
+                                shipping_preference: 'NO_SHIPPING'
                               }
                             }).catch(error => {
                               console.error('PayPal order creation error:', error);
