@@ -20,6 +20,10 @@ interface DeliveryDetails {
 
 const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
+// Add debugging logs
+console.log('PayPal Client ID:', PAYPAL_CLIENT_ID);
+console.log('Environment:', process.env.NODE_ENV);
+
 if (!PAYPAL_CLIENT_ID) {
   console.error('PayPal client ID is not configured');
 }
@@ -29,6 +33,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [paypalError, setPaypalError] = useState<string | null>(null);
   const [deliveryDetails, setDeliveryDetails] = useState<DeliveryDetails>({
     fullName: '',
     email: '',
@@ -37,7 +42,14 @@ export default function CheckoutPage() {
     postcode: '',
     city: ''
   });
+  const [isPayPalLoading, setIsPayPalLoading] = useState(false);
   
+  // Add useEffect for debugging
+  useEffect(() => {
+    console.log('Total Price:', totalPrice);
+    console.log('Items:', items);
+  }, [totalPrice, items]);
+
   useEffect(() => {
     if (items.length === 0) {
       router.push('/menu');
@@ -78,6 +90,20 @@ export default function CheckoutPage() {
     }
   };
 
+  const validateOrder = () => {
+    if (!totalPrice || totalPrice <= 0) {
+      setPaypalError('Invalid order amount. Please refresh the page and try again.');
+      return false;
+    }
+    
+    if (items.length === 0) {
+      setPaypalError('Your cart is empty. Please add items before proceeding.');
+      return false;
+    }
+    
+    return true;
+  };
+
   return (
     <>
       <Header />
@@ -85,6 +111,13 @@ export default function CheckoutPage() {
         <div className="container mx-auto px-4">
           <h1 className="text-3xl font-bold mb-8 text-black">Checkout</h1>
           
+          {/* Add error display */}
+          {paypalError && (
+            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+              {paypalError}
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Order Summary */}
             <div className="bg-white p-6 rounded-lg border border-gray-200">
@@ -186,76 +219,110 @@ export default function CheckoutPage() {
 
                 {/* PayPal Payment Section */}
                 <div className="mt-8">
-                  <PayPalScriptProvider
-                    options={{
-                      clientId: PAYPAL_CLIENT_ID || '',
-                      currency: "USD",
-                      intent: "capture",
-                      components: "buttons",
-                      "enable-funding": "paylater,venmo,card",
-                      "disable-funding": "paypal",
-                      "data-sdk-integration-source": "button-factory",
-                      "data-namespace": "PayPalSDK",
-                      "data-client-token": "test",
-                      "data-page-type": "checkout"
-                    }}
-                  >
-                    <div className="paypal-button-container">
-                      <PayPalButtons
-                        style={{
-                          layout: "vertical",
-                          color: "black",
-                          shape: "rect",
-                          label: "pay",
-                          height: 55,
-                          tagline: false
-                        }}
-                        fundingSource="card"
-                        createOrder={(data, actions) => {
-                          return actions.order.create({
-                            intent: "CAPTURE",
-                            purchase_units: [
-                              {
-                                amount: {
-                                  value: totalPrice.toFixed(2),
-                                  currency_code: "USD",
-                                },
-                              },
-                            ],
-                          });
-                        }}
-                        onApprove={async (data, actions) => {
-                          if (actions.order) {
+                  {PAYPAL_CLIENT_ID && validateOrder() ? (
+                    <PayPalScriptProvider
+                      options={{
+                        clientId: PAYPAL_CLIENT_ID,
+                        currency: "GBP",
+                        intent: "capture",
+                        components: "buttons"
+                      }}
+                    >
+                      <div className="paypal-button-container">
+                        <PayPalButtons
+                          style={{
+                            layout: "vertical",
+                            color: "gold",
+                            shape: "rect",
+                            label: "pay"
+                          }}
+                          createOrder={(data, actions) => {
+                            setIsPayPalLoading(true);
+                            console.log('Creating order with amount:', totalPrice);
+                            
+                            // Validate amount
+                            if (!totalPrice || totalPrice <= 0) {
+                              setPaypalError('Invalid order amount. Please refresh the page and try again.');
+                              setIsPayPalLoading(false);
+                              return Promise.reject('Invalid amount');
+                            }
+
+                            return actions.order.create({
+                              purchase_units: [
+                                {
+                                  amount: {
+                                    value: totalPrice.toFixed(2),
+                                    currency_code: "GBP"
+                                  },
+                                  description: `Order from TK Afro Kitchen - ${items.length} items`
+                                }
+                              ],
+                              application_context: {
+                                shipping_preference: 'NO_SHIPPING' // Since this is a food delivery service
+                              }
+                            }).catch(error => {
+                              console.error('PayPal order creation error:', error);
+                              setPaypalError('Failed to create payment. Please try again.');
+                              setIsPayPalLoading(false);
+                              throw error;
+                            });
+                          }}
+                          onApprove={async (data, actions) => {
+                            if (!actions.order) {
+                              setPaypalError('Payment processing failed. Please try again.');
+                              setIsPayPalLoading(false);
+                              return;
+                            }
+
                             try {
                               const order = await actions.order.capture();
-                              console.log("Order completed:", order);
+                              console.log('Payment successful:', order);
                               setPaymentSuccess(true);
-                              
-                              // Store order details in localStorage for confirmation page
-                              if (order.purchase_units && order.purchase_units[0]?.amount?.value) {
-                                localStorage.setItem('lastOrderDetails', JSON.stringify({
-                                  orderId: order.id,
-                                  status: order.status,
-                                  amount: order.purchase_units[0].amount.value,
-                                  timestamp: new Date().toISOString()
-                                }));
-                              }
-                              
-                              // Redirect to success page
-                              router.push('/success');
+                              setIsPayPalLoading(false);
                             } catch (error) {
-                              console.error("Payment error:", error);
-                              alert("There was an error processing your payment. Please try again.");
+                              console.error('Payment capture error:', error);
+                              setPaypalError('Payment processing failed. Please try again.');
+                              setIsPayPalLoading(false);
                             }
-                          }
-                        }}
-                        onError={(err) => {
-                          console.error("PayPal error:", err);
-                        }}
-                      />
+                          }}
+                          onError={(err) => {
+                            console.error('PayPal error:', {
+                              error: err,
+                              timestamp: new Date().toISOString(),
+                              orderAmount: totalPrice,
+                              clientId: PAYPAL_CLIENT_ID ? 'Present' : 'Missing'
+                            });
+                            setPaypalError('Payment system error. Please try again or use a different payment method.');
+                            setIsPayPalLoading(false);
+                          }}
+                          onCancel={() => {
+                            console.log('Payment cancelled by user');
+                            setPaypalError('Payment was cancelled. Please try again.');
+                            setIsPayPalLoading(false);
+                          }}
+                          onInit={() => {
+                            console.log('PayPal button initialized');
+                            setIsPayPalLoading(false);
+                          }}
+                        />
+                      </div>
+                    </PayPalScriptProvider>
+                  ) : (
+                    <div className="text-red-500">
+                      {!PAYPAL_CLIENT_ID 
+                        ? 'PayPal is not configured. Please contact support.'
+                        : 'Please ensure your cart is not empty and try again.'}
                     </div>
-                  </PayPalScriptProvider>
+                  )}
                 </div>
+
+                {/* Add loading indicator */}
+                {isPayPalLoading && (
+                  <div className="text-center py-4">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-orange-500 mx-auto"></div>
+                    <p className="mt-2 text-gray-600">Processing payment...</p>
+                  </div>
+                )}
 
                 <Button
                   type="submit"
