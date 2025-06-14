@@ -7,6 +7,7 @@ import Image from "next/image";
 import { useCart } from "@/contexts/CartContext";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useState } from "react";
+import { ErrorBoundary, CartErrorFallback } from "@/components/error/ErrorBoundary";
 
 interface SizeOption {
   size: string;
@@ -38,32 +39,47 @@ export function FoodCard({
   const [isOpen, setIsOpen] = useState(false);
 
   const handleAddToCart = () => {
-    const selectedSize = sizeOptions[selectedSizeIndex];
-    
-    addToCart({
-      id,
-      name,
-      description,
-      imageUrl,
-      category,
-      price: selectedSize.price,
-      quantity: 1,
-      portionInfo: selectedSize.portionInfo,
-      selectedSize: {
-        size: selectedSize.size,
-        price: selectedSize.price,
-        portionInfo: selectedSize.portionInfo
+    try {
+      const selectedSize = sizeOptions[selectedSizeIndex];
+      
+      if (!selectedSize) {
+        console.error('No size selected');
+        return;
       }
-    });
-    
-    setIsOpen(false); // Close the sheet
-    setIsCartOpen(true); // Open the cart modal
+      
+      const cartItem = {
+        id,
+        name,
+        description,
+        imageUrl,
+        category,
+        price: selectedSize.price,
+        quantity: 1,
+        portionInfo: selectedSize.portionInfo,
+        selectedSize: {
+          size: selectedSize.size,
+          price: selectedSize.price,
+          portionInfo: selectedSize.portionInfo
+        }
+      };
+      
+      console.log('Adding item to cart:', cartItem);
+      addToCart(cartItem);
+      
+      setIsOpen(false); // Close the sheet
+      setTimeout(() => {
+        setIsCartOpen(true); // Open the cart modal with a small delay
+      }, 100);
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+    }
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
-      <SheetTrigger asChild>
-        <Card className="group bg-[#1e1e1e] backdrop-blur-sm hover:shadow-lg transition-all duration-300 border-orange-900/20 cursor-pointer">
+    <ErrorBoundary fallback={CartErrorFallback}>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetTrigger asChild>
+          <Card className="group bg-[#1e1e1e] backdrop-blur-sm hover:shadow-lg transition-all duration-300 border-orange-900/20 cursor-pointer">
           <div className="relative aspect-[16/9] w-full overflow-hidden rounded-t-lg">
             <Image
               src={imageUrl}
@@ -150,5 +166,6 @@ export function FoodCard({
         </div>
       </SheetContent>
     </Sheet>
+    </ErrorBoundary>
   );
 }

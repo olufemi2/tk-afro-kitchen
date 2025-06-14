@@ -52,20 +52,30 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // Load cart from localStorage on mount
   useEffect(() => {
-    const savedCart = localStorage.getItem('cart');
-    if (savedCart) {
-      try {
-        const parsedCart = JSON.parse(savedCart);
-        setItems(parsedCart);
-      } catch (error) {
-        console.error('Error loading cart from localStorage:', error);
+    try {
+      if (typeof window !== 'undefined') {
+        const savedCart = localStorage.getItem('cart');
+        if (savedCart) {
+          const parsedCart = JSON.parse(savedCart);
+          if (Array.isArray(parsedCart)) {
+            setItems(parsedCart);
+          }
+        }
       }
+    } catch (error) {
+      console.error('Error loading cart from localStorage:', error);
     }
   }, []);
 
   // Save cart to localStorage whenever it changes
   useEffect(() => {
-    localStorage.setItem('cart', JSON.stringify(items));
+    try {
+      if (typeof window !== 'undefined') {
+        localStorage.setItem('cart', JSON.stringify(items));
+      }
+    } catch (error) {
+      console.error('Error saving cart to localStorage:', error);
+    }
   }, [items]);
 
   useEffect(() => {
@@ -76,32 +86,43 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [items]);
 
   const addToCart = (newItem: CartItem) => {
-    if (!newItem.id || !newItem.selectedSize) {
-      console.error('Invalid cart item:', newItem);
-      return;
-    }
-
-    setItems(currentItems => {
-      const existingItemIndex = currentItems.findIndex(
-        item => item.id === newItem.id && item.selectedSize.size === newItem.selectedSize.size
-      );
-
-      if (existingItemIndex > -1) {
-        // Update quantity of existing item
-        return currentItems.map((item, index) => {
-          if (index === existingItemIndex) {
-            return { ...item, quantity: item.quantity + 1 };
-          }
-          return item;
-        });
+    try {
+      if (!newItem.id || !newItem.selectedSize) {
+        console.error('Invalid cart item:', newItem);
+        return;
       }
 
-      // Add new item
-      return [...currentItems, { ...newItem, quantity: 1 }];
-    });
+      console.log('Adding to cart:', newItem);
 
-    // Open the cart modal when an item is added
-    setIsCartOpen(true);
+      setItems(currentItems => {
+        const existingItemIndex = currentItems.findIndex(
+          item => item.id === newItem.id && item.selectedSize.size === newItem.selectedSize.size
+        );
+
+        if (existingItemIndex > -1) {
+          // Update quantity of existing item
+          const updatedItems = currentItems.map((item, index) => {
+            if (index === existingItemIndex) {
+              return { ...item, quantity: item.quantity + 1 };
+            }
+            return item;
+          });
+          console.log('Updated existing item, new cart:', updatedItems);
+          return updatedItems;
+        }
+
+        // Add new item
+        const newItems = [...currentItems, { ...newItem, quantity: 1 }];
+        console.log('Added new item, new cart:', newItems);
+        return newItems;
+      });
+
+      // Open the cart modal when an item is added
+      console.log('Opening cart modal');
+      setIsCartOpen(true);
+    } catch (error) {
+      console.error('Error in addToCart:', error);
+    }
   };
 
   const removeFromCart = (itemId: string, size: string) => {
