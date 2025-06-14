@@ -86,27 +86,37 @@ function PayPalButtonsWrapper({
         });
       }}
       onApprove={async (data, actions) => {
+        console.log('PayPal onApprove triggered with data:', data);
+        
         if (actions.order) {
           try {
+            console.log('Capturing PayPal order...');
             const order = await actions.order.capture();
-            console.log("Order completed:", order);
+            console.log("PayPal order completed successfully:", order);
             
             // Store order details in localStorage for confirmation page
             if (order.purchase_units && order.purchase_units[0]?.amount?.value) {
-              localStorage.setItem('lastOrderDetails', JSON.stringify({
+              const orderDetails = {
                 orderId: order.id,
                 status: order.status,
                 amount: order.purchase_units[0].amount.value,
                 timestamp: new Date().toISOString(),
                 customerInfo: deliveryDetails
-              }));
+              };
+              
+              console.log('Storing order details in localStorage:', orderDetails);
+              localStorage.setItem('lastOrderDetails', JSON.stringify(orderDetails));
             }
             
+            console.log('Calling handlePaymentSuccess...');
             handlePaymentSuccess(order.id || 'unknown');
           } catch (error) {
-            console.error("Payment error:", error);
+            console.error("Payment capture error:", error);
             handlePaymentError(error);
           }
+        } else {
+          console.error('No actions.order available in onApprove');
+          handlePaymentError(new Error('Payment processing failed'));
         }
       }}
       onError={(err) => {
@@ -197,6 +207,8 @@ export default function CheckoutPage() {
     setIsSubmitting(true);
 
     try {
+      console.log('Processing payment success for order:', orderId);
+      
       // Send order details to backend
       const orderData = {
         orderId,
@@ -213,12 +225,25 @@ export default function CheckoutPage() {
         timestamp: new Date().toISOString()
       };
 
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      console.log('Order submitted:', orderData);
+      console.log('Order data prepared:', orderData);
       
+      // TODO: Replace with actual API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      console.log('Order submitted successfully');
+      
+      // Clear cart and redirect
       clearCart();
-      router.push('/success');
+      console.log('Cart cleared, redirecting to success page...');
+      
+      // Use window.location as fallback if router.push fails
+      try {
+        router.push('/success');
+        console.log('Router.push called');
+      } catch (routerError) {
+        console.error('Router.push failed, using window.location:', routerError);
+        window.location.href = '/success';
+      }
+      
     } catch (error) {
       console.error('Error processing order:', error);
       alert('There was an error processing your order. Please contact support.');
