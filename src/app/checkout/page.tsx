@@ -235,14 +235,9 @@ export default function CheckoutPage() {
       clearCart();
       console.log('Cart cleared, redirecting to success page...');
       
-      // Use window.location as fallback if router.push fails
-      try {
-        router.push('/success');
-        console.log('Router.push called');
-      } catch (routerError) {
-        console.error('Router.push failed, using window.location:', routerError);
-        window.location.href = '/success';
-      }
+      // Force redirect using window.location (most reliable after PayPal)
+      console.log('Redirecting to success page using window.location...');
+      window.location.href = '/success';
       
     } catch (error) {
       console.error('Error processing order:', error);
