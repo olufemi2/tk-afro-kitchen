@@ -3,13 +3,33 @@
 import { Header } from "@/components/layout/header";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
+interface OrderDetails {
+  orderId: string;
+  status: string;
+  amount: string;
+  timestamp: string;
+  customerInfo: any;
+}
 
 export default function SuccessPage() {
   const router = useRouter();
+  const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
 
   useEffect(() => {
-    // Clear any stored cart data
+    // Get order details from localStorage
+    const storedOrderDetails = localStorage.getItem('lastOrderDetails');
+    if (storedOrderDetails) {
+      try {
+        const details = JSON.parse(storedOrderDetails);
+        setOrderDetails(details);
+      } catch (error) {
+        console.error('Error parsing order details:', error);
+      }
+    }
+
+    // Clear cart data after payment
     localStorage.removeItem('cart');
   }, []);
 
@@ -18,37 +38,120 @@ export default function SuccessPage() {
       <Header />
       <div className="min-h-screen pt-24 pb-16 bg-gray-50">
         <div className="container mx-auto px-4">
-          <div className="max-w-2xl mx-auto text-center">
-            <div className="mb-8">
-              <svg
-                className="mx-auto h-16 w-16 text-green-500"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
+          <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-8">
+              <div className="mb-6">
+                <svg
+                  className="mx-auto h-20 w-20 text-green-500"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
+                </svg>
+              </div>
+              <h1 className="text-4xl font-bold mb-4 text-gray-900">Payment Successful!</h1>
+              <p className="text-lg text-gray-600 mb-8">
+                Thank you for your order. We'll start preparing your delicious Nigerian cuisine right away.
+              </p>
             </div>
-            <h1 className="text-4xl font-bold mb-4 text-black">Payment Successful!</h1>
-            <p className="text-lg text-gray-600 mb-8">
-              Thank you for your order. We'll start preparing your food right away.
-            </p>
+
+            {/* Order Details Card */}
+            {orderDetails && (
+              <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
+                <h2 className="text-xl font-semibold mb-4 text-gray-900">Order Confirmation</h2>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <h3 className="font-medium text-gray-700 mb-2">Payment Details</h3>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Order ID:</span>
+                        <span className="font-medium text-gray-900">{orderDetails.orderId}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Amount Paid:</span>
+                        <span className="font-medium text-green-600">£{orderDetails.amount}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Payment Status:</span>
+                        <span className="font-medium text-green-600 capitalize">{orderDetails.status}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Date & Time:</span>
+                        <span className="font-medium text-gray-900">
+                          {new Date(orderDetails.timestamp).toLocaleString('en-GB')}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {orderDetails.customerInfo && (
+                    <div>
+                      <h3 className="font-medium text-gray-700 mb-2">Delivery Information</h3>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Name:</span>
+                          <span className="font-medium text-gray-900">{orderDetails.customerInfo.fullName}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Phone:</span>
+                          <span className="font-medium text-gray-900">{orderDetails.customerInfo.phone}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-gray-600">Address:</span>
+                          <span className="font-medium text-gray-900 text-right max-w-xs">
+                            {orderDetails.customerInfo.address}, {orderDetails.customerInfo.city}, {orderDetails.customerInfo.postcode}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Estimated Delivery */}
+                <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+                  <div className="flex items-center space-x-2">
+                    <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                    </svg>
+                    <div>
+                      <p className="font-medium text-green-800">Estimated Delivery: 45-60 minutes</p>
+                      <p className="text-sm text-green-700">We'll call you when your order is on the way!</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Next Steps */}
+            <div className="bg-orange-50 rounded-lg border border-orange-200 p-6 mb-8">
+              <h3 className="font-semibold text-orange-800 mb-3">What happens next?</h3>
+              <ol className="list-decimal list-inside space-y-2 text-sm text-orange-700">
+                <li>We've received your payment and order details</li>
+                <li>Our kitchen team will start preparing your food</li>
+                <li>You'll receive a call when your order is ready for delivery</li>
+                <li>Enjoy your authentic Nigerian cuisine!</li>
+              </ol>
+            </div>
+
+            {/* Action Buttons */}
             <div className="space-y-4">
               <Button
                 onClick={() => router.push('/menu')}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded"
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 px-6 rounded-lg"
               >
                 Order Again
               </Button>
               <Button
                 onClick={() => router.push('/')}
-                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded"
+                className="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-3 px-6 rounded-lg"
               >
                 Return to Home
               </Button>
