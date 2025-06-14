@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { PayPalButtons, PayPalScriptProvider } from "@paypal/react-paypal-js";
+import { PayPalButtons, PayPalScriptProvider, usePayPalScriptReducer } from "@paypal/react-paypal-js";
 
 interface DeliveryDetails {
   fullName: string;
@@ -22,6 +22,99 @@ const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
 if (!PAYPAL_CLIENT_ID) {
   console.error('PayPal client ID is not configured');
+}
+
+// PayPal Buttons wrapper with loading state
+function PayPalButtonsWrapper({ 
+  finalTotal, 
+  deliveryDetails, 
+  handlePaymentSuccess, 
+  handlePaymentError 
+}: {
+  finalTotal: number;
+  deliveryDetails: any;
+  handlePaymentSuccess: (orderId: string) => void;
+  handlePaymentError: (error: any) => void;
+}) {
+  const [{ isResolved, isPending }] = usePayPalScriptReducer();
+
+  if (isPending) {
+    return (
+      <div className="text-center py-4">
+        <div className="inline-flex items-center space-x-2 text-gray-600">
+          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500"></div>
+          <span className="text-sm">Loading payment options...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (!isResolved) {
+    return (
+      <div className="text-center py-4 p-4 border border-red-300 rounded-lg bg-red-50">
+        <p className="text-red-600 text-sm">
+          Unable to load payment options. Please refresh the page and try again.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <PayPalButtons
+      style={{
+        layout: "vertical",
+        color: "black",
+        shape: "rect",
+        label: "pay",
+        height: 55,
+        tagline: false
+      }}
+      fundingSource="card"
+      createOrder={(data, actions) => {
+        return actions.order.create({
+          intent: "CAPTURE",
+          purchase_units: [
+            {
+              amount: {
+                value: finalTotal.toFixed(2),
+                currency_code: "GBP",
+              },
+              description: "TK Afro Kitchen Order",
+              custom_id: `order_${Date.now()}`,
+            },
+          ],
+        });
+      }}
+      onApprove={async (data, actions) => {
+        if (actions.order) {
+          try {
+            const order = await actions.order.capture();
+            console.log("Order completed:", order);
+            
+            // Store order details in localStorage for confirmation page
+            if (order.purchase_units && order.purchase_units[0]?.amount?.value) {
+              localStorage.setItem('lastOrderDetails', JSON.stringify({
+                orderId: order.id,
+                status: order.status,
+                amount: order.purchase_units[0].amount.value,
+                timestamp: new Date().toISOString(),
+                customerInfo: deliveryDetails
+              }));
+            }
+            
+            handlePaymentSuccess(order.id || 'unknown');
+          } catch (error) {
+            console.error("Payment error:", error);
+            handlePaymentError(error);
+          }
+        }
+      }}
+      onError={(err) => {
+        console.error("PayPal error:", err);
+        handlePaymentError(err);
+      }}
+    />
+  );
 }
 
 export default function CheckoutPage() {
@@ -324,76 +417,34 @@ export default function CheckoutPage() {
                     
                     {/* PayPal Integration */}
                     <div className="mb-6">
-                      <PayPalScriptProvider
-                        options={{
-                          clientId: PAYPAL_CLIENT_ID || '',
-                          currency: "GBP",
-                          intent: "capture",
-                          components: "buttons",
-                          "enable-funding": "card",
-                          "disable-funding": "paylater,venmo",
-                          "data-sdk-integration-source": "button-factory",
-                          "data-namespace": "PayPalSDK",
-                          "data-page-type": "checkout"
-                        }}
-                      >
-                        <div className="paypal-button-container">
-                          <PayPalButtons
-                            style={{
-                              layout: "vertical",
-                              color: "black",
-                              shape: "rect",
-                              label: "pay",
-                              height: 55,
-                              tagline: false
-                            }}
-                            fundingSource="card"
-                            createOrder={(data, actions) => {
-                              return actions.order.create({
-                                intent: "CAPTURE",
-                                purchase_units: [
-                                  {
-                                    amount: {
-                                      value: finalTotal.toFixed(2),
-                                      currency_code: "GBP",
-                                    },
-                                    description: "TK Afro Kitchen Order",
-                                    custom_id: `order_${Date.now()}`,
-                                  },
-                                ],
-                              });
-                            }}
-                            onApprove={async (data, actions) => {
-                              if (actions.order) {
-                                try {
-                                  const order = await actions.order.capture();
-                                  console.log("Order completed:", order);
-                                  
-                                  // Store order details in localStorage for confirmation page
-                                  if (order.purchase_units && order.purchase_units[0]?.amount?.value) {
-                                    localStorage.setItem('lastOrderDetails', JSON.stringify({
-                                      orderId: order.id,
-                                      status: order.status,
-                                      amount: order.purchase_units[0].amount.value,
-                                      timestamp: new Date().toISOString(),
-                                      customerInfo: deliveryDetails
-                                    }));
-                                  }
-                                  
-                                  handlePaymentSuccess(order.id || 'unknown');
-                                } catch (error) {
-                                  console.error("Payment error:", error);
-                                  handlePaymentError(error);
-                                }
-                              }
-                            }}
-                            onError={(err) => {
-                              console.error("PayPal error:", err);
-                              handlePaymentError(err);
-                            }}
-                          />
+                      {PAYPAL_CLIENT_ID ? (
+                        <PayPalScriptProvider
+                          options={{
+                            clientId: PAYPAL_CLIENT_ID,
+                            currency: "GBP",
+                            intent: "capture",
+                            components: "buttons",
+                            "enable-funding": "card",
+                            "disable-funding": "paylater,venmo",
+                            "data-sdk-integration-source": "button-factory"
+                          }}
+                        >
+                          <div className="paypal-button-container">
+                            <PayPalButtonsWrapper
+                              finalTotal={finalTotal}
+                              deliveryDetails={deliveryDetails}
+                              handlePaymentSuccess={handlePaymentSuccess}
+                              handlePaymentError={handlePaymentError}
+                            />
+                          </div>
+                        </PayPalScriptProvider>
+                      ) : (
+                        <div className="text-center py-4 p-4 border border-orange-300 rounded-lg bg-orange-50">
+                          <p className="text-orange-600 text-sm">
+                            Payment system is currently being configured. Please try again later.
+                          </p>
                         </div>
-                      </PayPalScriptProvider>
+                      )}
                     </div>
                     
                     {/* Security Badge */}
