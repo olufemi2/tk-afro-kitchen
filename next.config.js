@@ -15,7 +15,6 @@ const nextConfig = {
   
   // Optimize for Vercel builds
   experimental: {
-    optimizeCss: true,
     optimizePackageImports: ['lucide-react', '@radix-ui/react-dialog', '@radix-ui/react-slot'],
   },
   
