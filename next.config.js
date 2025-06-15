@@ -2,7 +2,7 @@
 const nextConfig = {
   images: {
     domains: ['images.unsplash.com'],
-    unoptimized: true, // This helps with Netlify deployment
+    unoptimized: process.env.NODE_ENV === 'staging', // Optimize images for production
     remotePatterns: [
       {
         protocol: 'https',
@@ -10,14 +10,31 @@ const nextConfig = {
       },
     ],
   },
-  output: 'export', // Change from 'standalone' to 'export' for static deployment
-  // Remove experimental features that might cause issues
+  // Use standalone for Vercel, export for static sites
+  output: process.env.VERCEL ? undefined : 'export',
+  
+  // Optimize for Vercel builds
   experimental: {
-    optimizeCss: false,
+    optimizeCss: true,
+    optimizePackageImports: ['lucide-react', '@radix-ui/react-dialog', '@radix-ui/react-slot'],
   },
-  webpack: (config) => {
+  
+  // Faster builds
+  swcMinify: true,
+  
+  webpack: (config, { dev, isServer }) => {
     // Add next-auth to externals to prevent build issues
     config.externals = [...(config.externals || []), 'next-auth'];
+    
+    // Optimize for faster builds
+    if (!dev && !isServer) {
+      config.cache = {
+        type: 'filesystem',
+        buildDependencies: {
+          config: [__filename],
+        },
+      };
+    }
     
     config.stats = {
       errorDetails: true,

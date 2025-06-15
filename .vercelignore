@@ -1,0 +1,29 @@
+# Speed up builds by ignoring unnecessary files
+*.md
+README.md
+CHANGELOG.md
+LICENSE
+.gitignore
+.git/
+.vscode/
+.idea/
+.DS_Store
+.env.example
+
+# Documentation and scripts not needed for deployment
+scripts/
+docs/
+SITE_BACKUP_PROCEDURE.md
+CURRENT_DNS_CONFIG.md
+DEPLOYMENT*.md
+PRODUCTION_PROMOTION_CHECKLIST.md
+STAGING_*.md
+URGENT_PAYMENT_FIX.md
+FUNCTIONALITY_TEST_RESULTS.md
+LIVE_TEST_SCRIPT.md
+PAYMENT_FLOW_DEBUG_GUIDE.md
+payment-test-report.json
+
+# Development files
+setup-env.js
+next-sitemap.config.js
