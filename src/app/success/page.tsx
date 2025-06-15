@@ -135,7 +135,7 @@ export default function SuccessPage() {
               <h3 className="font-semibold text-orange-800 mb-3">What happens next?</h3>
               <ol className="list-decimal list-inside space-y-2 text-sm text-orange-700">
                 <li>We've received your payment and order details</li>
-                <li>Our kitchen team will start preparing your fresh Nigerian cuisine</li>
+                <li>Our kitchen team will start preparing your fresh cuisine</li>
                 <li>You'll receive a call to confirm collection/delivery arrangements</li>
                 <li>Enjoy your authentic, freshly prepared meal!</li>
               </ol>
