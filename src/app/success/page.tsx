@@ -115,15 +115,15 @@ export default function SuccessPage() {
                   )}
                 </div>
 
-                {/* Estimated Delivery */}
+                {/* Order Type Information */}
                 <div className="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
                   <div className="flex items-center space-x-2">
                     <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                     </svg>
                     <div>
-                      <p className="font-medium text-green-800">Estimated Delivery: 45-60 minutes</p>
-                      <p className="text-sm text-green-700">We'll call you when your order is on the way!</p>
+                      <p className="font-medium text-green-800">Order Confirmed</p>
+                      <p className="text-sm text-green-700">We'll contact you with preparation and collection/delivery details</p>
                     </div>
                   </div>
                 </div>
@@ -135,9 +135,9 @@ export default function SuccessPage() {
               <h3 className="font-semibold text-orange-800 mb-3">What happens next?</h3>
               <ol className="list-decimal list-inside space-y-2 text-sm text-orange-700">
                 <li>We've received your payment and order details</li>
-                <li>Our kitchen team will start preparing your food</li>
-                <li>You'll receive a call when your order is ready for delivery</li>
-                <li>Enjoy your authentic Nigerian cuisine!</li>
+                <li>Our kitchen team will start preparing your fresh Nigerian cuisine</li>
+                <li>You'll receive a call to confirm collection/delivery arrangements</li>
+                <li>Enjoy your authentic, freshly prepared meal!</li>
               </ol>
             </div>
 
