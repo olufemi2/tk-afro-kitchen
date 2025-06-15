@@ -144,7 +144,7 @@ export default function CheckoutPage() {
     <>
       <Header />
       {/* Fixed viewport and responsive container */}
-      <div className="min-h-screen w-full overflow-x-hidden pt-24 pb-16 bg-gray-50">
+      <div className="min-h-screen w-full overflow-x-hidden pt-32 pb-24 bg-gray-50">
         <div className="container mx-auto px-4 max-w-7xl">
           {/* Progress Indicator */}
           <div className="max-w-4xl mx-auto mb-8">
@@ -406,7 +406,7 @@ export default function CheckoutPage() {
 
               {/* Order Summary Sidebar */}
               <div className="lg:col-span-1 order-1 lg:order-2">
-                <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm sticky top-8">
+                <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm lg:sticky lg:top-8 lg:max-h-[calc(100vh-8rem)] lg:overflow-y-auto">
                   <h3 className="text-lg sm:text-xl font-bold mb-4 text-gray-900">Order Summary</h3>
                   
                   {/* Order Type Info */}
