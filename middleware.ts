@@ -4,7 +4,7 @@ export function middleware(request: NextRequest) {
   const response = NextResponse.next();
   
   // Only apply to staging environment
-  if (process.env.NODE_ENV === 'staging' || process.env.NEXT_PUBLIC_ENVIRONMENT === 'staging') {
+  if (process.env.NEXT_PUBLIC_ENVIRONMENT === 'staging') {
     // Add aggressive cache-busting headers for staging
     response.headers.set('Cache-Control', 'no-cache, no-store, must-revalidate, max-age=0');
     response.headers.set('Pragma', 'no-cache');
