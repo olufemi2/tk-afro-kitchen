@@ -7,11 +7,24 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 
 export async function POST(request: NextRequest) {
   try {
+    console.log('Payment intent API called');
     const body = await request.json();
     const { amount, currency = 'gbp', customer_details, payment_method_id } = body;
+    
+    console.log('Request body:', { amount, currency, customer_details: customer_details?.name });
+
+    // Check if Stripe is properly configured
+    if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY === 'sk_test_placeholder') {
+      console.error('Stripe secret key not configured');
+      return NextResponse.json(
+        { error: 'Payment system not properly configured. Please contact support.' },
+        { status: 503 }
+      );
+    }
 
     // Validate required fields
     if (!amount || amount < 30) { // Minimum 30p
+      console.error('Invalid amount:', amount);
       return NextResponse.json(
         { error: 'Invalid amount. Minimum £0.30 required.' },
         { status: 400 }
@@ -19,6 +32,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!customer_details?.name || !customer_details?.email) {
+      console.error('Missing customer details:', customer_details);
       return NextResponse.json(
         { error: 'Customer name and email are required.' },
         { status: 400 }
@@ -55,6 +69,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Create payment intent (without payment method - will be attached during confirmation)
+    console.log('Creating payment intent with amount:', Math.round(amount), 'for customer:', customer_details.name);
+    
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount), // Ensure integer
       currency: currency.toLowerCase(),
@@ -82,6 +98,8 @@ export async function POST(request: NextRequest) {
         },
       } : undefined,
     });
+
+    console.log('Payment intent created successfully:', paymentIntent.id);
 
     return NextResponse.json({
       client_secret: paymentIntent.client_secret,

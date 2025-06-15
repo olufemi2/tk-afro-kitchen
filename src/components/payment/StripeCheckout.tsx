@@ -81,6 +81,8 @@ function CheckoutForm({
     }
 
     try {
+      console.log('Creating payment intent with amount:', amount, 'currency:', currency);
+      
       // Create payment intent on your backend
       const response = await fetch('/api/create-payment-intent', {
         method: 'POST',
@@ -95,11 +97,19 @@ function CheckoutForm({
       });
 
       const paymentIntentData = await response.json();
+      console.log('Payment intent response:', paymentIntentData);
 
       if (!response.ok) {
+        console.error('Payment intent creation failed:', paymentIntentData);
         throw new Error(paymentIntentData.error || 'Failed to create payment intent');
       }
 
+      if (!paymentIntentData.client_secret) {
+        throw new Error('No client secret received from payment intent');
+      }
+
+      console.log('Confirming payment with Stripe...');
+      
       // Confirm payment with card element
       const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(
         paymentIntentData.client_secret,
@@ -116,19 +126,25 @@ function CheckoutForm({
         }
       );
 
+      console.log('Payment confirmation result:', { confirmError, paymentIntent });
+
       if (confirmError) {
+        console.error('Payment confirmation error:', confirmError);
         throw confirmError;
       }
 
-      if (paymentIntent.status === 'succeeded') {
+      if (paymentIntent && paymentIntent.status === 'succeeded') {
+        console.log('Payment succeeded:', paymentIntent.id);
         onSuccess(paymentIntent);
       } else {
-        throw new Error(`Payment ${paymentIntent.status}`);
+        console.error('Payment failed with status:', paymentIntent?.status);
+        throw new Error(`Payment ${paymentIntent?.status || 'failed'}`);
       }
 
     } catch (error: any) {
       console.error('Payment error:', error);
-      setPaymentError(error.message || 'An unexpected error occurred');
+      const errorMessage = error.message || 'An unexpected error occurred';
+      setPaymentError(errorMessage);
       onError(error);
     } finally {
       setIsLoading(false);
