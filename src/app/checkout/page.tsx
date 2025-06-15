@@ -16,6 +16,7 @@ interface DeliveryDetails {
   address: string;
   postcode: string;
   city: string;
+  deliveryMode: 'pickup' | 'nationwide';
 }
 
 const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
@@ -141,24 +142,14 @@ export default function CheckoutPage() {
     phone: '',
     address: '',
     postcode: '',
-    city: ''
+    city: '',
+    deliveryMode: 'pickup'
   });
 
-  // Delivery time calculation
-  const [estimatedDelivery, setEstimatedDelivery] = useState('');
-  
   useEffect(() => {
     if (items.length === 0) {
       router.push('/menu');
     }
-    
-    // Calculate estimated delivery time (45-60 minutes from now)
-    const now = new Date();
-    const deliveryTime = new Date(now.getTime() + (45 * 60 * 1000)); // 45 minutes
-    setEstimatedDelivery(deliveryTime.toLocaleTimeString('en-GB', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    }));
   }, [items, router]);
 
   if (items.length === 0) {
@@ -172,9 +163,11 @@ export default function CheckoutPage() {
     if (!deliveryDetails.email.trim()) errors.email = 'Email is required';
     else if (!/\S+@\S+\.\S+/.test(deliveryDetails.email)) errors.email = 'Email is invalid';
     if (!deliveryDetails.phone.trim()) errors.phone = 'Phone number is required';
-    if (!deliveryDetails.address.trim()) errors.address = 'Delivery address is required';
-    if (!deliveryDetails.postcode.trim()) errors.postcode = 'Postcode is required';
-    if (!deliveryDetails.city.trim()) errors.city = 'City is required';
+    if (deliveryDetails.deliveryMode === 'nationwide') {
+      if (!deliveryDetails.address.trim()) errors.address = 'Delivery address is required';
+      if (!deliveryDetails.postcode.trim()) errors.postcode = 'Postcode is required';
+      if (!deliveryDetails.city.trim()) errors.city = 'City is required';
+    }
     
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -221,7 +214,6 @@ export default function CheckoutPage() {
         })),
         deliveryDetails,
         totalAmount: finalTotal,
-        estimatedDelivery,
         timestamp: new Date().toISOString()
       };
 
@@ -253,7 +245,7 @@ export default function CheckoutPage() {
   };
 
   // Calculate delivery fee and total
-  const deliveryFee = totalPrice > 30 ? 0 : 3.99;
+  const deliveryFee = deliveryDetails.deliveryMode === 'pickup' ? 0 : 27.99;
   const finalTotal = totalPrice + deliveryFee;
 
   return (
@@ -292,7 +284,44 @@ export default function CheckoutPage() {
               <div className="lg:col-span-2 order-2 lg:order-1">
                 {currentStep === 1 && (
                   <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm">
-                    <h2 className="text-xl sm:text-2xl font-bold mb-6 text-gray-900">Delivery Information</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold mb-6 text-gray-900">Order Information</h2>
+                    
+                    {/* Delivery Mode Selection */}
+                    <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                      <Label className="text-gray-700 font-medium text-sm mb-3 block">Order Type *</Label>
+                      <div className="space-y-3">
+                        <div className="flex items-center space-x-3">
+                          <input
+                            type="radio"
+                            id="pickup"
+                            name="deliveryMode"
+                            value="pickup"
+                            checked={deliveryDetails.deliveryMode === 'pickup'}
+                            onChange={(e) => setDeliveryDetails(prev => ({ ...prev, deliveryMode: e.target.value as 'pickup' | 'nationwide' }))}
+                            className="text-orange-500 focus:ring-orange-500"
+                          />
+                          <label htmlFor="pickup" className="flex-1">
+                            <div className="font-medium text-gray-900">Collection / Pickup</div>
+                            <div className="text-sm text-gray-600">Free - Collect from our kitchen</div>
+                          </label>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <input
+                            type="radio"
+                            id="nationwide"
+                            name="deliveryMode"
+                            value="nationwide"
+                            checked={deliveryDetails.deliveryMode === 'nationwide'}
+                            onChange={(e) => setDeliveryDetails(prev => ({ ...prev, deliveryMode: e.target.value as 'pickup' | 'nationwide' }))}
+                            className="text-orange-500 focus:ring-orange-500"
+                          />
+                          <label htmlFor="nationwide" className="flex-1">
+                            <div className="font-medium text-gray-900">Nationwide Delivery</div>
+                            <div className="text-sm text-gray-600">£27.99 - Delivery to any UK postcode</div>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
                     
                     <div className="space-y-4">
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -343,51 +372,55 @@ export default function CheckoutPage() {
                         )}
                       </div>
                       
-                      <div>
-                        <Label htmlFor="address" className="text-gray-700 font-medium text-sm">Delivery Address *</Label>
-                        <Input
-                          id="address"
-                          name="address"
-                          value={deliveryDetails.address}
-                          onChange={handleInputChange}
-                          className={`mt-1 text-sm ${validationErrors.address ? 'border-red-500' : 'border-gray-300'}`}
-                          placeholder="123 High Street, Apartment 4B"
-                        />
-                        {validationErrors.address && (
-                          <p className="text-red-500 text-xs mt-1">{validationErrors.address}</p>
-                        )}
-                      </div>
-                      
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        <div>
-                          <Label htmlFor="city" className="text-gray-700 font-medium text-sm">City *</Label>
-                          <Input
-                            id="city"
-                            name="city"
-                            value={deliveryDetails.city}
-                            onChange={handleInputChange}
-                            className={`mt-1 text-sm ${validationErrors.city ? 'border-red-500' : 'border-gray-300'}`}
-                            placeholder="London"
-                          />
-                          {validationErrors.city && (
-                            <p className="text-red-500 text-xs mt-1">{validationErrors.city}</p>
-                          )}
-                        </div>
-                        <div>
-                          <Label htmlFor="postcode" className="text-gray-700 font-medium text-sm">Postcode *</Label>
-                          <Input
-                            id="postcode"
-                            name="postcode"
-                            value={deliveryDetails.postcode}
-                            onChange={handleInputChange}
-                            className={`mt-1 text-sm ${validationErrors.postcode ? 'border-red-500' : 'border-gray-300'}`}
-                            placeholder="SW1A 1AA"
-                          />
-                          {validationErrors.postcode && (
-                            <p className="text-red-500 text-xs mt-1">{validationErrors.postcode}</p>
-                          )}
-                        </div>
-                      </div>
+                      {deliveryDetails.deliveryMode === 'nationwide' && (
+                        <>
+                          <div>
+                            <Label htmlFor="address" className="text-gray-700 font-medium text-sm">Delivery Address *</Label>
+                            <Input
+                              id="address"
+                              name="address"
+                              value={deliveryDetails.address}
+                              onChange={handleInputChange}
+                              className={`mt-1 text-sm ${validationErrors.address ? 'border-red-500' : 'border-gray-300'}`}
+                              placeholder="123 High Street, Apartment 4B"
+                            />
+                            {validationErrors.address && (
+                              <p className="text-red-500 text-xs mt-1">{validationErrors.address}</p>
+                            )}
+                          </div>
+                          
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                              <Label htmlFor="city" className="text-gray-700 font-medium text-sm">City *</Label>
+                              <Input
+                                id="city"
+                                name="city"
+                                value={deliveryDetails.city}
+                                onChange={handleInputChange}
+                                className={`mt-1 text-sm ${validationErrors.city ? 'border-red-500' : 'border-gray-300'}`}
+                                placeholder="London"
+                              />
+                              {validationErrors.city && (
+                                <p className="text-red-500 text-xs mt-1">{validationErrors.city}</p>
+                              )}
+                            </div>
+                            <div>
+                              <Label htmlFor="postcode" className="text-gray-700 font-medium text-sm">Postcode *</Label>
+                              <Input
+                                id="postcode"
+                                name="postcode"
+                                value={deliveryDetails.postcode}
+                                onChange={handleInputChange}
+                                className={`mt-1 text-sm ${validationErrors.postcode ? 'border-red-500' : 'border-gray-300'}`}
+                                placeholder="SW1A 1AA"
+                              />
+                              {validationErrors.postcode && (
+                                <p className="text-red-500 text-xs mt-1">{validationErrors.postcode}</p>
+                              )}
+                            </div>
+                          </div>
+                        </>
+                      )}
                     </div>
                     
                     <div className="mt-8 flex justify-end">
@@ -494,15 +527,22 @@ export default function CheckoutPage() {
                 <div className="bg-white p-4 sm:p-6 rounded-lg shadow-sm sticky top-8">
                   <h3 className="text-lg sm:text-xl font-bold mb-4 text-gray-900">Order Summary</h3>
                   
-                  {/* Estimated Delivery */}
-                  <div className="mb-4 p-3 bg-green-50 rounded-lg border border-green-200">
+                  {/* Order Type Info */}
+                  <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
                     <div className="flex items-center space-x-2">
-                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                      <svg className="w-4 h-4 sm:w-5 sm:h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm-7-9A7 7 0 1117 9a7 7 0 01-14 0z" clipRule="evenodd" />
                       </svg>
                       <div>
-                        <p className="text-xs sm:text-sm font-medium text-green-800">Estimated Delivery</p>
-                        <p className="text-xs sm:text-sm text-green-700">{estimatedDelivery} (45-60 min)</p>
+                        <p className="text-xs sm:text-sm font-medium text-blue-800">
+                          {deliveryDetails.deliveryMode === 'pickup' ? 'Collection' : 'Nationwide Delivery'}
+                        </p>
+                        <p className="text-xs sm:text-sm text-blue-700">
+                          {deliveryDetails.deliveryMode === 'pickup' 
+                            ? 'Free collection from our kitchen' 
+                            : '£27.99 delivery to any UK postcode'
+                          }
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -532,14 +572,13 @@ export default function CheckoutPage() {
                       <span className="text-gray-900">£{totalPrice.toFixed(2)}</span>
                     </div>
                     <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">Delivery Fee</span>
+                      <span className="text-gray-600">
+                        {deliveryDetails.deliveryMode === 'pickup' ? 'Collection Fee' : 'Delivery Fee'}
+                      </span>
                       <span className={`${deliveryFee === 0 ? 'text-green-600' : 'text-gray-900'}`}>
                         {deliveryFee === 0 ? 'FREE' : `£${deliveryFee.toFixed(2)}`}
                       </span>
                     </div>
-                    {deliveryFee === 0 && (
-                      <p className="text-xs text-green-600">Free delivery on orders over £30!</p>
-                    )}
                     <div className="flex justify-between font-bold text-base sm:text-lg border-t border-gray-200 pt-2">
                       <span className="text-gray-900">Total</span>
                       <span className="text-gray-900">£{finalTotal.toFixed(2)}</span>

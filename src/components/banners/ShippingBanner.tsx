@@ -29,7 +29,7 @@ export function ShippingBanner() {
               Nationwide Delivery
             </span>
             <span className="text-slate-300 ml-2">
-              • Flat rate shipping £21.99
+              • Flat rate shipping £27.99
             </span>
           </p>
         </div>
