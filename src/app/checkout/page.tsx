@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { PayPalButtons, PayPalScriptProvider, usePayPalScriptReducer } from "@paypal/react-paypal-js";
+import { StripeCheckout } from "@/components/payment/StripeCheckout";
 
 interface DeliveryDetails {
   fullName: string;
@@ -19,114 +19,9 @@ interface DeliveryDetails {
   deliveryMode: 'pickup' | 'nationwide';
 }
 
-const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+// Stripe configuration is handled in the StripeCheckout component
 
-if (!PAYPAL_CLIENT_ID) {
-  console.error('PayPal client ID is not configured');
-}
-
-// PayPal Buttons wrapper with loading state
-function PayPalButtonsWrapper({ 
-  finalTotal, 
-  deliveryDetails, 
-  handlePaymentSuccess, 
-  handlePaymentError 
-}: {
-  finalTotal: number;
-  deliveryDetails: any;
-  handlePaymentSuccess: (orderId: string) => void;
-  handlePaymentError: (error: any) => void;
-}) {
-  const [{ isResolved, isPending }] = usePayPalScriptReducer();
-
-  if (isPending) {
-    return (
-      <div className="text-center py-4">
-        <div className="inline-flex items-center space-x-2 text-gray-600">
-          <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500"></div>
-          <span className="text-sm">Loading payment options...</span>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isResolved) {
-    return (
-      <div className="text-center py-4 p-4 border border-red-300 rounded-lg bg-red-50">
-        <p className="text-red-600 text-sm">
-          Unable to load payment options. Please refresh the page and try again.
-        </p>
-      </div>
-    );
-  }
-
-  return (
-    <PayPalButtons
-      style={{
-        layout: "vertical",
-        color: "black",
-        shape: "rect",
-        label: "pay",
-        height: 55,
-        tagline: false
-      }}
-      fundingSource="card"
-      createOrder={(data, actions) => {
-        return actions.order.create({
-          intent: "CAPTURE",
-          purchase_units: [
-            {
-              amount: {
-                value: finalTotal.toFixed(2),
-                currency_code: "GBP",
-              },
-              description: "TK Afro Kitchen Order",
-              custom_id: `order_${Date.now()}`,
-            },
-          ],
-        });
-      }}
-      onApprove={async (data, actions) => {
-        console.log('PayPal onApprove triggered with data:', data);
-        
-        if (actions.order) {
-          try {
-            console.log('Capturing PayPal order...');
-            const order = await actions.order.capture();
-            console.log("PayPal order completed successfully:", order);
-            
-            // Store order details in localStorage for confirmation page
-            if (order.purchase_units && order.purchase_units[0]?.amount?.value) {
-              const orderDetails = {
-                orderId: order.id,
-                status: order.status,
-                amount: order.purchase_units[0].amount.value,
-                timestamp: new Date().toISOString(),
-                customerInfo: deliveryDetails
-              };
-              
-              console.log('Storing order details in localStorage:', orderDetails);
-              localStorage.setItem('lastOrderDetails', JSON.stringify(orderDetails));
-            }
-            
-            console.log('Calling handlePaymentSuccess...');
-            handlePaymentSuccess(order.id || 'unknown');
-          } catch (error) {
-            console.error("Payment capture error:", error);
-            handlePaymentError(error);
-          }
-        } else {
-          console.error('No actions.order available in onApprove');
-          handlePaymentError(new Error('Payment processing failed'));
-        }
-      }}
-      onError={(err) => {
-        console.error("PayPal error:", err);
-        handlePaymentError(err);
-      }}
-    />
-  );
-}
+// This component now uses Stripe instead of PayPal
 
 export default function CheckoutPage() {
   const { items, totalPrice, clearCart } = useCart();
@@ -195,40 +90,37 @@ export default function CheckoutPage() {
     }
   };
 
-  const handlePaymentSuccess = async (orderId: string) => {
+  const handlePaymentSuccess = async (paymentIntent: any) => {
     setPaymentSuccess(true);
     setIsSubmitting(true);
 
     try {
-      console.log('Processing payment success for order:', orderId);
+      console.log('Processing payment success for Stripe payment intent:', paymentIntent.id);
       
-      // Send order details to backend
-      const orderData = {
-        orderId,
+      // Store order details in localStorage for confirmation page
+      const orderDetails = {
+        paymentIntentId: paymentIntent.id,
+        status: paymentIntent.status,
+        amount: finalTotal.toFixed(2),
+        timestamp: new Date().toISOString(),
+        customerInfo: deliveryDetails,
         items: items.map(item => ({
           id: item.id,
           name: item.name,
           quantity: item.quantity,
           price: item.price,
           selectedSize: item.selectedSize
-        })),
-        deliveryDetails,
-        totalAmount: finalTotal,
-        timestamp: new Date().toISOString()
+        }))
       };
-
-      console.log('Order data prepared:', orderData);
       
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Order submitted successfully');
+      console.log('Storing order details in localStorage:', orderDetails);
+      localStorage.setItem('lastOrderDetails', JSON.stringify(orderDetails));
       
       // Clear cart and redirect
       clearCart();
       console.log('Cart cleared, redirecting to success page...');
       
-      // Force redirect using window.location (most reliable after PayPal)
-      console.log('Redirecting to success page using window.location...');
+      // Redirect to success page
       window.location.href = '/success';
       
     } catch (error) {
@@ -450,54 +342,44 @@ export default function CheckoutPage() {
                     <div className="space-y-4 mb-6">
                       <h3 className="text-base sm:text-lg font-semibold text-gray-900">Payment Method</h3>
                       <div className="space-y-3">
-                        <div className="p-3 sm:p-4 border-2 border-blue-500 bg-blue-50 rounded-lg">
+                        <div className="p-3 sm:p-4 border-2 border-orange-500 bg-orange-50 rounded-lg">
                           <div className="flex items-center justify-between">
                             <div className="flex items-center space-x-3">
                               <div className="flex space-x-1">
                                 <div className="w-6 h-4 bg-gradient-to-r from-blue-600 to-blue-700 rounded text-white text-xs flex items-center justify-center font-bold">VISA</div>
                                 <div className="w-6 h-4 bg-gradient-to-r from-red-500 to-red-600 rounded text-white text-xs flex items-center justify-center font-bold">MC</div>
+                                <div className="w-6 h-4 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded text-white text-xs flex items-center justify-center font-bold">AMEX</div>
                               </div>
                               <span className="font-medium text-gray-900 text-sm sm:text-base">Debit & Credit Cards</span>
                             </div>
-                            <div className="w-4 h-4 rounded-full bg-blue-500 border-blue-500">
+                            <div className="w-4 h-4 rounded-full bg-orange-500 border-orange-500">
                               <div className="w-2 h-2 bg-white rounded-full mx-auto mt-0.5"></div>
                             </div>
                           </div>
-                          <p className="text-xs sm:text-sm text-gray-600 mt-1">Secure payment processed by PayPal</p>
+                          <p className="text-xs sm:text-sm text-gray-600 mt-1">Secure payment processed by Stripe</p>
                         </div>
                       </div>
                     </div>
                     
-                    {/* PayPal Integration */}
+                    {/* Stripe Integration */}
                     <div className="mb-6">
-                      {PAYPAL_CLIENT_ID ? (
-                        <PayPalScriptProvider
-                          options={{
-                            clientId: PAYPAL_CLIENT_ID,
-                            currency: "GBP",
-                            intent: "capture",
-                            components: "buttons",
-                            "enable-funding": "card",
-                            "disable-funding": "paylater,venmo",
-                            "data-sdk-integration-source": "button-factory"
-                          }}
-                        >
-                          <div className="paypal-button-container">
-                            <PayPalButtonsWrapper
-                              finalTotal={finalTotal}
-                              deliveryDetails={deliveryDetails}
-                              handlePaymentSuccess={handlePaymentSuccess}
-                              handlePaymentError={handlePaymentError}
-                            />
-                          </div>
-                        </PayPalScriptProvider>
-                      ) : (
-                        <div className="text-center py-4 p-4 border border-orange-300 rounded-lg bg-orange-50">
-                          <p className="text-orange-600 text-sm">
-                            Payment system is currently being configured. Please try again later.
-                          </p>
-                        </div>
-                      )}
+                      <StripeCheckout
+                        amount={Math.round(finalTotal * 100)} // Convert to pence
+                        currency="gbp"
+                        onSuccess={handlePaymentSuccess}
+                        onError={handlePaymentError}
+                        customerDetails={{
+                          name: deliveryDetails.fullName,
+                          email: deliveryDetails.email,
+                          phone: deliveryDetails.phone,
+                          address: deliveryDetails.deliveryMode === 'nationwide' ? {
+                            line1: deliveryDetails.address,
+                            city: deliveryDetails.city,
+                            postal_code: deliveryDetails.postcode,
+                            country: 'GB'
+                          } : undefined
+                        }}
+                      />
                     </div>
                     
                     {/* Security Badge */}
