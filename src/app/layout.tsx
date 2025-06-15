@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { CartProvider } from '@/contexts/CartContext';
 import { SearchProvider } from '@/contexts/SearchContext';
 import { CartModal } from "@/components/cart/CartModal";
-import { RecommendedDeliveryBanner } from '@/components/banners/DeliveryBannerSelector';
+import { HeaderDeliveryInfo } from '@/components/banners/HeaderDeliveryInfo';
 
 export const metadata: Metadata = {
   title: 'TK Afro Kitchen',
@@ -54,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <RecommendedDeliveryBanner />
+        <HeaderDeliveryInfo />
         <SearchProvider>
           <CartProvider>
             {children}
