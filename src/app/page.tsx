@@ -4,13 +4,13 @@ import { FoodCard } from "@/components/food/food-card";
 import { categories, featuredDishes } from "@/data/sample-menu";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { DeliveryBanner } from '@/components/banners/DeliveryBanner';
+import { RecommendedDeliveryBanner } from '@/components/banners/DeliveryBannerSelector';
 
 export default function Home() {
   return (
     <>
       <Header />
-      <DeliveryBanner />
+      <RecommendedDeliveryBanner />
       <div className="pt-24 pb-16">
         {/* Hero Section */}
         <section className="relative min-h-[600px] bg-[#1e1e1e] overflow-hidden">
