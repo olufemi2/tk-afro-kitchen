@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
 import { useState } from "react";
+import Link from "next/link";
 
 interface FAQ {
   question: string;
@@ -197,7 +198,7 @@ export default function FAQsPage() {
                   size="lg"
                   className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
                 >
-                  <a href="/contact">Contact Us</a>
+                  <Link href="/contact">Contact Us</Link>
                 </Button>
                 <Button 
                   asChild 
@@ -205,7 +206,7 @@ export default function FAQsPage() {
                   variant="outline"
                   className="border-orange-900/20 bg-[#242424] hover:bg-[#2a2a2a] text-slate-200"
                 >
-                  <a href="/menu">Browse Our Menu</a>
+                  <Link href="/menu">Browse Our Menu</Link>
                 </Button>
               </div>
             </div>

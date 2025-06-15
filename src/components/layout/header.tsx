@@ -103,8 +103,8 @@ export function Header() {
                 <Menu className="h-5 w-5" />
               )}
             </Button>
-            <Button className="hidden md:flex button-primary">
-              Order Now
+            <Button asChild className="hidden md:flex button-primary">
+              <Link href="/menu">Order Now</Link>
             </Button>
           </div>
         </div>

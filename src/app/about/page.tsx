@@ -60,8 +60,8 @@ export default function AboutPage() {
               </div>
               <div className="relative w-full md:w-1/2 aspect-[4/3] rounded-2xl overflow-hidden">
                 <Image
-                  src="/images/dishes/kitchen.jpg"
-                  alt="TK Afro Kitchen"
+                  src="/images/dishes/jollofmeal.png"
+                  alt="TK Afro Kitchen - Authentic Nigerian Cuisine"
                   fill
                   className="object-cover"
                 />

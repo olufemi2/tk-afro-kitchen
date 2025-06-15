@@ -3,6 +3,7 @@
 import { Header } from "@/components/layout/header";
 import { QuoteFormModal } from "@/components/forms/quote-form-modal";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function CateringPage() {
   return (
@@ -82,8 +83,8 @@ export default function CateringPage() {
                   </Button>
                 }
               />
-              <Button variant="outline">
-                View Menu
+              <Button asChild variant="outline">
+                <Link href="/menu">View Menu</Link>
               </Button>
             </div>
           </div>

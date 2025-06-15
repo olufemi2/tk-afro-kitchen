@@ -1,0 +1,77 @@
+{
+  "timestamp": "2025-06-14T21:18:01.938Z",
+  "environment": "https://staging.tkafrokitchen.com",
+  "summary": {
+    "passed": 1,
+    "failed": 4,
+    "total": 5,
+    "successRate": 20
+  },
+  "details": [
+    {
+      "name": "Checkout Page Load",
+      "status": "FAIL",
+      "error": "Client network socket disconnected before secure TLS connection was established"
+    },
+    {
+      "name": "PayPal SDK Load",
+      "status": "FAIL",
+      "error": "PayPal SDK not accessible: 400"
+    },
+    {
+      "name": "Form Validation",
+      "status": "PASS",
+      "result": {
+        "allTestsPassed": true,
+        "results": [
+          {
+            "input": "invalid-email",
+            "expected": "invalid",
+            "actual": "invalid",
+            "passed": true
+          },
+          {
+            "input": "test@example.com",
+            "expected": "valid",
+            "actual": "valid",
+            "passed": true
+          },
+          {
+            "input": "123",
+            "expected": "invalid",
+            "actual": "invalid",
+            "passed": true
+          },
+          {
+            "input": "07123456789",
+            "expected": "valid",
+            "actual": "valid",
+            "passed": true
+          },
+          {
+            "input": "SW1A1AA",
+            "expected": "valid",
+            "actual": "valid",
+            "passed": true
+          },
+          {
+            "input": "invalid",
+            "expected": "invalid",
+            "actual": "invalid",
+            "passed": true
+          }
+        ]
+      }
+    },
+    {
+      "name": "Payment Button Render",
+      "status": "FAIL",
+      "error": "Missing required environment variables for PayPal"
+    },
+    {
+      "name": "Webhook Endpoint",
+      "status": "FAIL",
+      "error": "Client network socket disconnected before secure TLS connection was established"
+    }
+  ]
+}
