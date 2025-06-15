@@ -14,69 +14,79 @@ interface FAQ {
 
 const faqs: FAQ[] = [
   {
-    category: "Delivery",
-    question: "WHERE DO YOU DELIVER TO?",
-    answer: "We currently deliver to UK Mainland only."
+    category: "Getting Started",
+    question: "How can I get my authentic Nigerian food?",
+    answer: "We offer two convenient ways to enjoy our carefully crafted dishes: Free collection directly from our kitchen, or nationwide delivery to any UK postcode for just £27.99. Choose what works best for you!"
+  },
+  {
+    category: "Collection",
+    question: "Tell me about collection - is it really free?",
+    answer: "Yes, collection is completely free! Simply select 'Collection/Pickup' during checkout, complete your order, and come collect your freshly prepared Nigerian delicacies directly from our kitchen. It's that simple!"
+  },
+  {
+    category: "Nationwide Delivery",
+    question: "Where do you deliver across the UK?",
+    answer: "We bring authentic Nigerian cuisine to every corner of the UK! From London to Edinburgh, Manchester to Cardiff - any UK postcode for one flat rate of £27.99. No hidden fees, no postcode restrictions."
+  },
+  {
+    category: "Nationwide Delivery",
+    question: "How much does delivery cost?",
+    answer: "Just £27.99 to anywhere in the UK - that's it! Whether you're ordering for yourself or hosting a dinner party, whether you're in central London or the Scottish Highlands, the price stays the same."
   },
   {
     category: "Orders",
-    question: "IS THERE A MINIMUM ORDER AMOUNT?",
-    answer: "Yes there is, the minimum order is £70."
+    question: "Is there a minimum order amount?",
+    answer: "No minimum for collection - order as little or as much as you like! For delivery, while there's no strict minimum, our £27.99 delivery fee makes it perfect for sharing with family and friends."
   },
   {
     category: "Payment",
-    question: "HOW DO I PAY?",
-    answer: "You can make secure payment online using your debit or credit card via Paypal OR with Paypal directly if you have a Paypal account."
+    question: "How do I pay for my order?",
+    answer: "We make payment simple and secure! Pay with any debit or credit card through our PayPal checkout - no PayPal account needed. Your payment details are fully protected."
   },
   {
-    category: "Delivery",
-    question: "DO I NEED TO ORDER IN ADVANCE?",
-    answer: "Yes. We currently deliver on Tuesdays to Saturdays only. For express delivery, please allow 72hrs & orders before 12pm. Please note, we do not deliver on public holidays or the next working day after a public holiday."
+    category: "Our Food",
+    question: "Is your Nigerian food freshly prepared?",
+    answer: "Absolutely! Every dish is cooked fresh to order using traditional Nigerian recipes passed down through generations. We use only the finest ingredients and never serve pre-made or frozen meals. Taste the difference authenticity makes!"
   },
   {
-    category: "Food Quality",
-    question: "IS THE FOOD FRESHLY MADE?",
-    answer: "Yes. All our meals are cooked fresh to order."
+    category: "Nationwide Delivery",
+    question: "How will my food arrive?",
+    answer: "Your delicious Nigerian dishes arrive in premium food-safe containers, carefully sealed and insulated to preserve that fresh-cooked taste and aroma during the journey to your door."
   },
   {
-    category: "Delivery",
-    question: "HOW WILL MY FOOD ARRIVE?",
-    answer: "Your food will arrive in plastic bowls that will be transported in a styrofoam box with an ice gel pack. This is to keep the food chilled."
+    category: "Food Care",
+    question: "How should I store and reheat my food?",
+    answer: "Ready to eat? Simply microwave and enjoy! Want to save some for later? Store in the fridge for up to 3 days or freeze for up to 3 months. Always reheat until piping hot throughout - then savor every authentic bite!"
   },
   {
-    category: "Delivery",
-    question: "HOW LONG WILL MY ORDER TAKE TO ARRIVE?",
-    answer: "Our food is freshly made and delivered same day to locations within Milton Keynes. All other deliveries outside Milton Keynes have a delivery time of 72 hours (3 days)."
+    category: "Our Food",
+    question: "Do you use preservatives in your cooking?",
+    answer: "Never! We honor traditional Nigerian cooking methods using only natural ingredients. Every dish is prepared fresh without artificial preservatives, maintaining the authentic flavors and wholesome goodness of true Nigerian cuisine."
   },
   {
-    category: "Food Storage",
-    question: "HOW DO I STORE MY FOOD?",
-    answer: "As soon as the food is delivered, heat up in the microwave if you are ready to eat straight away or store in the fridge or freezer for later."
+    category: "Nationwide Delivery",
+    question: "How long does delivery take?",
+    answer: "Most UK addresses receive their orders within 1-3 working days. We'll send you tracking information once your freshly prepared meals are on their way, so you know exactly when to expect your Nigerian feast!"
   },
   {
-    category: "Food Quality",
-    question: "ARE THERE ANY PRESERVATIVES IN THE FOOD?",
-    answer: "No there isn't. We cook our food fresh. Once cooked and slightly cooled, we chill immediately to retain the freshness. It will be delivered to you chilled in an insulated box, ready to be re-heated or stored in your fridge or freezer."
-  },
-  {
-    category: "Delivery",
-    question: "IS MY ORDER DELIVERED TO MY DOOR?",
-    answer: "Yes. your order will be delivered straight to your door."
-  },
-  {
-    category: "Delivery",
-    question: "DO I NEED TO BE HOME TO RECEIVE MY DELIVERY?",
-    answer: "Yes. We require that there's someone at home to receive your order, this is because your order will arrive in an insulated box that will keep the food cool for a few hours after delivery and we advise removing the food from the box and putting it in the fridge or freezer as soon as possible after it has been delivered if it is not to be eaten immediately. If no arrangement is made for someone to be home on the day of the arranged delivery, unfortunately we will not be able to re-arrange or replace your order."
+    category: "Nationwide Delivery",
+    question: "Do I need to be home when my order arrives?",
+    answer: "We recommend being available to receive your order so you can enjoy it at its freshest! If you can't be home, please arrange for someone to accept the delivery - we want your Nigerian cuisine experience to be perfect."
   },
   {
     category: "Orders",
-    question: "CAN I REARRANGE MY DELIVERY DATE/DAY?",
-    answer: "Yes. When your order is confirmed, you can change the delivery day/date up to 2 days before your order is due to be delivered. Unfortunately, we are unable to make any changes to your order and delivery date beyond this point."
+    question: "Can I change my order after placing it?",
+    answer: "We'll do our best to help! Contact us immediately after placing your order if you need changes. If our kitchen hasn't started preparing your dishes yet, we can usually accommodate modifications."
   },
   {
-    category: "Orders",
-    question: "CAN I PLACE CUSTOMISED ORDERS?",
-    answer: "Yes, we can provide made to order food service for any meal types not captured on our menu list. Please leave a message on our board for any custom orders and we will get back to you."
+    category: "Special Requirements",
+    question: "Can you accommodate dietary requirements?",
+    answer: "Of course! Nigerian cuisine offers wonderful options for various dietary needs - vegetarian, vegan, and allergy-specific requirements. Just let us know your needs in the order notes or contact us directly to discuss how we can craft the perfect meal for you."
+  },
+  {
+    category: "Special Orders",
+    question: "Do you cater for events and large orders?",
+    answer: "We'd love to bring authentic Nigerian flavors to your celebration! Whether it's a family gathering, office party, or special event, we can create custom orders and larger quantities. Contact us to discuss your event needs and timing."
   }
 ];
 
@@ -124,7 +134,7 @@ export default function FAQsPage() {
               Frequently Asked Questions
             </h1>
             <p className="hero-description">
-              Find answers to common questions about our services, delivery, and food preparation
+              Everything you need to know about enjoying authentic Nigerian cuisine with TK Afro Kitchen
             </p>
           </div>
         </section>
@@ -144,21 +154,21 @@ export default function FAQsPage() {
                     return (
                       <div
                         key={index}
-                        className="bg-[#1e1e1e] rounded-lg border border-orange-900/20 overflow-hidden"
+                        className="card-base bg-[#1e1e1e]"
                       >
                         <button
-                          className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-[#242424] transition-colors"
+                          className="w-full px-6 py-4 flex items-center justify-between text-left hover:bg-[#242424] transition-all duration-300"
                           onClick={() => toggleFAQ(index)}
                         >
-                          <span className="font-medium text-slate-200">{faq.question}</span>
+                          <span className="font-medium text-slate-200 text-lg">{faq.question}</span>
                           <ChevronDown
-                            className={`w-5 h-5 text-orange-400 transition-transform ${
+                            className={`w-5 h-5 text-orange-400 transition-transform duration-300 ${
                               openFAQs.includes(index) ? 'rotate-180' : ''
                             }`}
                           />
                         </button>
                         {openFAQs.includes(index) && (
-                          <div className="px-6 pb-4 text-slate-400">
+                          <div className="px-6 pb-4 text-slate-300 leading-relaxed border-t border-orange-900/10 pt-4">
                             {faq.answer}
                           </div>
                         )}
@@ -172,19 +182,33 @@ export default function FAQsPage() {
 
         {/* CTA Section */}
         <section className="container mx-auto px-4 mt-16">
-          <div className="bg-gradient-to-r from-orange-500/10 to-yellow-500/10 rounded-2xl p-12 text-center border border-orange-900/20">
-            <h2 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
-              Still Have Questions?
-            </h2>
-            <p className="text-lg text-slate-300 mb-8">
-              We're here to help! Contact us for any additional information
-            </p>
-            <Button 
-              asChild 
-              className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
-            >
-              <a href="/contact">Contact Us</a>
-            </Button>
+          <div className="relative overflow-hidden rounded-3xl p-12 text-center bg-[#1e1e1e] border border-orange-900/20">
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-500/5 to-yellow-500/5" />
+            <div className="relative z-10">
+              <h2 className="text-3xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-yellow-400">
+                Still Have Questions?
+              </h2>
+              <p className="text-lg text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
+                We're passionate about sharing authentic Nigerian cuisine with you! Get in touch for any additional information about our dishes, services, or special requests.
+              </p>
+              <div className="flex gap-4 justify-center">
+                <Button 
+                  asChild 
+                  size="lg"
+                  className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
+                >
+                  <a href="/contact">Contact Us</a>
+                </Button>
+                <Button 
+                  asChild 
+                  size="lg"
+                  variant="outline"
+                  className="border-orange-900/20 bg-[#242424] hover:bg-[#2a2a2a] text-slate-200"
+                >
+                  <a href="/menu">Browse Our Menu</a>
+                </Button>
+              </div>
+            </div>
           </div>
         </section>
       </div>
