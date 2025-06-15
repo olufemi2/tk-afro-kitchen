@@ -81,22 +81,6 @@ function CheckoutForm({
     }
 
     try {
-      // Create payment method
-      const { error: methodError, paymentMethod } = await stripe.createPaymentMethod({
-        type: 'card',
-        card: cardElement,
-        billing_details: {
-          name: customerDetails.name,
-          email: customerDetails.email,
-          phone: customerDetails.phone,
-          address: customerDetails.address,
-        },
-      });
-
-      if (methodError) {
-        throw methodError;
-      }
-
       // Create payment intent on your backend
       const response = await fetch('/api/create-payment-intent', {
         method: 'POST',
@@ -106,7 +90,6 @@ function CheckoutForm({
         body: JSON.stringify({
           amount,
           currency,
-          payment_method_id: paymentMethod.id,
           customer_details: customerDetails,
         }),
       });
@@ -117,9 +100,20 @@ function CheckoutForm({
         throw new Error(paymentIntentData.error || 'Failed to create payment intent');
       }
 
-      // Confirm payment
+      // Confirm payment with card element
       const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(
-        paymentIntentData.client_secret
+        paymentIntentData.client_secret,
+        {
+          payment_method: {
+            card: cardElement,
+            billing_details: {
+              name: customerDetails.name,
+              email: customerDetails.email,
+              phone: customerDetails.phone,
+              address: customerDetails.address,
+            },
+          }
+        }
       );
 
       if (confirmError) {

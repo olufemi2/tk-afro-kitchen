@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { amount, currency = 'gbp', customer_details } = body;
+    const { amount, currency = 'gbp', customer_details, payment_method_id } = body;
 
     // Validate required fields
     if (!amount || amount < 30) { // Minimum 30p
@@ -54,7 +54,7 @@ export async function POST(request: NextRequest) {
       // Continue without customer if creation fails
     }
 
-    // Create payment intent
+    // Create payment intent (without payment method - will be attached during confirmation)
     const paymentIntent = await stripe.paymentIntents.create({
       amount: Math.round(amount), // Ensure integer
       currency: currency.toLowerCase(),
