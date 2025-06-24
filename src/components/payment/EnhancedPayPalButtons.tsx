@@ -57,18 +57,10 @@ export default function EnhancedPayPalButtons({
     ],
     application_context: {
       brand_name: "TK Afro Kitchen",
-      landing_page: isIOS ? "LOGIN" : "NO_PREFERENCE" as const,
+      landing_page: (isIOS ? "LOGIN" : "NO_PREFERENCE") as "LOGIN" | "NO_PREFERENCE",
       user_action: "PAY_NOW" as const,
       return_url: `${typeof window !== 'undefined' ? window.location.origin : ''}/success`,
-      cancel_url: `${typeof window !== 'undefined' ? window.location.origin : ''}/checkout`,
-      // iOS Safari specific settings
-      ...(isIOS && {
-        shipping_preference: "NO_SHIPPING",
-        payment_method: {
-          payer_selected: "PAYPAL",
-          payee_preferred: "IMMEDIATE_PAYMENT_REQUIRED"
-        }
-      })
+      cancel_url: `${typeof window !== 'undefined' ? window.location.origin : ''}/checkout`
     }
   };
 
