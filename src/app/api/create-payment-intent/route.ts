@@ -9,9 +9,9 @@ export async function POST(request: NextRequest) {
   try {
     console.log('Payment intent API called');
     const body = await request.json();
-    const { amount, currency = 'gbp', customer_details, payment_method_id } = body;
+    const { amount, currency = 'gbp', customer_details, payment_method_id, ios_safari } = body;
     
-    console.log('Request body:', { amount, currency, customer_details: customer_details?.name });
+    console.log('Request body:', { amount, currency, customer_details: customer_details?.name, ios_safari });
 
     // Check if Stripe is properly configured
     if (!process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET_KEY === 'sk_test_placeholder') {
@@ -84,6 +84,8 @@ export async function POST(request: NextRequest) {
         customer_phone: customer_details.phone || '',
         order_source: 'tk-afro-kitchen-website',
         created_at: new Date().toISOString(),
+        safari_payment: ios_safari ? 'true' : 'false',
+        browser_context: ios_safari ? 'ios_safari' : 'standard',
       },
       receipt_email: customer_details.email,
       description: `TK Afro Kitchen Order - ${customer_details.name}`,

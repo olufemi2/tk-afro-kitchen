@@ -1,0 +1,200 @@
+# Page snapshot
+
+```yaml
+- text: UK Delivery £27.99 Collection Free
+- alert
+- banner:
+  - link "TK Afro Kitchen TKAfro Kitchen":
+    - /url: /
+    - img "TK Afro Kitchen"
+    - text: TKAfro Kitchen
+  - button
+  - button
+- heading "Our Menu" [level=1]
+- paragraph: Discover the Rich Flavors of Nigeria
+- textbox "Search dishes..."
+- heading "Rice Dishes" [level=2]
+- paragraph: Authentic Nigerian rice specialties
+- img "Jollof Rice"
+- heading "Jollof Rice" [level=3]
+- paragraph: Our signature Jollof rice cooked with rich tomato sauce and aromatic spices
+- text: From £30.00 3 size options
+- img "Peppered Fried Rice"
+- heading "Peppered Fried Rice" [level=3]
+- paragraph: Flavorful fried rice with a perfect blend of peppers and seasonings
+- text: From £40.00 2 size options
+- img "Peppered Coconut Rice"
+- heading "Peppered Coconut Rice" [level=3]
+- paragraph: Aromatic coconut rice with a perfect blend of peppers
+- text: From £45.00 2 size options
+- img "Peppered Native Rice"
+- heading "Peppered Native Rice" [level=3]
+- paragraph: Traditional Nigerian native rice with peppered sauce
+- text: From £35.00 3 size options
+- img "Ofada Rice"
+- heading "Ofada Rice" [level=3]
+- paragraph: Traditional Nigerian brown rice variety
+- text: From £40.00 2 size options
+- heading "Soups & Stews" [level=2]
+- paragraph: Traditional Nigerian soups and stews
+- img "Assorted Stew"
+- heading "Assorted Stew" [level=3]
+- paragraph: Rich stew with assorted meat
+- text: From £60.00 2 size options
+- img "Chicken Stew"
+- heading "Chicken Stew" [level=3]
+- paragraph: Rich stew with chicken
+- text: From £50.00 2 size options
+- img "Fish Stew"
+- heading "Fish Stew" [level=3]
+- paragraph: Rich stew with fish
+- text: From £60.00 2 size options
+- img "Efo Riro"
+- heading "Efo Riro" [level=3]
+- paragraph: Rich and nutritious Nigerian spinach stew
+- text: From £60.00 2 size options
+- img "Efo Riro with Fish"
+- heading "Efo Riro with Fish" [level=3]
+- paragraph: Spinach stew with fish
+- text: From £60.00 2 size options
+- img "Egusi Soup"
+- heading "Egusi Soup" [level=3]
+- paragraph: Rich melon seed soup
+- text: From £65.00 2 size options
+- img "Assorted Okra Soup"
+- heading "Assorted Okra Soup" [level=3]
+- paragraph: Okra soup with assorted meat
+- text: From £60.00 2 size options
+- img "Seafood Okra Soup"
+- heading "Seafood Okra Soup" [level=3]
+- paragraph: Okra soup with seafood
+- text: From £70.00 2 size options
+- img "Ayamase Sauce"
+- heading "Ayamase Sauce" [level=3]
+- paragraph: Spicy green pepper sauce
+- text: From £65.00 2 size options
+- img "Ofada Sauce"
+- heading "Ofada Sauce" [level=3]
+- paragraph: Traditional sauce for Ofada rice
+- text: From £65.00 2 size options
+- img "Ogbono Soup"
+- heading "Ogbono Soup" [level=3]
+- paragraph: Traditional Nigerian Ogbono soup
+- text: From £60.00 2 size options
+- img "Fish Pepper Soup"
+- heading "Fish Pepper Soup" [level=3]
+- paragraph: Spicy Nigerian fish pepper soup
+- text: From £60.00 2 size options
+- heading "Protein Dishes" [level=2]
+- paragraph: Variety of peppered meats and fish
+- img "Peppered Beef and Chicken"
+- heading "Peppered Beef and Chicken" [level=3]
+- paragraph: Perfectly seasoned combination of beef and chicken
+- text: From £55.00 2 size options
+- img "Peppered Assorted Meat"
+- heading "Peppered Assorted Meat" [level=3]
+- paragraph: Mix of various meats in pepper sauce
+- text: From £60.00 2 size options
+- img "Peppered Beef and Fish"
+- heading "Peppered Beef and Fish" [level=3]
+- paragraph: Perfectly seasoned beef and fish in pepper sauce
+- text: From £65.00 2 size options
+- img "Peppered Beef and Turkey"
+- heading "Peppered Beef and Turkey" [level=3]
+- paragraph: Combination of beef and turkey in pepper sauce
+- text: From £60.00 2 size options
+- img "Peppered Beef Only"
+- heading "Peppered Beef Only" [level=3]
+- paragraph: Premium beef in pepper sauce
+- text: From £70.00 2 size options
+- img "Peppered Chicken Hard"
+- heading "Peppered Chicken Hard" [level=3]
+- paragraph: Hard chicken in pepper sauce
+- text: From £50.00 2 size options
+- img "Peppered Grilled Soft Chicken"
+- heading "Peppered Grilled Soft Chicken" [level=3]
+- paragraph: Grilled soft chicken in pepper sauce
+- text: From £50.00 2 size options
+- img "Turkey Wings"
+- heading "Turkey Wings" [level=3]
+- paragraph: Seasoned and grilled turkey wings
+- text: From £55.00 2 size options
+- img "Peppered Goat Meat"
+- heading "Peppered Goat Meat" [level=3]
+- paragraph: Premium goat meat in pepper sauce
+- text: From £70.00 2 size options
+- img "Peppered Fish"
+- heading "Peppered Fish" [level=3]
+- paragraph: Fish in pepper sauce
+- text: From £60.00 2 size options
+- heading "Side Dishes" [level=2]
+- paragraph: Delicious sides including plantain and beans
+- img "Dodo Gizzards"
+- heading "Dodo Gizzards" [level=3]
+- paragraph: Fried plantain with gizzards
+- text: From £60.00 2 size options
+- img "Assorted Pepper Soup"
+- heading "Assorted Pepper Soup" [level=3]
+- paragraph: Spicy pepper soup with assorted meat
+- text: From £55.00 2 size options
+- img "Fish Pepper Soup"
+- heading "Fish Pepper Soup" [level=3]
+- paragraph: Spicy pepper soup with fish
+- text: From £50.00 2 size options
+- img "Plantain"
+- heading "Plantain" [level=3]
+- paragraph: Fried plantain (Dodo)
+- text: From £40.00 2 size options
+- img "Ewa Agoyin and Sauce"
+- heading "Ewa Agoyin and Sauce" [level=3]
+- paragraph: Mashed beans with special sauce
+- text: From £60.00 2 size options
+- img "Yam Porridge (Asaro)"
+- heading "Yam Porridge (Asaro)" [level=3]
+- paragraph: Creamy yam porridge cooked with palm oil and peppers
+- text: From £50.00 2 size options
+- img "Beans Porridge"
+- heading "Beans Porridge" [level=3]
+- paragraph: Nigerian style beans porridge
+- text: From £50.00 2 size options
+- img "Beans & Dodo"
+- heading "Beans & Dodo" [level=3]
+- paragraph: Nigerian beans served with fried plantain
+- text: From £50.00 2 size options
+- heading "Snacks & Pastries" [level=2]
+- paragraph: Nigerian snacks and pastries
+- img "Meat Pies"
+- heading "Meat Pies" [level=3]
+- paragraph: Nigerian style meat pies
+- text: From £20.00 1 size options
+- img "Sausage Rolls"
+- heading "Sausage Rolls" [level=3]
+- paragraph: Nigerian style sausage rolls
+- text: From £20.00 1 size options
+- img "Chicken Pies"
+- heading "Chicken Pies" [level=3]
+- paragraph: Nigerian style chicken pies
+- text: From £20.00 1 size options
+- img "Fish Pies"
+- heading "Fish Pies" [level=3]
+- paragraph: Nigerian style fish pies
+- text: From £20.00 1 size options
+- img "Puff Puff"
+- heading "Puff Puff" [level=3]
+- paragraph: Nigerian deep-fried dough balls
+- text: From £40.00 1 size options
+- img "Mix and Match"
+- heading "Mix and Match" [level=3]
+- paragraph: Assorted Nigerian snacks
+- text: From £50.00 1 size options
+- heading "Fish Platters" [level=2]
+- paragraph: Special fish platters
+- img "Tilapia Fish Platter"
+- heading "Tilapia Fish Platter" [level=3]
+- paragraph: Grilled Tilapia fish platter with sides
+- text: From £30.00 1 size options
+- img "Croker Fish Platter"
+- heading "Croker Fish Platter" [level=3]
+- paragraph: Grilled Croker fish platter with sides
+- text: From £35.00 1 size options
+```

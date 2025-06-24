@@ -1,8 +1,6 @@
-import { test, expect, devices } from '@playwright/test';
+import { test, expect } from '@playwright/test';
 
 test.describe('Safari Payment Success Flow', () => {
-  // Run these tests specifically with Safari
-  test.use({ ...devices['Desktop Safari'] });
 
   test.beforeEach(async ({ page }) => {
     // Mock successful payment for testing
@@ -41,7 +39,9 @@ test.describe('Safari Payment Success Flow', () => {
     });
   });
 
-  test('should detect Safari browser correctly', async ({ page }) => {
+  test('should detect Safari browser correctly', async ({ page, browserName }) => {
+    test.skip(browserName !== 'webkit', 'Safari-specific test');
+    
     await page.goto('/');
     
     // Check that Safari is detected
@@ -52,7 +52,8 @@ test.describe('Safari Payment Success Flow', () => {
     console.log('User Agent:', userAgent);
   });
 
-  test('should handle Safari payment redirect correctly', async ({ page }) => {
+  test('should handle Safari payment redirect correctly', async ({ page, browserName }) => {
+    test.skip(browserName !== 'webkit', 'Safari-specific test');
     // Navigate to checkout with test data
     await page.goto('/checkout');
     
@@ -110,7 +111,8 @@ test.describe('Safari Payment Success Flow', () => {
     await expect(page).toHaveURL(/.*success/);
   });
 
-  test('should show Safari success banner on payment completion', async ({ page }) => {
+  test('should show Safari success banner on payment completion', async ({ page, browserName }) => {
+    test.skip(browserName !== 'webkit', 'Safari-specific test');
     // Directly navigate to success page with Safari
     await page.goto('/success?orderId=test_safari_123&amount=50.00&timestamp=1234567890');
     
@@ -141,7 +143,8 @@ test.describe('Safari Payment Success Flow', () => {
     await expect(page.locator('text=Thank you, text=successful')).toBeVisible();
   });
 
-  test('should retrieve order details from URL parameters in Safari', async ({ page }) => {
+  test('should retrieve order details from URL parameters in Safari', async ({ page, browserName }) => {
+    test.skip(browserName !== 'webkit', 'Safari-specific test');
     // Navigate to success page with query parameters
     await page.goto('/success?orderId=safari_test_456&amount=75.50&timestamp=1234567890');
     
@@ -154,7 +157,8 @@ test.describe('Safari Payment Success Flow', () => {
     await expect(page.locator('text=£75.50')).toBeVisible();
   });
 
-  test('should prevent automatic redirects from success page in Safari', async ({ page }) => {
+  test('should prevent automatic redirects from success page in Safari', async ({ page, browserName }) => {
+    test.skip(browserName !== 'webkit', 'Safari-specific test');
     // Navigate to success page
     await page.goto('/success');
     
@@ -174,7 +178,8 @@ test.describe('Safari Payment Success Flow', () => {
     await expect(page).toHaveURL(/.*success/);
   });
 
-  test('should handle localStorage access delays in Safari', async ({ page }) => {
+  test('should handle localStorage access delays in Safari', async ({ page, browserName }) => {
+    test.skip(browserName !== 'webkit', 'Safari-specific test');
     // Navigate to success page
     await page.goto('/success');
     
@@ -201,7 +206,8 @@ test.describe('Safari Payment Success Flow', () => {
     await expect(page.locator('text=Thank you, text=Payment Successful')).toBeVisible({ timeout: 5000 });
   });
 
-  test('should show loading state before displaying success content', async ({ page }) => {
+  test('should show loading state before displaying success content', async ({ page, browserName }) => {
+    test.skip(browserName !== 'webkit', 'Safari-specific test');
     // Navigate to success page
     await page.goto('/success');
     

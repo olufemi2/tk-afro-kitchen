@@ -117,7 +117,9 @@ export default function OptimizedCheckout() {
 
   const handlePaymentSuccess = async (paymentData: any, method: 'card' | 'bank' | 'mobile') => {
     const paymentId = paymentData?.id || paymentData?.orderId || 'unknown';
-    console.log('🎉 Payment success callback triggered:', { paymentId, method, paymentData });
+    const isSafariMode = paymentData?.safariMode || paymentData?.noRedirect;
+    
+    console.log('🎉 Payment success callback triggered:', { paymentId, method, paymentData, isSafariMode });
     setPaymentSuccess(true);
     setIsSubmitting(true);
 
@@ -152,50 +154,64 @@ export default function OptimizedCheckout() {
         status: 'COMPLETED',
         amount: totalPrice.toFixed(2),
         timestamp: new Date().toISOString(),
-        customerInfo: deliveryDetails
+        customerInfo: deliveryDetails,
+        safariMode: isSafariMode
       };
       localStorage.setItem('lastOrderDetails', JSON.stringify(orderDetails));
       
-      // Enhanced Safari-compatible redirect strategy
+      // Browser detection
       const userAgent = navigator.userAgent;
       const isSafari = /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
       const isIOS = /iPad|iPhone|iPod/.test(userAgent);
       
-      console.log('🔍 Browser detection:', { userAgent, isSafari, isIOS, method });
+      console.log('🔍 Browser detection:', { userAgent, isSafari, isIOS, method, isSafariMode });
       
-      if (isSafari || isIOS) {
-        console.log('📱 Safari/iOS detected - using direct navigation approach');
+      // Safari-specific handling: Use in-page success display instead of redirect
+      if (isSafariMode || isSafari || isIOS) {
+        console.log('🍎 Safari mode detected - showing in-page success instead of redirect');
         
-        // For Safari, use direct navigation with query parameters
-        const successUrl = `/success?orderId=${paymentId}&amount=${totalPrice.toFixed(2)}&timestamp=${Date.now()}`;
+        // Set Safari success flag for immediate display
+        localStorage.setItem('safariPaymentComplete', 'true');
+        localStorage.setItem('safariSuccessDisplayed', Date.now().toString());
         
-        try {
-          // Method 1: Direct location assignment (most reliable for Safari)
-          console.log('🚀 Using direct location assignment for Safari');
-          window.location.assign(successUrl);
+        // Trigger in-page success display by setting a success state
+        setPaymentSuccess(true);
+        setIsSubmitting(false);
+        
+        // Show success message and provide manual navigation option
+        setTimeout(() => {
+          const userConfirmed = confirm(
+            '🎉 Payment Successful!\n\n' +
+            `Order ID: ${paymentId}\n` +
+            `Amount: £${totalPrice.toFixed(2)}\n\n` +
+            'Click OK to view your order confirmation, or Cancel to stay on this page.'
+          );
           
-        } catch (e) {
-          console.error('Safari location.assign failed:', e);
-          
-          try {
-            // Method 2: Fallback to location.href
-            console.log('🚀 Fallback to location.href');
-            window.location.href = successUrl;
+          if (userConfirmed) {
+            // Use a more reliable navigation method for Safari
+            const successUrl = `/success?orderId=${paymentId}&amount=${totalPrice.toFixed(2)}&safari=true&timestamp=${Date.now()}`;
             
-          } catch (e2) {
-            console.error('Safari location.href failed:', e2);
-            
-            // Method 3: Manual confirmation with direct navigation
-            alert('Payment successful! You will be redirected to the confirmation page.');
-            setTimeout(() => {
+            // Try multiple navigation strategies for Safari
+            try {
               window.open(successUrl, '_self');
-            }, 100);
+            } catch (e) {
+              console.log('Window.open failed, trying location methods');
+              try {
+                window.location.replace(successUrl);
+              } catch (e2) {
+                window.location.href = successUrl;
+              }
+            }
           }
-        }
-      } else {
-        console.log('🖥️ Non-Safari device - using standard redirect');
-        router.push('/success');
+        }, 1000);
+        
+        return; // Exit early for Safari mode
       }
+      
+      // Standard redirect for non-Safari browsers
+      console.log('🖥️ Non-Safari device - using standard redirect');
+      router.push('/success');
+      
     } catch (error) {
       console.error('Error processing order:', error);
       alert('There was an error processing your order. Please contact support.');
@@ -432,6 +448,37 @@ export default function OptimizedCheckout() {
                       <div className="inline-flex items-center space-x-2 text-gray-600">
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-orange-500"></div>
                         <span>Processing your order...</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Safari Success Display */}
+                  {paymentSuccess && (
+                    <div className="mt-6 p-6 bg-green-50 border border-green-200 rounded-lg">
+                      <div className="text-center">
+                        <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100 mb-4">
+                          <svg className="h-6 w-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </svg>
+                        </div>
+                        <h3 className="text-lg font-semibold text-green-800 mb-2">Payment Successful!</h3>
+                        <p className="text-green-700 mb-4">
+                          Your order has been confirmed. You'll receive a confirmation email shortly.
+                        </p>
+                        <div className="text-sm text-green-600 mb-4">
+                          <p>Order Total: £{totalPrice.toFixed(2)}</p>
+                          <p>Estimated Delivery: {estimatedDelivery}</p>
+                        </div>
+                        <button
+                          onClick={() => {
+                            const paymentData = JSON.parse(localStorage.getItem('lastOrderDetails') || '{}');
+                            const successUrl = `/success?orderId=${paymentData.orderId}&amount=${paymentData.amount}&safari=true&timestamp=${Date.now()}`;
+                            window.open(successUrl, '_self');
+                          }}
+                          className="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-lg"
+                        >
+                          View Order Details
+                        </button>
                       </div>
                     </div>
                   )}

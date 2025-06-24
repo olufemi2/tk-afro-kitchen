@@ -187,21 +187,29 @@ function CheckoutForm({
           status: paymentIntent.status,
           timestamp: new Date().toISOString(),
           customerDetails,
-          isIOS
+          isIOS,
+          isSafari: /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent)
         };
         
         localStorage.setItem('lastStripePayment', JSON.stringify(paymentDetails));
         console.log('💾 Payment details saved to localStorage');
         
-        // Enhanced iOS Safari compatibility - delay callback to prevent redirect issues
-        if (isIOS) {
-          console.log('📱 iOS detected - using delayed callback');
-          setTimeout(() => {
-            console.log('⏰ Executing delayed Stripe success callback');
-            onSuccess(paymentIntent);
-          }, 2000);
+        // Safari-specific handling: avoid redirects entirely
+        if (isIOS || (/Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent))) {
+          console.log('🍎 Safari/iOS detected - using no-redirect approach');
+          
+          // Set a flag to trigger success UI without redirect
+          localStorage.setItem('safariPaymentSuccess', 'true');
+          localStorage.setItem('safariPaymentTimestamp', Date.now().toString());
+          
+          // Use immediate callback but with Safari-safe flag
+          onSuccess({
+            ...paymentIntent,
+            safariMode: true,
+            noRedirect: true
+          });
         } else {
-          console.log('🖥️ Non-iOS device - immediate callback');
+          console.log('🖥️ Non-Safari device - standard callback');
           onSuccess(paymentIntent);
         }
       } else {

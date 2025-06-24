@@ -2,7 +2,7 @@
 const nextConfig = {
   images: {
     domains: ['images.unsplash.com'],
-    unoptimized: process.env.NODE_ENV === 'staging', // Optimize images for production
+    unoptimized: process.env.NODE_ENV === 'staging' || !process.env.VERCEL, // Disable optimization for staging and static export
     remotePatterns: [
       {
         protocol: 'https',
