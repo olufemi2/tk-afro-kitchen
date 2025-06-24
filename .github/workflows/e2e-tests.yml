@@ -1,0 +1,156 @@
+name: E2E Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    # Run tests daily at 6 AM UTC
+    - cron: '0 6 * * *'
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        project: [chromium, firefox, safari]
+        
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps ${{ matrix.project }}
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Run Playwright tests
+      run: npx playwright test --project=${{ matrix.project }}
+      env:
+        PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
+        
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-report-${{ matrix.project }}
+        path: playwright-report/
+        retention-days: 30
+        
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: test-results-${{ matrix.project }}
+        path: test-results/
+        retention-days: 30
+
+  mobile-test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        project: [Mobile Chrome, Mobile Safari]
+        
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Run Mobile Playwright tests
+      run: npx playwright test --project="${{ matrix.project }}"
+      env:
+        PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
+        
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-report-mobile-${{ matrix.project }}
+        path: playwright-report/
+        retention-days: 30
+
+  safari-specific:
+    timeout-minutes: 60
+    runs-on: macos-latest  # Safari tests need macOS
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps safari
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Run Safari-specific tests
+      run: npm run test:e2e:safari
+      env:
+        PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
+        
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-report-safari-macos
+        path: playwright-report/
+        retention-days: 30
+
+  staging-tests:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+      
+    - name: Run tests against staging
+      run: npx playwright test
+      env:
+        PLAYWRIGHT_TEST_BASE_URL: https://staging.tkafrokitchen.com
+        
+    - uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-report-staging
+        path: playwright-report/
+        retention-days: 30
