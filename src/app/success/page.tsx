@@ -41,79 +41,84 @@ export default function SuccessPage() {
   }, []);
 
   useEffect(() => {
-    // Enhanced order details retrieval with Safari static navigation support
-    const getOrderDetails = () => {
+    // Enhanced order details retrieval using Safari navigation utility
+    const getOrderDetails = async () => {
       try {
+        // Import Safari navigation utility
+        const { SafariNavigation } = await import('@/utils/safariNavigation');
+        
         const urlParams = new URLSearchParams(window.location.search);
         const orderId = urlParams.get('orderId');
-        const isSafariStatic = urlParams.get('static') === 'true';
+        const isSafariNavigation = urlParams.get('nav') === 'safari';
         const isSafariUrl = urlParams.get('safari') === 'true';
         
-        console.log('🔍 Success page params:', { orderId, isSafariStatic, isSafariUrl });
+        console.log('🔍 Success page params:', { orderId, isSafariNavigation, isSafariUrl });
         
-        // Safari static navigation handling
-        if (isSafariStatic || isSafariUrl) {
-          console.log('🍎 Safari static navigation detected');
+        // Detect Safari and set state
+        if (SafariNavigation.shouldUseSafariNavigation() || isSafariNavigation || isSafariUrl) {
+          console.log('🍎 Safari navigation detected on success page');
           setIsSafari(true);
           
           // Prevent any router navigation that could trigger RSC issues
-          window.history.replaceState({}, '', window.location.href);
-        }
-        
-        // Try multiple localStorage sources
-        let storedOrderDetails = localStorage.getItem('lastOrderDetails');
-        
-        if (!storedOrderDetails && (isSafariStatic || isSafariUrl)) {
-          // Try Safari backup
-          storedOrderDetails = localStorage.getItem('safariOrderBackup');
-          console.log('🔄 Trying Safari backup storage');
-        }
-        
-        if (!storedOrderDetails) {
-          // Try Stripe payment data
-          storedOrderDetails = localStorage.getItem('lastStripePayment');
-          console.log('🔄 Trying Stripe payment storage');
-        }
-        
-        if (storedOrderDetails) {
-          const details = JSON.parse(storedOrderDetails);
-          
-          // Normalize data format
-          if (details.paymentIntentId && !details.orderId) {
-            details.orderId = details.paymentIntentId;
+          if (typeof window !== 'undefined') {
+            window.history.replaceState({}, '', window.location.href);
           }
-          if (details.amount && typeof details.amount === 'number') {
-            details.amount = (details.amount / 100).toFixed(2);
+        }
+        
+        // Try to retrieve order data using Safari utility
+        let orderData = SafariNavigation.retrieveOrderData();
+        
+        if (!orderData) {
+          // Fallback to standard localStorage
+          const storedOrderDetails = localStorage.getItem('lastOrderDetails');
+          if (storedOrderDetails) {
+            orderData = JSON.parse(storedOrderDetails);
+            console.log('✅ Order details from standard localStorage');
           }
+        }
+        
+        if (!orderData) {
+          // Try Stripe payment data as last resort
+          const stripeData = localStorage.getItem('lastStripePayment');
+          if (stripeData) {
+            const details = JSON.parse(stripeData);
+            orderData = {
+              orderId: details.paymentIntentId || details.id || 'unknown',
+              amount: details.amount ? (details.amount / 100).toFixed(2) : '0.00',
+              timestamp: details.timestamp || new Date().toISOString(),
+              status: 'COMPLETED',
+              customerInfo: details.customerDetails
+            };
+            console.log('✅ Order details from Stripe data');
+          }
+        }
+        
+        if (orderData) {
+          setOrderDetails(orderData);
+          console.log('✅ Order details loaded:', orderData.orderId);
           
-          setOrderDetails(details);
-          console.log('✅ Order details loaded from storage:', details.orderId);
-          
-          // Clear all storage keys after successful load
-          localStorage.removeItem('lastOrderDetails');
-          localStorage.removeItem('safariOrderBackup');
-          localStorage.removeItem('lastStripePayment');
+          // Clean up Safari navigation data
+          SafariNavigation.cleanup();
           
         } else if (orderId) {
-          // Fallback: Create basic order details from URL params
+          // Final fallback: Create basic order details from URL params
           const basicDetails = {
             orderId: orderId,
             status: 'COMPLETED',
             amount: urlParams.get('amount') || '0.00',
             timestamp: new Date().toISOString(),
-            customerInfo: null,
-            safariMode: isSafariUrl,
-            staticNavigation: isSafariStatic
+            customerInfo: null
           };
           setOrderDetails(basicDetails);
-          console.log('✅ Order details created from URL params for Safari');
+          console.log('✅ Order details created from URL params');
         } else {
           console.log('⚠️ No order details found - showing generic success message');
         }
-      } catch (error) {
-        console.error('❌ Error parsing order details:', error);
         
-        // Safari error recovery - try to show basic success
+      } catch (error) {
+        console.error('❌ Error retrieving order details:', error);
+        
+        // Error recovery - try to show basic success from URL
         const urlParams = new URLSearchParams(window.location.search);
         const orderId = urlParams.get('orderId');
         if (orderId) {
@@ -298,10 +303,10 @@ export default function SuccessPage() {
             {/* Action Buttons */}
             <div className="space-y-4">
               <Button
-                onClick={() => {
-                  if (isSafari) {
-                    // Use static navigation for Safari to avoid RSC issues
-                    window.location.href = `${window.location.origin}/menu`;
+                onClick={async () => {
+                  const { SafariNavigation } = await import('@/utils/safariNavigation');
+                  if (SafariNavigation.shouldUseSafariNavigation()) {
+                    SafariNavigation.navigateToMenu();
                   } else {
                     router.push('/menu');
                   }
@@ -311,10 +316,10 @@ export default function SuccessPage() {
                 Order Again
               </Button>
               <Button
-                onClick={() => {
-                  if (isSafari) {
-                    // Use static navigation for Safari to avoid RSC issues
-                    window.location.href = window.location.origin;
+                onClick={async () => {
+                  const { SafariNavigation } = await import('@/utils/safariNavigation');
+                  if (SafariNavigation.shouldUseSafariNavigation()) {
+                    SafariNavigation.navigateToHome();
                   } else {
                     router.push('/');
                   }

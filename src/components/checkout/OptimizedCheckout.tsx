@@ -118,13 +118,15 @@ export default function OptimizedCheckout() {
 
   const handlePaymentSuccess = async (paymentData: any, method: 'card' | 'bank' | 'mobile') => {
     const paymentId = paymentData?.id || paymentData?.orderId || 'unknown';
-    const isSafariMode = paymentData?.safariMode || paymentData?.noRedirect;
     
-    console.log('🎉 Payment success callback triggered:', { paymentId, method, paymentData, isSafariMode });
+    console.log('🎉 Payment success callback triggered:', { paymentId, method, paymentData });
     setPaymentSuccess(true);
     setIsSubmitting(true);
 
     try {
+      // Immediately import Safari navigation utility
+      const { SafariNavigation } = await import('@/utils/safariNavigation');
+      
       // Send order details to backend
       const orderData = {
         paymentId,
@@ -144,85 +146,45 @@ export default function OptimizedCheckout() {
       };
 
       // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 1000));
       console.log('Order submitted:', orderData);
       
-      // DON'T clear cart yet - wait until after navigation to prevent race condition
-      
-      // Store order details for success page
-      const orderDetails = {
+      // Prepare order details for success page
+      const successOrderData = {
         orderId: paymentId,
-        status: 'COMPLETED',
         amount: totalPrice.toFixed(2),
         timestamp: new Date().toISOString(),
         customerInfo: deliveryDetails,
-        safariMode: isSafariMode
+        items: items.map(item => ({
+          id: item.id,
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+          selectedSize: item.selectedSize
+        })),
+        status: 'COMPLETED'
       };
-      localStorage.setItem('lastOrderDetails', JSON.stringify(orderDetails));
       
-      // Browser detection
-      const userAgent = navigator.userAgent;
-      const isSafari = /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
-      const isIOS = /iPad|iPhone|iPod/.test(userAgent);
-      
-      console.log('🔍 Browser detection:', { userAgent, isSafari, isIOS, method, isSafariMode });
-      
-      // Safari-specific handling: Completely bypass Next.js router
-      if (isSafariMode || isSafari || isIOS) {
-        console.log('🍎 Safari mode detected - using static navigation to avoid RSC payload issues');
+      // Check if we should use Safari navigation
+      if (SafariNavigation.shouldUseSafariNavigation()) {
+        console.log('🍎 Safari detected - using Safari-first navigation approach');
         
-        // Set Safari success flag for immediate display
-        localStorage.setItem('safariPaymentComplete', 'true');
-        localStorage.setItem('safariSuccessDisplayed', Date.now().toString());
+        // Clear cart immediately for Safari (no race condition with navigation)
+        clearCart();
         
-        // Store comprehensive order data for static page
-        const completeOrderData = {
-          orderId: paymentId,
-          status: 'COMPLETED',
-          amount: totalPrice.toFixed(2),
-          timestamp: new Date().toISOString(),
-          customerInfo: deliveryDetails,
-          items: items.map(item => ({
-            id: item.id,
-            name: item.name,
-            quantity: item.quantity,
-            price: item.price,
-            selectedSize: item.selectedSize
-          })),
-          safariMode: true,
-          staticNavigation: true
-        };
+        // Use Safari-specific navigation that bypasses Next.js router entirely
+        SafariNavigation.navigateToSuccess(successOrderData);
         
-        // Store in multiple keys for reliability
-        localStorage.setItem('lastOrderDetails', JSON.stringify(completeOrderData));
-        localStorage.setItem('safariOrderBackup', JSON.stringify(completeOrderData));
-        
-        console.log('💾 Safari order data stored, using immediate static navigation');
-        
-        // Immediate static navigation to bypass RSC issues
-        const successUrl = `${window.location.origin}/success?orderId=${paymentId}&amount=${totalPrice.toFixed(2)}&safari=true&static=true&timestamp=${Date.now()}`;
-        
-        // Force full page reload to avoid Next.js routing issues
-        setTimeout(() => {
-          console.log('🚀 Safari: Performing full page navigation to avoid RSC payload failure');
-          
-          // Clear cart AFTER setting success flag and before navigation
-          clearCart();
-          
-          window.location.href = successUrl;
-        }, 500);
-        
-        // Show immediate in-page confirmation while navigation happens
-        setPaymentSuccess(true);
-        setIsSubmitting(false);
-        
-        return; // Exit early for Safari mode
+        return; // Exit early - Safari navigation takes over
       }
       
-      // Standard redirect for non-Safari browsers
-      console.log('🖥️ Non-Safari device - using standard redirect');
+      // Standard navigation for non-Safari browsers
+      console.log('🖥️ Non-Safari browser - using standard Next.js navigation');
       
-      // Clear cart after navigation for non-Safari browsers
+      // Store order details for Next.js navigation
+      localStorage.setItem('lastOrderDetails', JSON.stringify(successOrderData));
+      
+      // Clear cart and navigate
       clearCart();
       router.push('/success');
       
