@@ -17,6 +17,7 @@ export default function SuccessPage() {
   const router = useRouter();
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isSafari, setIsSafari] = useState(false);
 
   useEffect(() => {
     // Enhanced order details retrieval with Safari compatibility
@@ -54,11 +55,16 @@ export default function SuccessPage() {
 
     // Safari-specific: Add a small delay to ensure localStorage is accessible
     const userAgent = navigator.userAgent;
-    const isSafari = /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+    const safariDetected = /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+    setIsSafari(safariDetected);
     
-    if (isSafari) {
-      console.log('📱 Safari detected - adding delay for localStorage access');
-      setTimeout(getOrderDetails, 100);
+    if (safariDetected) {
+      console.log('📱 Safari detected - applying Safari-specific success page handling');
+      
+      // For Safari, show immediate success confirmation
+      document.title = '✅ Payment Successful - TK Afro Kitchen';
+      
+      setTimeout(getOrderDetails, 300);
     } else {
       getOrderDetails();
     }
@@ -90,6 +96,13 @@ export default function SuccessPage() {
     <>
       <Header />
       <div className="min-h-screen pt-24 pb-16 bg-gray-50">
+        {/* Safari Success Banner */}
+        {isSafari && (
+          <div className="bg-green-600 text-white py-3 text-center font-semibold">
+            🎉 Payment Successful! Your order has been confirmed.
+          </div>
+        )}
+        
         <div className="container mx-auto px-4">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-8">

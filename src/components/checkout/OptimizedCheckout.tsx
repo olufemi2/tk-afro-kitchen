@@ -164,25 +164,33 @@ export default function OptimizedCheckout() {
       console.log('🔍 Browser detection:', { userAgent, isSafari, isIOS, method });
       
       if (isSafari || isIOS) {
-        console.log('📱 Safari/iOS detected - using Safari-compatible redirect');
+        console.log('📱 Safari/iOS detected - using direct navigation approach');
         
-        // Safari-specific approach: Use a more direct method
+        // For Safari, use direct navigation with query parameters
+        const successUrl = `/success?orderId=${paymentId}&amount=${totalPrice.toFixed(2)}&timestamp=${Date.now()}`;
+        
         try {
-          // First, try to update the URL without navigation
-          window.history.pushState({}, '', '/success');
-          
-          // Then trigger a page reload to ensure the success page loads
-          setTimeout(() => {
-            console.log('🔄 Reloading page to show success content');
-            window.location.reload();
-          }, 500);
+          // Method 1: Direct location assignment (most reliable for Safari)
+          console.log('🚀 Using direct location assignment for Safari');
+          window.location.assign(successUrl);
           
         } catch (e) {
-          console.error('Safari redirect failed:', e);
+          console.error('Safari location.assign failed:', e);
           
-          // Fallback: Show success message and manual navigation
-          alert('Payment successful! Click OK to view your order confirmation.');
-          window.location.href = '/success';
+          try {
+            // Method 2: Fallback to location.href
+            console.log('🚀 Fallback to location.href');
+            window.location.href = successUrl;
+            
+          } catch (e2) {
+            console.error('Safari location.href failed:', e2);
+            
+            // Method 3: Manual confirmation with direct navigation
+            alert('Payment successful! You will be redirected to the confirmation page.');
+            setTimeout(() => {
+              window.open(successUrl, '_self');
+            }, 100);
+          }
         }
       } else {
         console.log('🖥️ Non-Safari device - using standard redirect');
