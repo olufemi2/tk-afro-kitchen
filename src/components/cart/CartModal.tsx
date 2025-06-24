@@ -31,6 +31,11 @@ export function CartModal() {
     router.push('/checkout');
   };
 
+  const handleContinueShopping = () => {
+    setIsCartOpen(false);
+    router.push('/menu');
+  };
+
   return (
     <Sheet open={isCartOpen} onOpenChange={setIsCartOpen}>
       <SheetContent side="right" className="w-full sm:max-w-md bg-[#1e1e1e] border-l border-orange-900/20">
@@ -115,12 +120,22 @@ export function CartModal() {
                   </span>
                 </div>
 
-                <Button
-                  className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
-                  onClick={handleCheckout}
-                >
-                  Proceed to Checkout
-                </Button>
+                <div className="space-y-3">
+                  <Button
+                    className="w-full bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
+                    onClick={handleCheckout}
+                  >
+                    Proceed to Checkout
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    className="w-full border-orange-500 text-orange-400 hover:bg-orange-500/10"
+                    onClick={handleContinueShopping}
+                  >
+                    Continue Shopping
+                  </Button>
+                </div>
               </div>
             </>
           )}

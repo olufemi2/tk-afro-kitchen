@@ -362,12 +362,20 @@ export default function OptimizedCheckout() {
                 <div className="bg-white p-6 rounded-lg shadow-sm">
                   <div className="flex items-center justify-between mb-6">
                     <h2 className="text-2xl font-bold text-gray-900">Payment</h2>
-                    <button
-                      onClick={() => setCurrentStep(1)}
-                      className="text-orange-600 hover:text-orange-700 font-medium"
-                    >
-                      ← Edit Details
-                    </button>
+                    <div className="flex gap-4">
+                      <button
+                        onClick={() => router.push('/menu')}
+                        className="text-blue-600 hover:text-blue-700 font-medium"
+                      >
+                        ← Continue Shopping
+                      </button>
+                      <button
+                        onClick={() => setCurrentStep(1)}
+                        className="text-orange-600 hover:text-orange-700 font-medium"
+                      >
+                        ← Edit Details
+                      </button>
+                    </div>
                   </div>
                   
                   <PaymentSelector
