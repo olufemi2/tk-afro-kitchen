@@ -49,6 +49,24 @@ export default function OptimizedCheckout() {
       hour: '2-digit', 
       minute: '2-digit' 
     }));
+    
+    // Debug: Check for stored error information on component mount
+    const storedErrors = [
+      'paypalError',
+      'paypalCancel', 
+      'paypalCreateOrderError',
+      'checkoutPaymentError'
+    ];
+    
+    storedErrors.forEach(errorKey => {
+      const stored = localStorage.getItem(errorKey);
+      if (stored) {
+        console.log(`🔍 Found stored ${errorKey}:`, JSON.parse(stored));
+      }
+    });
+    
+    // Clear old error flags
+    localStorage.removeItem('preventAutoRedirect');
   }, [items, router]);
 
   if (items.length === 0) {
@@ -147,8 +165,42 @@ export default function OptimizedCheckout() {
   };
 
   const handlePaymentError = (error: any) => {
-    console.error('Payment error:', error);
-    alert('Payment failed. Please try again or contact support.');
+    console.error('❌ Payment error in checkout:', error);
+    console.error('❌ Payment error details:', JSON.stringify(error, null, 2));
+    
+    // Enhanced error tracking for iOS Safari
+    const userAgent = navigator.userAgent;
+    const isIOSSafari = /iPad|iPhone|iPod/.test(userAgent) && /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+    const isIOSWebView = /iPad|iPhone|iPod/.test(userAgent) && !/Safari/.test(userAgent);
+    
+    if (isIOSSafari || isIOSWebView) {
+      console.error('❌ Payment error on iOS device - this might cause homepage redirect');
+      
+      // Store comprehensive error details for debugging
+      localStorage.setItem('checkoutPaymentError', JSON.stringify({
+        error: {
+          message: error?.message,
+          name: error?.name,
+          stack: error?.stack,
+          details: error
+        },
+        userAgent,
+        timestamp: new Date().toISOString(),
+        currentStep,
+        deliveryDetails,
+        totalAmount: totalPrice,
+        isIOSSafari,
+        isIOSWebView
+      }));
+      
+      // Try to prevent automatic redirect by setting a flag
+      localStorage.setItem('preventAutoRedirect', 'true');
+      
+      // Show iOS-specific error message
+      alert(`Payment failed on iOS Safari. Error: ${error?.message || 'Unknown error'}. Please try again or contact support. Check console for debug info.`);
+    } else {
+      alert('Payment failed. Please try again or contact support.');
+    }
   };
 
   // Calculate delivery fee and total

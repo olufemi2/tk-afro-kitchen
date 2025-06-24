@@ -20,6 +20,12 @@ export default function EnhancedPayPalButtons({
 
   const PAYPAL_CLIENT_ID = process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
+  // Enhanced iOS Safari detection
+  const userAgent = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+  const isIOSSafari = /iPad|iPhone|iPod/.test(userAgent) && /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+  const isIOSWebView = /iPad|iPhone|iPod/.test(userAgent) && !/Safari/.test(userAgent);
+  const isIOS = isIOSSafari || isIOSWebView;
+
   const createOrderData = {
     intent: "CAPTURE" as const,
     purchase_units: [
@@ -51,10 +57,18 @@ export default function EnhancedPayPalButtons({
     ],
     application_context: {
       brand_name: "TK Afro Kitchen",
-      landing_page: "NO_PREFERENCE" as const,
+      landing_page: isIOS ? "LOGIN" : "NO_PREFERENCE" as const,
       user_action: "PAY_NOW" as const,
       return_url: `${typeof window !== 'undefined' ? window.location.origin : ''}/success`,
-      cancel_url: `${typeof window !== 'undefined' ? window.location.origin : ''}/checkout`
+      cancel_url: `${typeof window !== 'undefined' ? window.location.origin : ''}/checkout`,
+      // iOS Safari specific settings
+      ...(isIOS && {
+        shipping_preference: "NO_SHIPPING",
+        payment_method: {
+          payer_selected: "PAYPAL",
+          payee_preferred: "IMMEDIATE_PAYMENT_REQUIRED"
+        }
+      })
     }
   };
 
@@ -153,7 +167,15 @@ export default function EnhancedPayPalButtons({
             "disable-funding": paymentMethod === 'card' ? "paylater,venmo" : "",
             "data-sdk-integration-source": "button-factory",
             "data-namespace": "PayPalSDK",
-            "data-page-type": "checkout"
+            "data-page-type": "checkout",
+            // iOS Safari specific configuration
+            ...(isIOS && {
+              "data-client-token": undefined,
+              "data-merchant-id": undefined,
+              "data-order-id": undefined,
+              "data-client-metadata-id": `${Date.now()}-ios-safari`,
+              "debug": process.env.NODE_ENV === 'development' ? 'true' : 'false'
+            })
           }}
         >
           <div className="paypal-button-container">
@@ -168,7 +190,32 @@ export default function EnhancedPayPalButtons({
               }}
               fundingSource={paymentMethod === 'card' ? 'card' : undefined}
               createOrder={(data, actions) => {
-                return actions.order.create(createOrderData);
+                console.log('🏗️ Creating PayPal order...', { data, isIOS, userAgent });
+                console.log('🏗️ Order data:', JSON.stringify(createOrderData, null, 2));
+                
+                try {
+                  return actions.order.create(createOrderData).then(orderId => {
+                    console.log('✅ PayPal order created successfully:', orderId);
+                    return orderId;
+                  }).catch(error => {
+                    console.error('❌ PayPal order creation failed:', error);
+                    
+                    // Store creation error for debugging
+                    if (isIOS) {
+                      localStorage.setItem('paypalCreateOrderError', JSON.stringify({
+                        error,
+                        userAgent,
+                        timestamp: new Date().toISOString(),
+                        createOrderData
+                      }));
+                    }
+                    
+                    throw error;
+                  });
+                } catch (error) {
+                  console.error('❌ PayPal createOrder caught error:', error);
+                  throw error;
+                }
               }}
               onApprove={async (data, actions) => {
                 console.log('💳 PayPal onApprove triggered:', data);
@@ -230,11 +277,46 @@ export default function EnhancedPayPalButtons({
                 }
               }}
               onError={(err) => {
-                console.error("PayPal error:", err);
+                console.error("❌ PayPal error:", err);
+                console.error("❌ PayPal error details:", JSON.stringify(err, null, 2));
+                
+                // Enhanced error tracking for iOS Safari
+                const userAgent = navigator.userAgent;
+                const isIOSSafari = /iPad|iPhone|iPod/.test(userAgent) && /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+                
+                if (isIOSSafari) {
+                  console.error("❌ PayPal error on iOS Safari - this might cause redirect to homepage");
+                  
+                  // Store error details for debugging
+                  localStorage.setItem('paypalError', JSON.stringify({
+                    error: err,
+                    userAgent,
+                    timestamp: new Date().toISOString(),
+                    paymentMethod
+                  }));
+                }
+                
                 onError(err);
               }}
               onCancel={(data) => {
-                console.log("Payment cancelled:", data);
+                console.log("🚫 Payment cancelled:", data);
+                console.log("🚫 Cancel data:", JSON.stringify(data, null, 2));
+                
+                const userAgent = navigator.userAgent;
+                const isIOSSafari = /iPad|iPhone|iPod/.test(userAgent) && /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+                
+                if (isIOSSafari) {
+                  console.log("🚫 Payment cancelled on iOS Safari - this might redirect to homepage");
+                  
+                  // Store cancellation details for debugging
+                  localStorage.setItem('paypalCancel', JSON.stringify({
+                    data,
+                    userAgent,
+                    timestamp: new Date().toISOString(),
+                    paymentMethod
+                  }));
+                }
+                
                 // Track cancellation for analytics
                 if (typeof window !== 'undefined' && (window as any).gtag) {
                   (window as any).gtag('event', 'payment_cancelled', {
