@@ -137,10 +137,37 @@
   .nav-link {
     @apply text-slate-300 hover:text-orange-400 transition-colors
            px-4 py-2 rounded-full hover:bg-orange-400/10;
+    /* Safari-specific fixes */
+    pointer-events: auto;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
   }
 
   .nav-link-active {
     @apply text-orange-400 bg-orange-400/10;
+  }
+
+  /* Safari-specific navigation fixes */
+  @supports (-webkit-touch-callout: none) {
+    .nav-link {
+      -webkit-tap-highlight-color: transparent;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+    
+    /* Ensure links are clickable in Safari */
+    a[href] {
+      pointer-events: auto;
+      cursor: pointer;
+    }
+    
+    /* Fix for Safari button/link interactions */
+    button, a {
+      -webkit-appearance: none;
+      -webkit-tap-highlight-color: transparent;
+    }
   }
 
   .footer-section {

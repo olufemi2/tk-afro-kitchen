@@ -146,60 +146,46 @@ export default function OptimizedCheckout() {
       
       clearCart();
       
-      // Enhanced iOS Safari compatibility fix
+      // Store order details for success page
+      const orderDetails = {
+        orderId: paymentId,
+        status: 'COMPLETED',
+        amount: totalPrice.toFixed(2),
+        timestamp: new Date().toISOString(),
+        customerInfo: deliveryDetails
+      };
+      localStorage.setItem('lastOrderDetails', JSON.stringify(orderDetails));
+      
+      // Enhanced Safari-compatible redirect strategy
       const userAgent = navigator.userAgent;
-      const isIOSSafari = /iPad|iPhone|iPod/.test(userAgent) && /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
-      const isIOSWebView = /iPad|iPhone|iPod/.test(userAgent) && !/Safari/.test(userAgent);
+      const isSafari = /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+      const isIOS = /iPad|iPhone|iPod/.test(userAgent);
       
-      console.log('🔍 Device detection:', { userAgent, isIOSSafari, isIOSWebView, method });
+      console.log('🔍 Browser detection:', { userAgent, isSafari, isIOS, method });
       
-      if (isIOSSafari || isIOSWebView) {
-        console.log('📱 iOS detected - using multiple redirect strategies');
+      if (isSafari || isIOS) {
+        console.log('📱 Safari/iOS detected - using Safari-compatible redirect');
         
-        // Strategy 1: Show success message immediately
-        alert('Payment successful! You will be redirected to the success page.');
-        
-        // Strategy 2: Try multiple redirect methods with delays
-        setTimeout(() => {
-          console.log('🚀 Attempting window.location.replace');
-          try {
-            window.location.replace('/success');
-          } catch (e) {
-            console.error('window.location.replace failed:', e);
-          }
-        }, 1000);
-        
-        setTimeout(() => {
-          console.log('🚀 Attempting window.location.href as fallback');
-          try {
-            window.location.href = '/success';
-          } catch (e) {
-            console.error('window.location.href failed:', e);
-          }
-        }, 3000);
-        
-        setTimeout(() => {
-          console.log('🚀 Attempting router.push as final fallback');
-          try {
-            router.push('/success');
-          } catch (e) {
-            console.error('router.push failed:', e);
-          }
-        }, 5000);
-        
-        // Strategy 3: Manual navigation as last resort
-        setTimeout(() => {
-          console.log('🚀 Final fallback - showing manual navigation');
-          if (window.location.pathname !== '/success') {
-            const continueManually = confirm('Automatic redirect failed. Click OK to go to success page manually.');
-            if (continueManually) {
-              window.location.href = '/success';
-            }
-          }
-        }, 8000);
-        
+        // Safari-specific approach: Use a more direct method
+        try {
+          // First, try to update the URL without navigation
+          window.history.pushState({}, '', '/success');
+          
+          // Then trigger a page reload to ensure the success page loads
+          setTimeout(() => {
+            console.log('🔄 Reloading page to show success content');
+            window.location.reload();
+          }, 500);
+          
+        } catch (e) {
+          console.error('Safari redirect failed:', e);
+          
+          // Fallback: Show success message and manual navigation
+          alert('Payment successful! Click OK to view your order confirmation.');
+          window.location.href = '/success';
+        }
       } else {
-        console.log('🖥️ Non-iOS device - using immediate redirect');
+        console.log('🖥️ Non-Safari device - using standard redirect');
         router.push('/success');
       }
     } catch (error) {

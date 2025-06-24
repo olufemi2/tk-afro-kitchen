@@ -1,11 +1,35 @@
+'use client';
+
 import { Header } from "@/components/layout/header";
 import { CategoryCard } from "@/components/food/category-card";
 import { FoodCard } from "@/components/food/food-card";
 import { categories, featuredDishes } from "@/data/sample-menu";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 export default function Home() {
+  const [isSafari, setIsSafari] = useState(false);
+
+  useEffect(() => {
+    // Detect Safari for specific handling
+    const userAgent = navigator.userAgent;
+    const safari = /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+    setIsSafari(safari);
+    
+    if (safari) {
+      console.log('📱 Safari detected on homepage - applying Safari-specific fixes');
+    }
+  }, []);
+
+  // Safari-specific link handler
+  const handleSafariLink = (href: string) => {
+    if (isSafari) {
+      // Force navigation in Safari
+      window.location.href = href;
+    }
+  };
+
   return (
     <>
       <Header />
@@ -27,12 +51,14 @@ export default function Home() {
               <Link 
                 href="/menu"
                 className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-10 px-6 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
+                onClick={() => isSafari && handleSafariLink('/menu')}
               >
                 Browse Our Menu
               </Link>
               <Link 
                 href="/about"
                 className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-10 px-6 border border-orange-900/20 bg-[#242424] hover:bg-[#2a2a2a] text-slate-200"
+                onClick={() => isSafari && handleSafariLink('/about')}
               >
                 About Us
               </Link>
@@ -70,6 +96,7 @@ export default function Home() {
               <Link 
                 href="/menu"
                 className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-10 px-6 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
+                onClick={() => isSafari && handleSafariLink('/menu')}
               >
                 Browse Full Menu
               </Link>

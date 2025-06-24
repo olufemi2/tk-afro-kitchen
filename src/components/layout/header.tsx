@@ -5,15 +5,35 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { ShoppingCart, Menu, Phone, MapPin, Instagram, Facebook, Twitter, X } from "lucide-react";
 import { useCart } from "@/contexts/CartContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export function Header() {
   const { items, setIsCartOpen } = useCart();
   const cartItemCount = items.length;
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSafari, setIsSafari] = useState(false);
+
+  useEffect(() => {
+    // Detect Safari for specific handling
+    const userAgent = navigator.userAgent;
+    const safari = /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+    setIsSafari(safari);
+    
+    if (safari) {
+      console.log('📱 Safari detected - applying Safari-specific fixes');
+    }
+  }, []);
 
   const toggleMobileMenu = () => {
     setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
+  // Safari-specific link handler
+  const handleSafariLink = (href: string) => {
+    if (isSafari) {
+      // Force navigation in Safari
+      window.location.href = href;
+    }
   };
 
   return (
@@ -49,15 +69,31 @@ export function Header() {
             
             {/* Navigation Links */}
             <nav className="flex items-center space-x-4">
-              <Link href="/about" className="nav-link">About</Link>
-              <Link href="/contact" className="nav-link">Contact</Link>
+              <Link 
+                href="/about" 
+                className="nav-link"
+                onClick={() => isSafari && handleSafariLink('/about')}
+              >
+                About
+              </Link>
+              <Link 
+                href="/contact" 
+                className="nav-link"
+                onClick={() => isSafari && handleSafariLink('/contact')}
+              >
+                Contact
+              </Link>
             </nav>
           </div>
         </div>
 
         {/* Main Navigation */}
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center space-x-2">
+          <Link 
+            href="/" 
+            className="flex items-center space-x-2"
+            onClick={() => isSafari && handleSafariLink('/')}
+          >
             <div className="relative w-10 h-10">
               <Image
                 src="/images/brand/tklogo.jpg"
@@ -72,9 +108,27 @@ export function Header() {
           </Link>
 
           <nav className="hidden md:flex items-center space-x-6">
-            <Link href="/menu" className="nav-link">Menu</Link>
-            <Link href="/frozen" className="nav-link">Frozen</Link>
-            <Link href="/catering" className="nav-link">Catering</Link>
+            <Link 
+              href="/menu" 
+              className="nav-link"
+              onClick={() => isSafari && handleSafariLink('/menu')}
+            >
+              Menu
+            </Link>
+            <Link 
+              href="/frozen" 
+              className="nav-link"
+              onClick={() => isSafari && handleSafariLink('/frozen')}
+            >
+              Frozen
+            </Link>
+            <Link 
+              href="/catering" 
+              className="nav-link"
+              onClick={() => isSafari && handleSafariLink('/catering')}
+            >
+              Catering
+            </Link>
           </nav>
 
           <div className="flex items-center space-x-4">
@@ -106,6 +160,7 @@ export function Header() {
             <Link 
               href="/menu" 
               className="hidden md:flex inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
+              onClick={() => isSafari && handleSafariLink('/menu')}
             >
               Order Now
             </Link>
@@ -119,35 +174,50 @@ export function Header() {
               <Link 
                 href="/menu" 
                 className="px-4 py-2 text-slate-300 hover:bg-orange-500/10 hover:text-orange-400"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  isSafari && handleSafariLink('/menu');
+                }}
               >
                 Menu
               </Link>
               <Link 
                 href="/frozen" 
                 className="px-4 py-2 text-slate-300 hover:bg-orange-500/10 hover:text-orange-400"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  isSafari && handleSafariLink('/frozen');
+                }}
               >
                 Frozen
               </Link>
               <Link 
                 href="/catering" 
                 className="px-4 py-2 text-slate-300 hover:bg-orange-500/10 hover:text-orange-400"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  isSafari && handleSafariLink('/catering');
+                }}
               >
                 Catering
               </Link>
               <Link 
                 href="/about" 
                 className="px-4 py-2 text-slate-300 hover:bg-orange-500/10 hover:text-orange-400"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  isSafari && handleSafariLink('/about');
+                }}
               >
                 About
               </Link>
               <Link 
                 href="/contact" 
                 className="px-4 py-2 text-slate-300 hover:bg-orange-500/10 hover:text-orange-400"
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={() => {
+                  setIsMobileMenuOpen(false);
+                  isSafari && handleSafariLink('/contact');
+                }}
               >
                 Contact
               </Link>

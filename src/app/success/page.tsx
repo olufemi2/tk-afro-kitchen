@@ -16,22 +16,75 @@ interface OrderDetails {
 export default function SuccessPage() {
   const router = useRouter();
   const [orderDetails, setOrderDetails] = useState<OrderDetails | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Get order details from localStorage
-    const storedOrderDetails = localStorage.getItem('lastOrderDetails');
-    if (storedOrderDetails) {
+    // Enhanced order details retrieval with Safari compatibility
+    const getOrderDetails = () => {
       try {
-        const details = JSON.parse(storedOrderDetails);
-        setOrderDetails(details);
+        // Try multiple sources for order details
+        const storedOrderDetails = localStorage.getItem('lastOrderDetails');
+        const urlParams = new URLSearchParams(window.location.search);
+        const orderId = urlParams.get('orderId');
+        
+        if (storedOrderDetails) {
+          const details = JSON.parse(storedOrderDetails);
+          setOrderDetails(details);
+          console.log('✅ Order details loaded from localStorage:', details);
+        } else if (orderId) {
+          // Fallback: Create basic order details from URL params
+          const basicDetails = {
+            orderId: orderId,
+            status: 'COMPLETED',
+            amount: urlParams.get('amount') || '0.00',
+            timestamp: new Date().toISOString(),
+            customerInfo: null
+          };
+          setOrderDetails(basicDetails);
+          console.log('✅ Order details created from URL params:', basicDetails);
+        } else {
+          console.log('⚠️ No order details found - showing generic success message');
+        }
       } catch (error) {
-        console.error('Error parsing order details:', error);
+        console.error('❌ Error parsing order details:', error);
+      } finally {
+        setIsLoading(false);
       }
+    };
+
+    // Safari-specific: Add a small delay to ensure localStorage is accessible
+    const userAgent = navigator.userAgent;
+    const isSafari = /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+    
+    if (isSafari) {
+      console.log('📱 Safari detected - adding delay for localStorage access');
+      setTimeout(getOrderDetails, 100);
+    } else {
+      getOrderDetails();
     }
 
     // Clear cart data after payment
-    localStorage.removeItem('cart');
+    try {
+      localStorage.removeItem('cart');
+      console.log('✅ Cart data cleared');
+    } catch (error) {
+      console.error('❌ Error clearing cart:', error);
+    }
   }, []);
+
+  if (isLoading) {
+    return (
+      <>
+        <Header />
+        <div className="min-h-screen pt-24 pb-16 bg-gray-50 flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500 mx-auto mb-4"></div>
+            <p className="text-gray-600">Loading your order confirmation...</p>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
