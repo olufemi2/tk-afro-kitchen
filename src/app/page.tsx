@@ -24,21 +24,18 @@ export default function Home() {
               available for delivery across the UK or local pickup.
             </p>
             <div className="flex gap-4">
-              <Button 
-                asChild 
-                size="lg" 
-                className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
+              <Link 
+                href="/menu"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-10 px-6 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
               >
-                <Link href="/menu">Browse Our Menu</Link>
-              </Button>
-              <Button 
-                asChild 
-                size="lg" 
-                variant="outline" 
-                className="border-orange-900/20 bg-[#242424] hover:bg-[#2a2a2a] text-slate-200"
+                Browse Our Menu
+              </Link>
+              <Link 
+                href="/about"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-10 px-6 border border-orange-900/20 bg-[#242424] hover:bg-[#2a2a2a] text-slate-200"
               >
-                <Link href="/about">About Us</Link>
-              </Button>
+                About Us
+              </Link>
             </div>
           </div>
         </section>
@@ -70,13 +67,12 @@ export default function Home() {
               ))}
             </div>
             <div className="mt-8 text-center">
-              <Button 
-                asChild 
-                size="lg" 
-                className="bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
+              <Link 
+                href="/menu"
+                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-10 px-6 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
               >
-                <Link href="/menu">Browse Full Menu</Link>
-              </Button>
+                Browse Full Menu
+              </Link>
             </div>
           </div>
         </section>

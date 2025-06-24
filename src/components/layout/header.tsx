@@ -103,9 +103,12 @@ export function Header() {
                 <Menu className="h-5 w-5" />
               )}
             </Button>
-            <Button asChild className="hidden md:flex button-primary">
-              <Link href="/menu">Order Now</Link>
-            </Button>
+            <Link 
+              href="/menu" 
+              className="hidden md:flex inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
+            >
+              Order Now
+            </Link>
           </div>
         </div>
 

@@ -154,12 +154,50 @@ export default function OptimizedCheckout() {
       console.log('🔍 Device detection:', { userAgent, isIOSSafari, isIOSWebView, method });
       
       if (isIOSSafari || isIOSWebView) {
-        console.log('📱 iOS detected - using delayed redirect');
-        // For iOS Safari/WebView, use window.location.href with delay instead of router.push
+        console.log('📱 iOS detected - using multiple redirect strategies');
+        
+        // Strategy 1: Show success message immediately
+        alert('Payment successful! You will be redirected to the success page.');
+        
+        // Strategy 2: Try multiple redirect methods with delays
         setTimeout(() => {
-          console.log('🚀 Executing delayed redirect to success page');
-          window.location.href = '/success';
-        }, 4000);
+          console.log('🚀 Attempting window.location.replace');
+          try {
+            window.location.replace('/success');
+          } catch (e) {
+            console.error('window.location.replace failed:', e);
+          }
+        }, 1000);
+        
+        setTimeout(() => {
+          console.log('🚀 Attempting window.location.href as fallback');
+          try {
+            window.location.href = '/success';
+          } catch (e) {
+            console.error('window.location.href failed:', e);
+          }
+        }, 3000);
+        
+        setTimeout(() => {
+          console.log('🚀 Attempting router.push as final fallback');
+          try {
+            router.push('/success');
+          } catch (e) {
+            console.error('router.push failed:', e);
+          }
+        }, 5000);
+        
+        // Strategy 3: Manual navigation as last resort
+        setTimeout(() => {
+          console.log('🚀 Final fallback - showing manual navigation');
+          if (window.location.pathname !== '/success') {
+            const continueManually = confirm('Automatic redirect failed. Click OK to go to success page manually.');
+            if (continueManually) {
+              window.location.href = '/success';
+            }
+          }
+        }, 8000);
+        
       } else {
         console.log('🖥️ Non-iOS device - using immediate redirect');
         router.push('/success');
