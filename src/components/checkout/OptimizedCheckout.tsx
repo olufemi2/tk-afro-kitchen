@@ -118,7 +118,18 @@ export default function OptimizedCheckout() {
       console.log('Order submitted:', orderData);
       
       clearCart();
-      router.push('/success');
+      
+      // iOS Safari compatibility fix - detect iOS Safari and add delay
+      const isIOSSafari = /iPad|iPhone|iPod/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+      
+      if (isIOSSafari) {
+        // For iOS Safari, delay redirect to allow payment interface to settle
+        setTimeout(() => {
+          router.push('/success');
+        }, 3000);
+      } else {
+        router.push('/success');
+      }
     } catch (error) {
       console.error('Error processing order:', error);
       alert('There was an error processing your order. Please contact support.');

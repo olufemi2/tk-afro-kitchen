@@ -203,7 +203,16 @@ export default function EnhancedPayPalButtons({
                       }
                     }
                     
-                    onSuccess(order.id || 'unknown');
+                    // iOS Safari compatibility - delay callback to prevent redirect issues
+                    const isIOSSafari = /iPad|iPhone|iPod/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+                    
+                    if (isIOSSafari) {
+                      setTimeout(() => {
+                        onSuccess(order.id || 'unknown');
+                      }, 1000);
+                    } else {
+                      onSuccess(order.id || 'unknown');
+                    }
                   } catch (error) {
                     console.error("Payment processing error:", error);
                     onError(error);

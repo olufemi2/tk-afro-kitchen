@@ -135,7 +135,17 @@ function CheckoutForm({
 
       if (paymentIntent && paymentIntent.status === 'succeeded') {
         console.log('Payment succeeded:', paymentIntent.id);
-        onSuccess(paymentIntent);
+        
+        // iOS Safari compatibility - delay callback to prevent redirect issues
+        const isIOSSafari = /iPad|iPhone|iPod/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+        
+        if (isIOSSafari) {
+          setTimeout(() => {
+            onSuccess(paymentIntent);
+          }, 1000);
+        } else {
+          onSuccess(paymentIntent);
+        }
       } else {
         console.error('Payment failed with status:', paymentIntent?.status);
         throw new Error(`Payment ${paymentIntent?.status || 'failed'}`);
