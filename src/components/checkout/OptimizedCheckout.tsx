@@ -73,7 +73,7 @@ export default function OptimizedCheckout() {
     
     // Clear old error flags
     localStorage.removeItem('preventAutoRedirect');
-  }, [items, router]);
+  }, [items, router, paymentSuccess]);
 
   if (items.length === 0) {
     return null;

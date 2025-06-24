@@ -7,7 +7,9 @@ export interface OrderData {
   orderId: string;
   amount: string;
   timestamp: string;
+  status?: string;
   customerInfo?: any;
+  items?: any[];
 }
 
 export class SafariNavigation {
