@@ -171,10 +171,12 @@ export default function EnhancedPayPalButtons({
                 return actions.order.create(createOrderData);
               }}
               onApprove={async (data, actions) => {
+                console.log('💳 PayPal onApprove triggered:', data);
                 if (actions.order) {
                   try {
+                    console.log('🔄 Capturing PayPal order...');
                     const order = await actions.order.capture();
-                    console.log("Order completed:", order);
+                    console.log("✅ PayPal order completed:", order);
                     
                     // Enhanced order tracking
                     if (order.purchase_units && order.purchase_units[0]?.amount?.value) {
@@ -191,6 +193,7 @@ export default function EnhancedPayPalButtons({
                       };
                       
                       localStorage.setItem('lastOrderDetails', JSON.stringify(orderDetails));
+                      console.log('💾 Order details saved to localStorage');
                       
                       // Send to analytics/tracking
                       if (typeof window !== 'undefined' && (window as any).gtag) {
@@ -203,18 +206,25 @@ export default function EnhancedPayPalButtons({
                       }
                     }
                     
-                    // iOS Safari compatibility - delay callback to prevent redirect issues
-                    const isIOSSafari = /iPad|iPhone|iPod/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+                    // Enhanced iOS compatibility - detect iOS Safari and WebView
+                    const userAgent = navigator.userAgent;
+                    const isIOSSafari = /iPad|iPhone|iPod/.test(userAgent) && /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+                    const isIOSWebView = /iPad|iPhone|iPod/.test(userAgent) && !/Safari/.test(userAgent);
                     
-                    if (isIOSSafari) {
+                    console.log('🔍 PayPal device detection:', { userAgent, isIOSSafari, isIOSWebView });
+                    
+                    if (isIOSSafari || isIOSWebView) {
+                      console.log('📱 iOS detected in PayPal - using delayed callback');
                       setTimeout(() => {
+                        console.log('⏰ Executing delayed PayPal success callback');
                         onSuccess(order.id || 'unknown');
-                      }, 1000);
+                      }, 2000);
                     } else {
+                      console.log('🖥️ Non-iOS device in PayPal - immediate callback');
                       onSuccess(order.id || 'unknown');
                     }
                   } catch (error) {
-                    console.error("Payment processing error:", error);
+                    console.error("❌ Payment processing error:", error);
                     onError(error);
                   }
                 }

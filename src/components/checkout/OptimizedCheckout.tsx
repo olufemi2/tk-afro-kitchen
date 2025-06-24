@@ -93,6 +93,7 @@ export default function OptimizedCheckout() {
   };
 
   const handlePaymentSuccess = async (orderId: string) => {
+    console.log('🎉 Payment success callback triggered:', orderId);
     setPaymentSuccess(true);
     setIsSubmitting(true);
 
@@ -119,15 +120,22 @@ export default function OptimizedCheckout() {
       
       clearCart();
       
-      // iOS Safari compatibility fix - detect iOS Safari and add delay
-      const isIOSSafari = /iPad|iPhone|iPod/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+      // Enhanced iOS Safari compatibility fix
+      const userAgent = navigator.userAgent;
+      const isIOSSafari = /iPad|iPhone|iPod/.test(userAgent) && /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+      const isIOSWebView = /iPad|iPhone|iPod/.test(userAgent) && !/Safari/.test(userAgent);
       
-      if (isIOSSafari) {
-        // For iOS Safari, delay redirect to allow payment interface to settle
+      console.log('🔍 Device detection:', { userAgent, isIOSSafari, isIOSWebView });
+      
+      if (isIOSSafari || isIOSWebView) {
+        console.log('📱 iOS detected - using delayed redirect');
+        // For iOS Safari/WebView, use window.location.href with delay instead of router.push
         setTimeout(() => {
-          router.push('/success');
-        }, 3000);
+          console.log('🚀 Executing delayed redirect to success page');
+          window.location.href = '/success';
+        }, 4000);
       } else {
+        console.log('🖥️ Non-iOS device - using immediate redirect');
         router.push('/success');
       }
     } catch (error) {
