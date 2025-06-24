@@ -166,44 +166,50 @@ export default function OptimizedCheckout() {
       
       console.log('🔍 Browser detection:', { userAgent, isSafari, isIOS, method, isSafariMode });
       
-      // Safari-specific handling: Use in-page success display instead of redirect
+      // Safari-specific handling: Completely bypass Next.js router
       if (isSafariMode || isSafari || isIOS) {
-        console.log('🍎 Safari mode detected - showing in-page success instead of redirect');
+        console.log('🍎 Safari mode detected - using static navigation to avoid RSC payload issues');
         
         // Set Safari success flag for immediate display
         localStorage.setItem('safariPaymentComplete', 'true');
         localStorage.setItem('safariSuccessDisplayed', Date.now().toString());
         
-        // Trigger in-page success display by setting a success state
+        // Store comprehensive order data for static page
+        const completeOrderData = {
+          orderId: paymentId,
+          status: 'COMPLETED',
+          amount: totalPrice.toFixed(2),
+          timestamp: new Date().toISOString(),
+          customerInfo: deliveryDetails,
+          items: items.map(item => ({
+            id: item.id,
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price,
+            selectedSize: item.selectedSize
+          })),
+          safariMode: true,
+          staticNavigation: true
+        };
+        
+        // Store in multiple keys for reliability
+        localStorage.setItem('lastOrderDetails', JSON.stringify(completeOrderData));
+        localStorage.setItem('safariOrderBackup', JSON.stringify(completeOrderData));
+        
+        console.log('💾 Safari order data stored, using immediate static navigation');
+        
+        // Immediate static navigation to bypass RSC issues
+        const successUrl = `${window.location.origin}/success?orderId=${paymentId}&amount=${totalPrice.toFixed(2)}&safari=true&static=true&timestamp=${Date.now()}`;
+        
+        // Force full page reload to avoid Next.js routing issues
+        setTimeout(() => {
+          console.log('🚀 Safari: Performing full page navigation to avoid RSC payload failure');
+          window.location.href = successUrl;
+        }, 500);
+        
+        // Show immediate in-page confirmation while navigation happens
         setPaymentSuccess(true);
         setIsSubmitting(false);
-        
-        // Show success message and provide manual navigation option
-        setTimeout(() => {
-          const userConfirmed = confirm(
-            '🎉 Payment Successful!\n\n' +
-            `Order ID: ${paymentId}\n` +
-            `Amount: £${totalPrice.toFixed(2)}\n\n` +
-            'Click OK to view your order confirmation, or Cancel to stay on this page.'
-          );
-          
-          if (userConfirmed) {
-            // Use a more reliable navigation method for Safari
-            const successUrl = `/success?orderId=${paymentId}&amount=${totalPrice.toFixed(2)}&safari=true&timestamp=${Date.now()}`;
-            
-            // Try multiple navigation strategies for Safari
-            try {
-              window.open(successUrl, '_self');
-            } catch (e) {
-              console.log('Window.open failed, trying location methods');
-              try {
-                window.location.replace(successUrl);
-              } catch (e2) {
-                window.location.href = successUrl;
-              }
-            }
-          }
-        }, 1000);
         
         return; // Exit early for Safari mode
       }
