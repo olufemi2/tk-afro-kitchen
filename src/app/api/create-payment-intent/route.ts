@@ -103,11 +103,30 @@ export async function POST(request: NextRequest) {
 
     console.log('Payment intent created successfully:', paymentIntent.id);
 
-    return NextResponse.json({
+    const response = NextResponse.json({
       client_secret: paymentIntent.client_secret,
       payment_intent_id: paymentIntent.id,
       customer_id: customer?.id,
     });
+
+    // Set Safari-compatible cookies for payment session
+    if (ios_safari) {
+      response.cookies.set('payment_session', paymentIntent.id, {
+        httpOnly: true,
+        secure: true,
+        sameSite: 'none',
+        maxAge: 3600, // 1 hour
+      });
+      
+      response.cookies.set('safari_payment', 'true', {
+        httpOnly: false,
+        secure: true,
+        sameSite: 'none',
+        maxAge: 3600,
+      });
+    }
+
+    return response;
 
   } catch (error: any) {
     console.error('Payment intent creation error:', error);

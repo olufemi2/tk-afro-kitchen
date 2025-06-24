@@ -149,10 +149,10 @@ export default function SuccessPage() {
       getOrderDetails();
     }
 
-    // Clear cart data after payment
+    // Clear cart data after payment (safety cleanup)
     try {
       localStorage.removeItem('cart');
-      console.log('✅ Cart data cleared');
+      console.log('✅ Cart data cleared on success page');
     } catch (error) {
       console.error('❌ Error clearing cart:', error);
     }

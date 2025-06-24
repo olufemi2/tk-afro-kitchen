@@ -38,7 +38,8 @@ export default function OptimizedCheckout() {
   const [estimatedDelivery, setEstimatedDelivery] = useState('');
   
   useEffect(() => {
-    if (items.length === 0) {
+    // Prevent redirect to menu during payment success flow
+    if (items.length === 0 && !paymentSuccess) {
       router.push('/menu');
     }
     
@@ -146,7 +147,7 @@ export default function OptimizedCheckout() {
       await new Promise(resolve => setTimeout(resolve, 2000));
       console.log('Order submitted:', orderData);
       
-      clearCart();
+      // DON'T clear cart yet - wait until after navigation to prevent race condition
       
       // Store order details for success page
       const orderDetails = {
@@ -204,6 +205,10 @@ export default function OptimizedCheckout() {
         // Force full page reload to avoid Next.js routing issues
         setTimeout(() => {
           console.log('🚀 Safari: Performing full page navigation to avoid RSC payload failure');
+          
+          // Clear cart AFTER setting success flag and before navigation
+          clearCart();
+          
           window.location.href = successUrl;
         }, 500);
         
@@ -216,6 +221,9 @@ export default function OptimizedCheckout() {
       
       // Standard redirect for non-Safari browsers
       console.log('🖥️ Non-Safari device - using standard redirect');
+      
+      // Clear cart after navigation for non-Safari browsers
+      clearCart();
       router.push('/success');
       
     } catch (error) {
