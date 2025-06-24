@@ -120,8 +120,18 @@ export default function CheckoutPage() {
       clearCart();
       console.log('Cart cleared, redirecting to success page...');
       
-      // Redirect to success page
-      window.location.href = '/success';
+      // Redirect to success page with iOS Safari compatibility
+      const isIOSSafari = /iPad|iPhone|iPod/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+      
+      if (isIOSSafari) {
+        // iOS Safari needs delay after payment processing
+        console.log('iOS Safari detected, using delayed redirect...');
+        setTimeout(() => {
+          window.location.href = '/success';
+        }, 3000);
+      } else {
+        window.location.href = '/success';
+      }
       
     } catch (error) {
       console.error('Error processing order:', error);
