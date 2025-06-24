@@ -66,22 +66,33 @@ function CheckoutForm({
     event.preventDefault();
 
     if (!stripe || !elements) {
+      console.error('❌ Stripe not loaded or elements not available');
       return;
     }
 
     setIsLoading(true);
     setPaymentError(null);
 
+    // Enhanced iOS Safari detection and logging
+    const userAgent = navigator.userAgent;
+    const isIOSSafari = /iPad|iPhone|iPod/.test(userAgent) && /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+    const isIOSWebView = /iPad|iPhone|iPod/.test(userAgent) && !/Safari/.test(userAgent);
+    const isIOS = isIOSSafari || isIOSWebView;
+
+    console.log('🏗️ Starting Stripe payment submission');
+    console.log('🔍 Device detection:', { userAgent, isIOSSafari, isIOSWebView, isIOS });
+
     const cardElement = elements.getElement(CardElement);
 
     if (!cardElement) {
+      console.error('❌ Card element not found');
       setPaymentError('Card element not found');
       setIsLoading(false);
       return;
     }
 
     try {
-      console.log('Creating payment intent with amount:', amount, 'currency:', currency);
+      console.log('💳 Creating payment intent with amount:', amount, 'currency:', currency);
       
       // Create payment intent on your backend
       const response = await fetch('/api/create-payment-intent', {
@@ -93,22 +104,36 @@ function CheckoutForm({
           amount,
           currency,
           customer_details: customerDetails,
+          ios_safari: isIOS // Flag for backend iOS handling
         }),
       });
 
       const paymentIntentData = await response.json();
-      console.log('Payment intent response:', paymentIntentData);
+      console.log('✅ Payment intent response:', paymentIntentData);
 
       if (!response.ok) {
-        console.error('Payment intent creation failed:', paymentIntentData);
+        console.error('❌ Payment intent creation failed:', paymentIntentData);
+        
+        // Store error for iOS debugging
+        if (isIOS) {
+          localStorage.setItem('stripePaymentIntentError', JSON.stringify({
+            error: paymentIntentData,
+            userAgent,
+            timestamp: new Date().toISOString(),
+            amount,
+            currency
+          }));
+        }
+        
         throw new Error(paymentIntentData.error || 'Failed to create payment intent');
       }
 
       if (!paymentIntentData.client_secret) {
+        console.error('❌ No client secret received');
         throw new Error('No client secret received from payment intent');
       }
 
-      console.log('Confirming payment with Stripe...');
+      console.log('🔄 Confirming payment with Stripe...');
       
       // Confirm payment with card element
       const { error: confirmError, paymentIntent } = await stripe.confirmCardPayment(
@@ -126,33 +151,98 @@ function CheckoutForm({
         }
       );
 
-      console.log('Payment confirmation result:', { confirmError, paymentIntent });
+      console.log('💳 Payment confirmation result:', { confirmError, paymentIntent });
 
       if (confirmError) {
-        console.error('Payment confirmation error:', confirmError);
+        console.error('❌ Payment confirmation error:', confirmError);
+        
+        // Enhanced error storage for iOS debugging
+        if (isIOS) {
+          localStorage.setItem('stripeConfirmError', JSON.stringify({
+            error: {
+              code: confirmError.code,
+              message: confirmError.message,
+              type: confirmError.type,
+              charge: confirmError.charge,
+              decline_code: confirmError.decline_code,
+              doc_url: confirmError.doc_url
+            },
+            userAgent,
+            timestamp: new Date().toISOString(),
+            paymentIntentId: paymentIntentData.client_secret
+          }));
+        }
+        
         throw confirmError;
       }
 
       if (paymentIntent && paymentIntent.status === 'succeeded') {
-        console.log('Payment succeeded:', paymentIntent.id);
+        console.log('🎉 Payment succeeded:', paymentIntent.id);
         
-        // iOS Safari compatibility - delay callback to prevent redirect issues
-        const isIOSSafari = /iPad|iPhone|iPod/.test(navigator.userAgent) && /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent);
+        // Store successful payment details
+        const paymentDetails = {
+          paymentIntentId: paymentIntent.id,
+          amount: paymentIntent.amount,
+          currency: paymentIntent.currency,
+          status: paymentIntent.status,
+          timestamp: new Date().toISOString(),
+          customerDetails,
+          isIOS
+        };
         
-        if (isIOSSafari) {
+        localStorage.setItem('lastStripePayment', JSON.stringify(paymentDetails));
+        console.log('💾 Payment details saved to localStorage');
+        
+        // Enhanced iOS Safari compatibility - delay callback to prevent redirect issues
+        if (isIOS) {
+          console.log('📱 iOS detected - using delayed callback');
           setTimeout(() => {
+            console.log('⏰ Executing delayed Stripe success callback');
             onSuccess(paymentIntent);
-          }, 1000);
+          }, 2000);
         } else {
+          console.log('🖥️ Non-iOS device - immediate callback');
           onSuccess(paymentIntent);
         }
       } else {
-        console.error('Payment failed with status:', paymentIntent?.status);
+        console.error('❌ Payment failed with status:', paymentIntent?.status);
+        
+        if (isIOS) {
+          localStorage.setItem('stripePaymentStatusError', JSON.stringify({
+            status: paymentIntent?.status,
+            paymentIntentId: paymentIntent?.id,
+            userAgent,
+            timestamp: new Date().toISOString()
+          }));
+        }
+        
         throw new Error(`Payment ${paymentIntent?.status || 'failed'}`);
       }
 
     } catch (error: any) {
-      console.error('Payment error:', error);
+      console.error('❌ Stripe payment error:', error);
+      console.error('❌ Stripe error details:', JSON.stringify(error, null, 2));
+      
+      // Comprehensive error storage for iOS debugging
+      if (isIOS) {
+        localStorage.setItem('stripeGeneralError', JSON.stringify({
+          error: {
+            message: error?.message,
+            name: error?.name,
+            stack: error?.stack,
+            code: error?.code,
+            type: error?.type
+          },
+          userAgent,
+          timestamp: new Date().toISOString(),
+          amount,
+          currency,
+          customerDetails: customerDetails.name
+        }));
+        
+        console.error('❌ Stripe error on iOS - stored in localStorage for debugging');
+      }
+      
       const errorMessage = error.message || 'An unexpected error occurred';
       setPaymentError(errorMessage);
       onError(error);

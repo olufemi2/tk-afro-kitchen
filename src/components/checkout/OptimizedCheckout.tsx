@@ -6,7 +6,7 @@ import { useCart } from "@/contexts/CartContext";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import EnhancedPayPalButtons from "@/components/payment/EnhancedPayPalButtons";
+import { PaymentSelector } from "@/components/payment/PaymentSelector";
 
 interface DeliveryDetails {
   fullName: string;
@@ -55,7 +55,12 @@ export default function OptimizedCheckout() {
       'paypalError',
       'paypalCancel', 
       'paypalCreateOrderError',
-      'checkoutPaymentError'
+      'checkoutPaymentError',
+      'stripePaymentIntentError',
+      'stripeConfirmError',
+      'stripePaymentStatusError',
+      'stripeGeneralError',
+      'lastStripePayment'
     ];
     
     storedErrors.forEach(errorKey => {
@@ -110,15 +115,18 @@ export default function OptimizedCheckout() {
     }
   };
 
-  const handlePaymentSuccess = async (orderId: string) => {
-    console.log('🎉 Payment success callback triggered:', orderId);
+  const handlePaymentSuccess = async (paymentData: any, method: 'card' | 'bank' | 'mobile') => {
+    const paymentId = paymentData?.id || paymentData?.orderId || 'unknown';
+    console.log('🎉 Payment success callback triggered:', { paymentId, method, paymentData });
     setPaymentSuccess(true);
     setIsSubmitting(true);
 
     try {
       // Send order details to backend
       const orderData = {
-        orderId,
+        paymentId,
+        paymentMethod: method,
+        paymentData,
         items: items.map(item => ({
           id: item.id,
           name: item.name,
@@ -143,7 +151,7 @@ export default function OptimizedCheckout() {
       const isIOSSafari = /iPad|iPhone|iPod/.test(userAgent) && /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
       const isIOSWebView = /iPad|iPhone|iPod/.test(userAgent) && !/Safari/.test(userAgent);
       
-      console.log('🔍 Device detection:', { userAgent, isIOSSafari, isIOSWebView });
+      console.log('🔍 Device detection:', { userAgent, isIOSSafari, isIOSWebView, method });
       
       if (isIOSSafari || isIOSWebView) {
         console.log('📱 iOS detected - using delayed redirect');
@@ -164,8 +172,8 @@ export default function OptimizedCheckout() {
     }
   };
 
-  const handlePaymentError = (error: any) => {
-    console.error('❌ Payment error in checkout:', error);
+  const handlePaymentError = (error: any, method: 'card' | 'bank' | 'mobile') => {
+    console.error('❌ Payment error in checkout:', { error, method });
     console.error('❌ Payment error details:', JSON.stringify(error, null, 2));
     
     // Enhanced error tracking for iOS Safari
@@ -184,6 +192,7 @@ export default function OptimizedCheckout() {
           stack: error?.stack,
           details: error
         },
+        paymentMethod: method,
         userAgent,
         timestamp: new Date().toISOString(),
         currentStep,
@@ -197,9 +206,9 @@ export default function OptimizedCheckout() {
       localStorage.setItem('preventAutoRedirect', 'true');
       
       // Show iOS-specific error message
-      alert(`Payment failed on iOS Safari. Error: ${error?.message || 'Unknown error'}. Please try again or contact support. Check console for debug info.`);
+      alert(`${method.toUpperCase()} payment failed on iOS Safari. Error: ${error?.message || 'Unknown error'}. Please try again or contact support. Check console for debug info.`);
     } else {
-      alert('Payment failed. Please try again or contact support.');
+      alert(`${method.toUpperCase()} payment failed. Please try again or contact support.`);
     }
   };
 
@@ -361,11 +370,21 @@ export default function OptimizedCheckout() {
                     </button>
                   </div>
                   
-                  <EnhancedPayPalButtons
-                    amount={finalTotal}
+                  <PaymentSelector
+                    amount={Math.round(finalTotal * 100)} // Convert to pence
                     onSuccess={handlePaymentSuccess}
                     onError={handlePaymentError}
-                    deliveryDetails={deliveryDetails}
+                    customerDetails={{
+                      name: deliveryDetails.fullName,
+                      email: deliveryDetails.email,
+                      phone: deliveryDetails.phone,
+                      address: {
+                        line1: deliveryDetails.address,
+                        city: deliveryDetails.city,
+                        postal_code: deliveryDetails.postcode,
+                        country: 'GB'
+                      }
+                    }}
                   />
                   
                   {isSubmitting && (
