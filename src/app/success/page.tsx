@@ -10,7 +10,8 @@ interface OrderDetails {
   status: string;
   amount: string;
   timestamp: string;
-  customerInfo: any;
+  customerInfo?: any;
+  items?: any[];
 }
 
 export default function SuccessPage() {
@@ -72,7 +73,11 @@ export default function SuccessPage() {
           // Fallback to standard localStorage
           const storedOrderDetails = localStorage.getItem('lastOrderDetails');
           if (storedOrderDetails) {
-            orderData = JSON.parse(storedOrderDetails);
+            const parsedData = JSON.parse(storedOrderDetails);
+            orderData = {
+              ...parsedData,
+              status: parsedData.status || 'COMPLETED'
+            };
             console.log('✅ Order details from standard localStorage');
           }
         }
@@ -94,7 +99,12 @@ export default function SuccessPage() {
         }
         
         if (orderData) {
-          setOrderDetails(orderData);
+          // Ensure status is always set for OrderDetails compatibility
+          const orderDetails: OrderDetails = {
+            ...orderData,
+            status: orderData.status || 'COMPLETED'
+          };
+          setOrderDetails(orderDetails);
           console.log('✅ Order details loaded:', orderData.orderId);
           
           // Clean up Safari navigation data
