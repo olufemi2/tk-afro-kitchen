@@ -56,14 +56,15 @@ export function PaymentSelector({
     setIsSafari(safariDetected);
     
     // Auto-select PayPal for any Safari browser due to Stripe issues
-    if (safariDetected && !selectedMethod) {
+    if (safariDetected && selectedMethod === null) {
       console.log(`🍎 Safari detected - forcing PayPal selection`);
-      setTimeout(() => {
-        setSelectedMethod('paypal');
-        console.log('🍎 PayPal auto-selected for Safari user');
-      }, 100);
+      console.log(`🔧 Current selectedMethod: ${selectedMethod}`);
+      
+      // Use immediate selection for Safari
+      setSelectedMethod('paypal');
+      console.log('🍎 PayPal auto-selected for Safari user');
     }
-  }, [selectedMethod]);
+  }, []); // Remove dependency to prevent loops
 
   const bankTransferDiscount = Math.round(amount * 0.03); // 3% discount
   const bankTransferAmount = amount - bankTransferDiscount;
