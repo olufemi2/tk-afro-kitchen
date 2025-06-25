@@ -23,8 +23,9 @@ export default function Home() {
   }, []);
 
   // Safari-specific link handler
-  const handleSafariLink = (href: string) => {
+  const handleSafariLink = (e: React.MouseEvent, href: string) => {
     if (isSafari) {
+      e.preventDefault();
       // Force navigation in Safari
       window.location.href = href;
     }
@@ -51,14 +52,14 @@ export default function Home() {
               <Link 
                 href="/menu"
                 className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-10 px-6 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
-                onClick={() => isSafari && handleSafariLink('/menu')}
+                onClick={(e) => handleSafariLink(e, '/menu')}
               >
                 Browse Our Menu
               </Link>
               <Link 
                 href="/about"
                 className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-10 px-6 border border-orange-900/20 bg-[#242424] hover:bg-[#2a2a2a] text-slate-200"
-                onClick={() => isSafari && handleSafariLink('/about')}
+                onClick={(e) => handleSafariLink(e, '/about')}
               >
                 About Us
               </Link>
@@ -96,7 +97,7 @@ export default function Home() {
               <Link 
                 href="/menu"
                 className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-10 px-6 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
-                onClick={() => isSafari && handleSafariLink('/menu')}
+                onClick={(e) => handleSafariLink(e, '/menu')}
               >
                 Browse Full Menu
               </Link>
