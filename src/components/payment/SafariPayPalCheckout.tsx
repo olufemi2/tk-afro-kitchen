@@ -92,7 +92,7 @@ export function SafariPayPalCheckout({
           }
         },
 
-        onApprove: async (data) => {
+        onApprove: async (data: any) => {
           try {
             console.log('🔵 PayPal: Payment approved, capturing order');
             
@@ -139,12 +139,12 @@ export function SafariPayPalCheckout({
           }
         },
 
-        onError: (err) => {
+        onError: (err: any) => {
           console.error('❌ PayPal payment error:', err);
           onError(err);
         },
 
-        onCancel: (data) => {
+        onCancel: (data: any) => {
           console.log('⚠️ PayPal payment cancelled:', data);
           onError(new Error('Payment was cancelled'));
         }

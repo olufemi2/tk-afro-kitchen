@@ -7,7 +7,7 @@ import { StripeCheckout } from './StripeCheckout';
 import { GoCardlessPayment } from './GoCardlessPayment';
 import { SafariPayPalCheckout } from './SafariPayPalCheckout';
 
-type PaymentMethod = 'card' | 'bank' | 'mobile';
+type PaymentMethod = 'card' | 'bank' | 'mobile' | 'paypal';
 
 interface PaymentSelectorProps {
   amount: number; // Amount in pence
@@ -61,6 +61,9 @@ export function PaymentSelector({
     benefits: ['Safari Compatible', 'PayPal Protection', 'Credit/Debit Cards'],
     color: 'indigo',
     safariOptimized: true,
+    comingSoon: false,
+    safariIssue: false,
+    popular: false,
   };
 
   const paymentMethods = [
@@ -77,6 +80,8 @@ export function PaymentSelector({
       color: 'blue',
       popular: !isSafari, // Not popular for Safari due to compatibility issues
       safariIssue: isSafari,
+      comingSoon: false,
+      safariOptimized: false,
     },
     {
       id: 'bank' as PaymentMethod,
@@ -88,6 +93,10 @@ export function PaymentSelector({
       benefits: ['Lowest cost', 'Secure Direct Debit', 'No card fees'],
       color: 'green',
       savings: bankTransferDiscount,
+      comingSoon: false,
+      safariOptimized: false,
+      safariIssue: false,
+      popular: false,
     },
     {
       id: 'mobile' as PaymentMethod,
@@ -99,6 +108,9 @@ export function PaymentSelector({
       benefits: ['One-touch payment', 'Biometric security', 'Super fast'],
       color: 'purple',
       comingSoon: true,
+      safariOptimized: false,
+      safariIssue: false,
+      popular: false,
     },
     // Show PayPal last for non-Safari users
     ...(!isSafari ? [paypalMethod] : []),
@@ -167,8 +179,8 @@ export function PaymentSelector({
         </div>
         <SafariPayPalCheckout
           amount={amount}
-          onSuccess={(data) => onSuccess(data, 'paypal' as any)}
-          onError={(error) => onError(error, 'paypal' as any)}
+          onSuccess={(data) => onSuccess(data, 'paypal')}
+          onError={(error) => onError(error, 'paypal')}
           customerDetails={customerDetails}
         />
       </div>

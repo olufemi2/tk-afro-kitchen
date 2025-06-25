@@ -116,7 +116,7 @@ export default function OptimizedCheckout() {
     }
   };
 
-  const handlePaymentSuccess = async (paymentData: any, method: 'card' | 'bank' | 'mobile') => {
+  const handlePaymentSuccess = async (paymentData: any, method: 'card' | 'bank' | 'mobile' | 'paypal') => {
     const paymentId = paymentData?.id || paymentData?.orderId || 'unknown';
     
     console.log('🎉 Payment success callback triggered:', { paymentId, method, paymentData });
@@ -124,8 +124,16 @@ export default function OptimizedCheckout() {
     setIsSubmitting(true);
 
     try {
-      // Immediately import Safari navigation utility
-      const { SafariNavigation } = await import('@/utils/safariNavigation');
+      // Import comprehensive Safari payment handler
+      const { SafariPaymentHandler } = await import('@/utils/safariPaymentHandler');
+      
+      // Initialize Safari handler for this payment
+      const safariHandler = new SafariPaymentHandler({
+        orderId: paymentId,
+        amount: totalPrice.toFixed(2),
+        currency: 'GBP',
+        description: `TK Afro Kitchen Order ${paymentId}`
+      });
       
       // Send order details to backend
       const orderData = {
@@ -162,20 +170,49 @@ export default function OptimizedCheckout() {
           price: item.price,
           selectedSize: item.selectedSize
         })),
-        status: 'COMPLETED'
+        status: 'COMPLETED',
+        paymentMethod: method
       };
       
-      // Check if we should use Safari navigation
-      if (SafariNavigation.shouldUseSafariNavigation()) {
-        console.log('🍎 Safari detected - using Safari-first navigation approach');
+      // Check if this is Safari and use comprehensive Safari handling
+      if (safariHandler.isIOSSafari()) {
+        console.log('🍎 iOS Safari detected - using comprehensive Safari payment handler');
         
-        // Clear cart immediately for Safari (no race condition with navigation)
+        // Clear cart immediately for Safari
         clearCart();
         
-        // Use Safari-specific navigation that bypasses Next.js router entirely
-        SafariNavigation.navigateToSuccess(successOrderData);
+        // Use the comprehensive Safari redirect handling
+        setTimeout(() => {
+          const successUrl = `/success?orderId=${paymentId}&amount=${totalPrice.toFixed(2)}&method=${method}&safari=true&timestamp=${Date.now()}`;
+          
+          // Store data with multiple strategies
+          localStorage.setItem('lastOrderDetails', JSON.stringify(successOrderData));
+          localStorage.setItem('safariOrderBackup', JSON.stringify(successOrderData));
+          
+          console.log('🚀 Safari: Using delayed navigation with comprehensive handling');
+          window.location.replace(successUrl);
+        }, 2000); // 2 second delay for Safari
         
-        return; // Exit early - Safari navigation takes over
+        // Show immediate success feedback
+        setPaymentSuccess(true);
+        setIsSubmitting(false);
+        
+        return; // Exit early for Safari
+        
+      } else if (safariHandler.isSafari()) {
+        console.log('🍎 Safari desktop detected - using Safari-optimized navigation');
+        
+        // Clear cart and store data
+        clearCart();
+        localStorage.setItem('lastOrderDetails', JSON.stringify(successOrderData));
+        
+        // Use replace instead of href for better Safari compatibility
+        setTimeout(() => {
+          const successUrl = `/success?orderId=${paymentId}&amount=${totalPrice.toFixed(2)}&method=${method}&safari=true&timestamp=${Date.now()}`;
+          window.location.replace(successUrl);
+        }, 1500);
+        
+        return;
       }
       
       // Standard navigation for non-Safari browsers
@@ -196,7 +233,7 @@ export default function OptimizedCheckout() {
     }
   };
 
-  const handlePaymentError = (error: any, method: 'card' | 'bank' | 'mobile') => {
+  const handlePaymentError = (error: any, method: 'card' | 'bank' | 'mobile' | 'paypal') => {
     console.error('❌ Payment error in checkout:', { error, method });
     console.error('❌ Payment error details:', JSON.stringify(error, null, 2));
     
