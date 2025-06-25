@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CreditCard, Banknote, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { StripeCheckout } from './StripeCheckout';
 import { GoCardlessPayment } from './GoCardlessPayment';
+import { SafariPayPalCheckout } from './SafariPayPalCheckout';
 
 type PaymentMethod = 'card' | 'bank' | 'mobile';
 
@@ -32,11 +33,39 @@ export function PaymentSelector({
   customerDetails
 }: PaymentSelectorProps) {
   const [selectedMethod, setSelectedMethod] = useState<PaymentMethod | null>(null);
+  const [isSafari, setIsSafari] = useState(false);
+
+  useEffect(() => {
+    // Detect Safari for PayPal recommendation
+    const userAgent = navigator.userAgent;
+    const safariDetected = /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS|EdgiOS/.test(userAgent);
+    setIsSafari(safariDetected);
+    
+    // Auto-select PayPal for Safari users if no method selected
+    if (safariDetected && !selectedMethod) {
+      console.log('🍎 Safari detected - PayPal recommended for optimal compatibility');
+    }
+  }, [selectedMethod]);
 
   const bankTransferDiscount = Math.round(amount * 0.03); // 3% discount
   const bankTransferAmount = amount - bankTransferDiscount;
 
+  // PayPal method for Safari users
+  const paypalMethod = {
+    id: 'paypal' as const,
+    title: 'PayPal',
+    subtitle: 'Safari Optimized',
+    icon: CreditCard, // Using CreditCard icon for now
+    amount: amount,
+    fees: 'Standard rate',
+    benefits: ['Safari Compatible', 'PayPal Protection', 'Credit/Debit Cards'],
+    color: 'indigo',
+    safariOptimized: true,
+  };
+
   const paymentMethods = [
+    // Show PayPal first for Safari users
+    ...(isSafari ? [paypalMethod] : []),
     {
       id: 'card' as PaymentMethod,
       title: 'Card Payment',
@@ -46,7 +75,8 @@ export function PaymentSelector({
       fees: 'Standard rate',
       benefits: ['Instant payment', 'Apple Pay & Google Pay', 'Most popular'],
       color: 'blue',
-      popular: true,
+      popular: !isSafari, // Not popular for Safari due to compatibility issues
+      safariIssue: isSafari,
     },
     {
       id: 'bank' as PaymentMethod,
@@ -70,6 +100,8 @@ export function PaymentSelector({
       color: 'purple',
       comingSoon: true,
     },
+    // Show PayPal last for non-Safari users
+    ...(!isSafari ? [paypalMethod] : []),
   ];
 
   if (selectedMethod === 'card') {
@@ -118,6 +150,31 @@ export function PaymentSelector({
     );
   }
 
+  if (selectedMethod === 'paypal') {
+    return (
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h3 className="text-lg font-semibold">
+            PayPal {isSafari && <span className="text-sm text-green-600">(Safari Optimized)</span>}
+          </h3>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setSelectedMethod(null)}
+          >
+            Change Method
+          </Button>
+        </div>
+        <SafariPayPalCheckout
+          amount={amount}
+          onSuccess={(data) => onSuccess(data, 'paypal' as any)}
+          onError={(error) => onError(error, 'paypal' as any)}
+          customerDetails={customerDetails}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
       <div className="text-center">
@@ -133,6 +190,8 @@ export function PaymentSelector({
         {paymentMethods.map((method) => {
           const Icon = method.icon;
           const isDisabled = method.comingSoon;
+          const isPayPal = method.id === 'paypal';
+          const hasIssues = method.safariIssue;
           
           return (
             <button
@@ -143,6 +202,10 @@ export function PaymentSelector({
                 relative p-6 rounded-xl border-2 text-left transition-all duration-200
                 ${isDisabled 
                   ? 'border-gray-200 bg-gray-50 cursor-not-allowed opacity-60' 
+                  : hasIssues
+                  ? 'border-yellow-200 bg-yellow-50 hover:border-yellow-300 cursor-pointer'
+                  : isPayPal && isSafari
+                  ? 'border-green-300 bg-green-50 hover:border-green-400 cursor-pointer ring-2 ring-green-200'
                   : `border-gray-200 hover:border-${method.color}-300 hover:bg-${method.color}-50 cursor-pointer`
                 }
               `}
@@ -150,6 +213,18 @@ export function PaymentSelector({
               {method.popular && (
                 <div className="absolute -top-2 left-4 bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
                   Most Popular
+                </div>
+              )}
+              
+              {method.safariOptimized && isSafari && (
+                <div className="absolute -top-2 left-4 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
+                  Safari Optimized
+                </div>
+              )}
+
+              {hasIssues && (
+                <div className="absolute -top-2 left-4 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
+                  ⚠️ Safari Issues
                 </div>
               )}
               
