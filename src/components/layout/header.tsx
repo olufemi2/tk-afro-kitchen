@@ -29,8 +29,9 @@ export function Header() {
   };
 
   // Safari-specific link handler
-  const handleSafariLink = (href: string) => {
+  const handleSafariLink = (e: React.MouseEvent, href: string) => {
     if (isSafari) {
+      e.preventDefault();
       // Force navigation in Safari
       window.location.href = href;
     }
@@ -72,14 +73,14 @@ export function Header() {
               <Link 
                 href="/about" 
                 className="nav-link"
-                onClick={() => isSafari && handleSafariLink('/about')}
+                onClick={(e) => handleSafariLink(e, '/about')}
               >
                 About
               </Link>
               <Link 
                 href="/contact" 
                 className="nav-link"
-                onClick={() => isSafari && handleSafariLink('/contact')}
+                onClick={(e) => handleSafariLink(e, '/contact')}
               >
                 Contact
               </Link>
@@ -92,7 +93,7 @@ export function Header() {
           <Link 
             href="/" 
             className="flex items-center space-x-2"
-            onClick={() => isSafari && handleSafariLink('/')}
+            onClick={(e) => handleSafariLink(e, '/')}
           >
             <div className="relative w-10 h-10">
               <Image
@@ -111,21 +112,21 @@ export function Header() {
             <Link 
               href="/menu" 
               className="nav-link"
-              onClick={() => isSafari && handleSafariLink('/menu')}
+              onClick={(e) => handleSafariLink(e, '/menu')}
             >
               Menu
             </Link>
             <Link 
               href="/frozen" 
               className="nav-link"
-              onClick={() => isSafari && handleSafariLink('/frozen')}
+              onClick={(e) => handleSafariLink(e, '/frozen')}
             >
               Frozen
             </Link>
             <Link 
               href="/catering" 
               className="nav-link"
-              onClick={() => isSafari && handleSafariLink('/catering')}
+              onClick={(e) => handleSafariLink(e, '/catering')}
             >
               Catering
             </Link>
@@ -160,7 +161,7 @@ export function Header() {
             <Link 
               href="/menu" 
               className="hidden md:flex inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-9 px-4 py-2 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
-              onClick={() => isSafari && handleSafariLink('/menu')}
+              onClick={(e) => handleSafariLink(e, '/menu')}
             >
               Order Now
             </Link>
@@ -174,9 +175,9 @@ export function Header() {
               <Link 
                 href="/menu" 
                 className="px-4 py-2 text-slate-300 hover:bg-orange-500/10 hover:text-orange-400"
-                onClick={() => {
+                onClick={(e) => {
                   setIsMobileMenuOpen(false);
-                  isSafari && handleSafariLink('/menu');
+                  handleSafariLink(e, '/menu');
                 }}
               >
                 Menu
@@ -184,9 +185,9 @@ export function Header() {
               <Link 
                 href="/frozen" 
                 className="px-4 py-2 text-slate-300 hover:bg-orange-500/10 hover:text-orange-400"
-                onClick={() => {
+                onClick={(e) => {
                   setIsMobileMenuOpen(false);
-                  isSafari && handleSafariLink('/frozen');
+                  handleSafariLink(e, '/frozen');
                 }}
               >
                 Frozen
@@ -194,9 +195,9 @@ export function Header() {
               <Link 
                 href="/catering" 
                 className="px-4 py-2 text-slate-300 hover:bg-orange-500/10 hover:text-orange-400"
-                onClick={() => {
+                onClick={(e) => {
                   setIsMobileMenuOpen(false);
-                  isSafari && handleSafariLink('/catering');
+                  handleSafariLink(e, '/catering');
                 }}
               >
                 Catering
@@ -204,9 +205,9 @@ export function Header() {
               <Link 
                 href="/about" 
                 className="px-4 py-2 text-slate-300 hover:bg-orange-500/10 hover:text-orange-400"
-                onClick={() => {
+                onClick={(e) => {
                   setIsMobileMenuOpen(false);
-                  isSafari && handleSafariLink('/about');
+                  handleSafariLink(e, '/about');
                 }}
               >
                 About
@@ -214,9 +215,9 @@ export function Header() {
               <Link 
                 href="/contact" 
                 className="px-4 py-2 text-slate-300 hover:bg-orange-500/10 hover:text-orange-400"
-                onClick={() => {
+                onClick={(e) => {
                   setIsMobileMenuOpen(false);
-                  isSafari && handleSafariLink('/contact');
+                  handleSafariLink(e, '/contact');
                 }}
               >
                 Contact
