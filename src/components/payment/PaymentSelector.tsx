@@ -36,14 +36,22 @@ export function PaymentSelector({
   const [isSafari, setIsSafari] = useState(false);
 
   useEffect(() => {
-    // Detect Safari for PayPal recommendation
+    // Enhanced Safari detection for iOS Safari
     const userAgent = navigator.userAgent;
-    const safariDetected = /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS|EdgiOS/.test(userAgent);
+    const isIOSSafari = /iPad|iPhone|iPod/.test(userAgent) && /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS|EdgiOS/.test(userAgent);
+    const isDesktopSafari = /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS|EdgiOS/.test(userAgent) && !/iPad|iPhone|iPod/.test(userAgent);
+    const safariDetected = isIOSSafari || isDesktopSafari;
+    
     setIsSafari(safariDetected);
     
-    // Auto-select PayPal for Safari users if no method selected
+    // Auto-select PayPal for Safari users (especially iOS Safari)
     if (safariDetected && !selectedMethod) {
-      console.log('🍎 Safari detected - PayPal recommended for optimal compatibility');
+      console.log(`🍎 Safari detected (iOS: ${isIOSSafari}, Desktop: ${isDesktopSafari}) - PayPal will be prioritized`);
+      // Auto-select PayPal for iOS Safari due to Stripe issues
+      if (isIOSSafari) {
+        setSelectedMethod('paypal');
+        console.log('🍎 iOS Safari detected - auto-selecting PayPal due to Stripe compatibility issues');
+      }
     }
   }, [selectedMethod]);
 
@@ -54,16 +62,18 @@ export function PaymentSelector({
   const paypalMethod = {
     id: 'paypal' as const,
     title: 'PayPal',
-    subtitle: 'Safari Optimized',
+    subtitle: isSafari ? 'Recommended for Safari' : 'Secure Payment',
     icon: CreditCard, // Using CreditCard icon for now
     amount: amount,
     fees: 'Standard rate',
-    benefits: ['Safari Compatible', 'PayPal Protection', 'Credit/Debit Cards'],
+    benefits: isSafari 
+      ? ['Safari Compatible ✓', 'No Redirect Issues', 'PayPal Protection', 'Credit/Debit Cards']
+      : ['PayPal Protection', 'Credit/Debit Cards', 'Secure Payment'],
     color: 'indigo',
-    safariOptimized: true,
+    safariOptimized: isSafari,
     comingSoon: false,
     safariIssue: false,
-    popular: false,
+    popular: isSafari, // Make PayPal popular for Safari users
   };
 
   const paymentMethods = [
@@ -72,12 +82,14 @@ export function PaymentSelector({
     {
       id: 'card' as PaymentMethod,
       title: 'Card Payment',
-      subtitle: 'Credit or Debit Card',
+      subtitle: isSafari ? 'May have Safari issues' : 'Credit or Debit Card',
       icon: CreditCard,
       amount: amount,
       fees: 'Standard rate',
-      benefits: ['Instant payment', 'Apple Pay & Google Pay', 'Most popular'],
-      color: 'blue',
+      benefits: isSafari 
+        ? ['May redirect to menu', 'Stripe payment', 'Use PayPal instead']
+        : ['Instant payment', 'Apple Pay & Google Pay', 'Most popular'],
+      color: isSafari ? 'yellow' : 'blue',
       popular: !isSafari, // Not popular for Safari due to compatibility issues
       safariIssue: isSafari,
       comingSoon: false,

@@ -38,9 +38,19 @@ export default function OptimizedCheckout() {
   const [estimatedDelivery, setEstimatedDelivery] = useState('');
   
   useEffect(() => {
-    // Prevent redirect to menu during payment success flow
-    if (items.length === 0 && !paymentSuccess) {
+    // Prevent redirect to menu during payment success flow or Safari navigation
+    const safariSuccessFlag = localStorage.getItem('safariPaymentSuccess');
+    const preventRedirect = localStorage.getItem('preventAutoRedirect');
+    
+    if (items.length === 0 && !paymentSuccess && !safariSuccessFlag && !preventRedirect) {
+      console.log('🔄 Empty cart detected - redirecting to menu');
       router.push('/menu');
+    } else if (safariSuccessFlag) {
+      console.log('🍎 Safari payment success detected - preventing menu redirect');
+      // Keep the success flag for a short time to prevent redirect loops
+      setTimeout(() => {
+        localStorage.removeItem('safariPaymentSuccess');
+      }, 5000);
     }
     
     // Calculate estimated delivery time (45-60 minutes from now)
@@ -178,6 +188,10 @@ export default function OptimizedCheckout() {
       if (safariHandler.isIOSSafari()) {
         console.log('🍎 iOS Safari detected - using comprehensive Safari payment handler');
         
+        // Set Safari success flags to prevent menu redirects
+        localStorage.setItem('safariPaymentSuccess', 'true');
+        localStorage.setItem('preventAutoRedirect', 'true');
+        
         // Clear cart immediately for Safari
         clearCart();
         
@@ -201,6 +215,10 @@ export default function OptimizedCheckout() {
         
       } else if (safariHandler.isSafari()) {
         console.log('🍎 Safari desktop detected - using Safari-optimized navigation');
+        
+        // Set Safari success flags to prevent menu redirects
+        localStorage.setItem('safariPaymentSuccess', 'true');
+        localStorage.setItem('preventAutoRedirect', 'true');
         
         // Clear cart and store data
         clearCart();
