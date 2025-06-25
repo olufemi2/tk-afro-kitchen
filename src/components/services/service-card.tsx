@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import Image from "next/image";
+import Link from "next/link";
 import { LucideIcon } from "lucide-react";
 
 interface ServiceFeature {
@@ -63,7 +64,7 @@ export function ServiceCard({ title, description, features, actionLabel, actionH
       </CardContent>
       <CardFooter className="bg-white/80 backdrop-blur-sm">
         <Button asChild className="w-full bg-gradient-to-r from-orange-600 to-yellow-500 hover:from-orange-700 hover:to-yellow-600 text-white">
-          <a href={actionHref}>{actionLabel}</a>
+          <Link href={actionHref}>{actionLabel}</Link>
         </Button>
       </CardFooter>
     </Card>

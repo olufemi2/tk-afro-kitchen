@@ -36,35 +36,12 @@ export function PaymentSelector({
   const [isSafari, setIsSafari] = useState(false);
 
   useEffect(() => {
-    // Simple and robust Safari detection
-    const userAgent = navigator.userAgent.toLowerCase();
-    const isSafariUA = userAgent.includes('safari') && !userAgent.includes('chrome') && !userAgent.includes('chromium') && !userAgent.includes('edg');
-    const isIOSDevice = /ipad|iphone|ipod/.test(userAgent);
-    const isIOSSafari = isIOSDevice && isSafariUA;
-    const isDesktopSafari = isSafariUA && !isIOSDevice;
-    const safariDetected = isSafariUA;
-    
-    console.log('🔍 Browser Detection:', {
-      userAgent: navigator.userAgent,
-      isSafariUA,
-      isIOSDevice,
-      isIOSSafari,
-      isDesktopSafari,
-      safariDetected
-    });
-    
-    setIsSafari(safariDetected);
-    
-    // Auto-select PayPal for any Safari browser due to Stripe issues
-    if (safariDetected && selectedMethod === null) {
-      console.log(`🍎 Safari detected - forcing PayPal selection`);
-      console.log(`🔧 Current selectedMethod: ${selectedMethod}`);
-      
-      // Use immediate selection for Safari
-      setSelectedMethod('paypal');
-      console.log('🍎 PayPal auto-selected for Safari user');
+    // Auto-select card payment as default for all browsers
+    if (selectedMethod === null) {
+      console.log('💳 Auto-selecting card payment as default');
+      setSelectedMethod('card');
     }
-  }, []); // Remove dependency to prevent loops
+  }, []); // Auto-select card payment on load
 
   const bankTransferDiscount = Math.round(amount * 0.03); // 3% discount
   const bankTransferAmount = amount - bankTransferDiscount;
@@ -88,21 +65,17 @@ export function PaymentSelector({
   };
 
   const paymentMethods = [
-    // Show PayPal first for Safari users
-    ...(isSafari ? [paypalMethod] : []),
     {
       id: 'card' as PaymentMethod,
       title: 'Card Payment',
-      subtitle: isSafari ? 'May have Safari issues' : 'Credit or Debit Card',
+      subtitle: 'Credit or Debit Card',
       icon: CreditCard,
       amount: amount,
       fees: 'Standard rate',
-      benefits: isSafari 
-        ? ['May redirect to menu', 'Stripe payment', 'Use PayPal instead']
-        : ['Instant payment', 'Apple Pay & Google Pay', 'Most popular'],
-      color: isSafari ? 'yellow' : 'blue',
-      popular: !isSafari, // Not popular for Safari due to compatibility issues
-      safariIssue: isSafari,
+      benefits: ['Instant payment', 'Apple Pay & Google Pay', 'Most popular'],
+      color: 'blue',
+      popular: true,
+      safariIssue: false,
       comingSoon: false,
       safariOptimized: false,
     },
@@ -135,8 +108,6 @@ export function PaymentSelector({
       safariIssue: false,
       popular: false,
     },
-    // Show PayPal last for non-Safari users
-    ...(!isSafari ? [paypalMethod] : []),
   ];
 
   if (selectedMethod === 'card') {
@@ -185,49 +156,9 @@ export function PaymentSelector({
     );
   }
 
-  if (selectedMethod === 'paypal') {
-    return (
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h3 className="text-lg font-semibold">
-            PayPal {isSafari && <span className="text-sm text-green-600">(Safari Optimized)</span>}
-          </h3>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setSelectedMethod(null)}
-          >
-            Change Method
-          </Button>
-        </div>
-        <SafariPayPalCheckout
-          amount={amount}
-          onSuccess={(data) => onSuccess(data, 'paypal')}
-          onError={(error) => onError(error, 'paypal')}
-          customerDetails={customerDetails}
-        />
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-6">
-      {/* Debug info for Safari users */}
-      {isSafari && (
-        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-          <div className="flex items-center space-x-2 mb-2">
-            <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-            </svg>
-            <h4 className="font-semibold text-blue-800">Safari Detected</h4>
-          </div>
-          <p className="text-sm text-blue-700">
-            We've detected you're using Safari. For the best payment experience, we recommend using PayPal.
-            Stripe payments may experience redirect issues in Safari.
-          </p>
-        </div>
-      )}
-      
       <div className="text-center">
         <h3 className="text-xl font-semibold text-gray-900 mb-2">
           Choose Payment Method

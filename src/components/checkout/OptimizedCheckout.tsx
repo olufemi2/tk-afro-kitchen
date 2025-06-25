@@ -163,9 +163,46 @@ export default function OptimizedCheckout() {
         timestamp: new Date().toISOString()
       };
 
-      // TODO: Replace with actual API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      console.log('Order submitted:', orderData);
+      // Send order to backend and notify kitchen staff
+      try {
+        console.log('📤 Sending order to backend...');
+        
+        // Send kitchen notification
+        const notificationResponse = await fetch('/api/notify-kitchen', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            orderId: paymentId,
+            amount: totalPrice.toFixed(2),
+            paymentMethod: method,
+            customerInfo: deliveryDetails,
+            items: items.map(item => ({
+              id: item.id,
+              name: item.name,
+              quantity: item.quantity,
+              price: item.price,
+              selectedSize: item.selectedSize
+            })),
+            timestamp: new Date().toISOString(),
+            totalAmount: totalPrice,
+            estimatedDelivery
+          }),
+        });
+
+        if (notificationResponse.ok) {
+          const notificationResult = await notificationResponse.json();
+          console.log('✅ Kitchen notification sent:', notificationResult);
+        } else {
+          console.error('⚠️ Kitchen notification failed, but order will continue');
+        }
+      } catch (notificationError) {
+        console.error('⚠️ Kitchen notification error:', notificationError);
+        // Don't fail the order if notification fails
+      }
+      
+      console.log('Order processed successfully:', orderData);
       
       // Prepare order details for success page
       const successOrderData = {
