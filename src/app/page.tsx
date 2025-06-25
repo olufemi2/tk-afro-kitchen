@@ -24,10 +24,14 @@ export default function Home() {
 
   // Safari-specific link handler
   const handleSafariLink = (e: React.MouseEvent, href: string) => {
+    console.log('🔗 Navigation clicked:', href, 'Safari:', isSafari);
     if (isSafari) {
       e.preventDefault();
+      console.log('🍎 Safari navigation - using window.location.href');
       // Force navigation in Safari
       window.location.href = href;
+    } else {
+      console.log('🖥️ Standard browser - using Next.js router');
     }
   };
 
