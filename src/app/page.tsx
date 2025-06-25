@@ -52,22 +52,6 @@ export default function Home() {
               Experience the rich flavors of Nigeria with our carefully crafted dishes,
               available for delivery across the UK or local pickup.
             </p>
-            <div className="flex gap-4">
-              <Link 
-                href="/menu"
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-10 px-6 bg-gradient-to-r from-orange-500 to-yellow-500 hover:from-orange-600 hover:to-yellow-600 text-white"
-                onClick={(e) => handleSafariLink(e, '/menu')}
-              >
-                Browse Our Menu
-              </Link>
-              <Link 
-                href="/about"
-                className="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all h-10 px-6 border border-orange-900/20 bg-[#242424] hover:bg-[#2a2a2a] text-slate-200"
-                onClick={(e) => handleSafariLink(e, '/about')}
-              >
-                About Us
-              </Link>
-            </div>
           </div>
         </section>
 
