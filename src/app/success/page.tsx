@@ -20,16 +20,37 @@ export default function SuccessPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSafari, setIsSafari] = useState(false);
 
-  // Safari debugging effect
+  // Safari debugging and redirect prevention effect
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const userAgent = navigator.userAgent;
-      const isSafariBrowser = /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS/.test(userAgent);
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isSafariBrowser = userAgent.includes('safari') && !userAgent.includes('chrome') && !userAgent.includes('chromium') && !userAgent.includes('edg');
       
       if (isSafariBrowser) {
         console.log('🍎 SUCCESS PAGE: Safari detected');
         console.log('📍 Current URL:', window.location.href);
         console.log('📦 localStorage keys:', Object.keys(localStorage));
+        
+        // Check Safari payment flags
+        const safariPaymentSuccess = localStorage.getItem('safariPaymentSuccess');
+        const preventAutoRedirect = localStorage.getItem('preventAutoRedirect');
+        const safariPaymentTimestamp = localStorage.getItem('safariPaymentTimestamp');
+        
+        console.log('🍎 Safari payment flags:', {
+          safariPaymentSuccess,
+          preventAutoRedirect,
+          safariPaymentTimestamp
+        });
+        
+        if (safariPaymentSuccess || preventAutoRedirect) {
+          console.log('🛡️ Safari payment success detected - preventing any automatic redirects');
+          
+          // Prevent any potential automatic redirects
+          window.history.replaceState({}, '', window.location.href);
+          
+          // Prevent any potential navigation
+          console.log('🔒 Safari payment success - navigation locked');
+        }
         
         // Check for RSC navigation issues
         const urlParams = new URLSearchParams(window.location.search);

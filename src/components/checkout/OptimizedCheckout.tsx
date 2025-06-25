@@ -184,53 +184,50 @@ export default function OptimizedCheckout() {
         paymentMethod: method
       };
       
+      // Detect Safari more aggressively
+      const userAgent = navigator.userAgent.toLowerCase();
+      const isSafariUA = userAgent.includes('safari') && !userAgent.includes('chrome') && !userAgent.includes('chromium') && !userAgent.includes('edg');
+      const isIOSDevice = /ipad|iphone|ipod/.test(userAgent);
+      
       // Check if this is Safari and use comprehensive Safari handling
-      if (safariHandler.isIOSSafari()) {
-        console.log('🍎 iOS Safari detected - using comprehensive Safari payment handler');
+      if (isSafariUA || safariHandler.isIOSSafari() || safariHandler.isSafari()) {
+        console.log('🍎 Safari detected - using comprehensive Safari payment handler');
+        console.log('🔍 Safari detection details:', {
+          isSafariUA,
+          isIOSDevice,
+          safariHandlerIOS: safariHandler.isIOSSafari(),
+          safariHandlerDesktop: safariHandler.isSafari(),
+          userAgent: navigator.userAgent
+        });
         
         // Set Safari success flags to prevent menu redirects
         localStorage.setItem('safariPaymentSuccess', 'true');
         localStorage.setItem('preventAutoRedirect', 'true');
+        localStorage.setItem('safariPaymentTimestamp', Date.now().toString());
         
         // Clear cart immediately for Safari
         clearCart();
         
-        // Use the comprehensive Safari redirect handling
-        setTimeout(() => {
-          const successUrl = `/success?orderId=${paymentId}&amount=${totalPrice.toFixed(2)}&method=${method}&safari=true&timestamp=${Date.now()}`;
-          
-          // Store data with multiple strategies
-          localStorage.setItem('lastOrderDetails', JSON.stringify(successOrderData));
-          localStorage.setItem('safariOrderBackup', JSON.stringify(successOrderData));
-          
-          console.log('🚀 Safari: Using delayed navigation with comprehensive handling');
-          window.location.replace(successUrl);
-        }, 2000); // 2 second delay for Safari
+        // Store data with multiple strategies
+        localStorage.setItem('lastOrderDetails', JSON.stringify(successOrderData));
+        localStorage.setItem('safariOrderBackup', JSON.stringify(successOrderData));
         
-        // Show immediate success feedback
+        // Use immediate window.location.href for most reliable Safari navigation
+        const successUrl = `/success?orderId=${paymentId}&amount=${totalPrice.toFixed(2)}&method=${method}&safari=true&timestamp=${Date.now()}`;
+        
+        console.log('🚀 Safari: Using immediate window.location navigation');
+        console.log('🔗 Success URL:', successUrl);
+        
+        // Show immediate success feedback first
         setPaymentSuccess(true);
         setIsSubmitting(false);
         
-        return; // Exit early for Safari
-        
-      } else if (safariHandler.isSafari()) {
-        console.log('🍎 Safari desktop detected - using Safari-optimized navigation');
-        
-        // Set Safari success flags to prevent menu redirects
-        localStorage.setItem('safariPaymentSuccess', 'true');
-        localStorage.setItem('preventAutoRedirect', 'true');
-        
-        // Clear cart and store data
-        clearCart();
-        localStorage.setItem('lastOrderDetails', JSON.stringify(successOrderData));
-        
-        // Use replace instead of href for better Safari compatibility
+        // Use href for most reliable Safari navigation
         setTimeout(() => {
-          const successUrl = `/success?orderId=${paymentId}&amount=${totalPrice.toFixed(2)}&method=${method}&safari=true&timestamp=${Date.now()}`;
-          window.location.replace(successUrl);
-        }, 1500);
+          window.location.href = successUrl;
+        }, 1000); // Reduced delay
         
-        return;
+        return; // Exit early for Safari
       }
       
       // Standard navigation for non-Safari browsers

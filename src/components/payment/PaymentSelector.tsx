@@ -36,22 +36,32 @@ export function PaymentSelector({
   const [isSafari, setIsSafari] = useState(false);
 
   useEffect(() => {
-    // Enhanced Safari detection for iOS Safari
-    const userAgent = navigator.userAgent;
-    const isIOSSafari = /iPad|iPhone|iPod/.test(userAgent) && /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS|EdgiOS/.test(userAgent);
-    const isDesktopSafari = /Safari/.test(userAgent) && !/Chrome|CriOS|FxiOS|EdgiOS/.test(userAgent) && !/iPad|iPhone|iPod/.test(userAgent);
-    const safariDetected = isIOSSafari || isDesktopSafari;
+    // Simple and robust Safari detection
+    const userAgent = navigator.userAgent.toLowerCase();
+    const isSafariUA = userAgent.includes('safari') && !userAgent.includes('chrome') && !userAgent.includes('chromium') && !userAgent.includes('edg');
+    const isIOSDevice = /ipad|iphone|ipod/.test(userAgent);
+    const isIOSSafari = isIOSDevice && isSafariUA;
+    const isDesktopSafari = isSafariUA && !isIOSDevice;
+    const safariDetected = isSafariUA;
+    
+    console.log('🔍 Browser Detection:', {
+      userAgent: navigator.userAgent,
+      isSafariUA,
+      isIOSDevice,
+      isIOSSafari,
+      isDesktopSafari,
+      safariDetected
+    });
     
     setIsSafari(safariDetected);
     
-    // Auto-select PayPal for Safari users (especially iOS Safari)
+    // Auto-select PayPal for any Safari browser due to Stripe issues
     if (safariDetected && !selectedMethod) {
-      console.log(`🍎 Safari detected (iOS: ${isIOSSafari}, Desktop: ${isDesktopSafari}) - PayPal will be prioritized`);
-      // Auto-select PayPal for iOS Safari due to Stripe issues
-      if (isIOSSafari) {
+      console.log(`🍎 Safari detected - forcing PayPal selection`);
+      setTimeout(() => {
         setSelectedMethod('paypal');
-        console.log('🍎 iOS Safari detected - auto-selecting PayPal due to Stripe compatibility issues');
-      }
+        console.log('🍎 PayPal auto-selected for Safari user');
+      }, 100);
     }
   }, [selectedMethod]);
 
@@ -201,6 +211,22 @@ export function PaymentSelector({
 
   return (
     <div className="space-y-6">
+      {/* Debug info for Safari users */}
+      {isSafari && (
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <div className="flex items-center space-x-2 mb-2">
+            <svg className="w-5 h-5 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+            </svg>
+            <h4 className="font-semibold text-blue-800">Safari Detected</h4>
+          </div>
+          <p className="text-sm text-blue-700">
+            We've detected you're using Safari. For the best payment experience, we recommend using PayPal.
+            Stripe payments may experience redirect issues in Safari.
+          </p>
+        </div>
+      )}
+      
       <div className="text-center">
         <h3 className="text-xl font-semibold text-gray-900 mb-2">
           Choose Payment Method
