@@ -39,7 +39,7 @@ export default function Home() {
     <>
       <Header />
       <div className="pt-24 pb-16">
-        {/* Hero Section */}
+        {/* Hero Section - Navigation buttons fixed for production deployment */}
         <section className="relative min-h-[600px] bg-[#1e1e1e] overflow-hidden">
           <div className="absolute inset-0 bg-[url('/images/dishes/Jollof.jpeg')] bg-cover bg-center opacity-5 mix-blend-overlay" />
           <div className="container mx-auto px-4 h-full flex flex-col justify-center py-16">
