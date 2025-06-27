@@ -40,26 +40,40 @@ const sendWhatsAppNotification = async (orderData: any) => {
 
   const twilio = require('twilio')(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN);
   
-  const message = `🍽️ NEW ORDER ALERT! 🍽️
+  const fulfillmentText = orderData.fulfillmentType === 'delivery' 
+  ? `🚚 DELIVERY (£${orderData.deliveryFee?.toFixed(2) || '21.99'} fee)`
+  : `🏪 COLLECTION (FREE)`;
+
+const addressText = orderData.fulfillmentType === 'delivery' && orderData.customerInfo.address
+  ? `${orderData.customerInfo.address}, ${orderData.customerInfo.city}, ${orderData.customerInfo.postcode}`
+  : orderData.fulfillmentType === 'collection' 
+    ? 'COLLECTION from Milton Keynes kitchen'
+    : 'COLLECTION/PICKUP';
+
+const message = `🍽️ NEW ORDER ALERT! 🍽️
 
 Order ID: ${orderData.orderId}
-Amount: £${orderData.amount}
+Total: £${orderData.finalTotal || orderData.amount}
 Payment: ${orderData.paymentMethod}
+Fulfillment: ${fulfillmentText}
 
 Customer: ${orderData.customerInfo.fullName}
 Phone: ${orderData.customerInfo.phone}
 Email: ${orderData.customerInfo.email}
 
-Delivery: ${orderData.customerInfo.address ? 
-  `${orderData.customerInfo.address}, ${orderData.customerInfo.city}, ${orderData.customerInfo.postcode}` : 
-  'COLLECTION/PICKUP'}
+${orderData.fulfillmentType === 'delivery' ? 'Delivery Address:' : 'Collection:'} ${addressText}
 
 ITEMS:
 ${orderData.items.map((item: any) => 
   `• ${item.quantity}x ${item.name} (${item.selectedSize.size}) - £${(item.price * item.quantity).toFixed(2)}`
 ).join('\n')}
 
+Subtotal: £${orderData.totalAmount}
+${orderData.fulfillmentType === 'delivery' ? `Delivery: £${orderData.deliveryFee?.toFixed(2) || '21.99'}` : 'Collection: FREE'}
+TOTAL: £${orderData.finalTotal || orderData.amount}
+
 Time: ${new Date(orderData.timestamp).toLocaleString('en-GB')}
+${orderData.fulfillmentType === 'delivery' ? 'Expected: Next working day' : 'Ready: 45-60 minutes'}
 
 ⏰ Please confirm receipt and estimated preparation time.`;
 
@@ -123,9 +137,12 @@ const sendEmailNotification = async (orderData: any) => {
             <p><strong>Name:</strong> ${orderData.customerInfo.fullName}</p>
             <p><strong>Phone:</strong> ${orderData.customerInfo.phone}</p>
             <p><strong>Email:</strong> ${orderData.customerInfo.email}</p>
-            <p><strong>Delivery:</strong> ${orderData.customerInfo.address ? 
+            <p><strong>${orderData.fulfillmentType === 'delivery' ? 'Delivery Address:' : 'Collection:'}:</strong> ${orderData.fulfillmentType === 'delivery' && orderData.customerInfo.address ? 
               `${orderData.customerInfo.address}, ${orderData.customerInfo.city}, ${orderData.customerInfo.postcode}` : 
-              '<strong>COLLECTION/PICKUP</strong>'}</p>
+              '<strong>COLLECTION from Milton Keynes kitchen</strong>'}</p>
+            <p><strong>Fulfillment Type:</strong> ${orderData.fulfillmentType === 'delivery' 
+              ? `🚚 UK Delivery (£${orderData.deliveryFee?.toFixed(2) || '21.99'} fee)` 
+              : '🏪 Collection (FREE)'}</p>
           </div>
           
           <h3>Order Items</h3>
@@ -153,7 +170,9 @@ const sendEmailNotification = async (orderData: any) => {
           </table>
           
           <div class="total">
-            Total Amount: £${orderData.amount} (${orderData.paymentMethod.toUpperCase()})
+            Subtotal: £${orderData.totalAmount}<br>
+            ${orderData.fulfillmentType === 'delivery' ? `UK Delivery: £${orderData.deliveryFee?.toFixed(2) || '21.99'}` : 'Collection: FREE'}<br>
+            <strong>Total: £${orderData.finalTotal || orderData.amount} (${orderData.paymentMethod.toUpperCase()})</strong>
           </div>
           
           <div class="order-info">
@@ -164,6 +183,10 @@ const sendEmailNotification = async (orderData: any) => {
               <li>Estimate preparation time</li>
               <li>Contact customer if any issues</li>
               <li>Begin food preparation</li>
+              ${orderData.fulfillmentType === 'delivery' 
+                ? '<li><strong>Arrange next-day delivery to customer address</strong></li>' 
+                : '<li><strong>Call customer when ready for collection (45-60 min)</strong></li>'
+              }
             </ol>
           </div>
         </div>
@@ -184,13 +207,20 @@ const sendEmailNotification = async (orderData: any) => {
 Order ID: ${orderData.orderId}
 Customer: ${orderData.customerInfo.fullName}
 Phone: ${orderData.customerInfo.phone}
-Amount: £${orderData.amount}
-Payment: ${orderData.paymentMethod}
+Fulfillment: ${orderData.fulfillmentType === 'delivery' ? 'UK Delivery' : 'Collection'}
+${orderData.fulfillmentType === 'delivery' && orderData.customerInfo.address ? 
+  `Address: ${orderData.customerInfo.address}, ${orderData.customerInfo.city}, ${orderData.customerInfo.postcode}` : 
+  'Collection from Milton Keynes kitchen'}
 
 Items:
 ${orderData.items.map((item: any) => 
   `${item.quantity}x ${item.name} (${item.selectedSize.size}) - £${(item.price * item.quantity).toFixed(2)}`
 ).join('\n')}
+
+Subtotal: £${orderData.totalAmount}
+${orderData.fulfillmentType === 'delivery' ? `Delivery: £${orderData.deliveryFee?.toFixed(2) || '21.99'}` : 'Collection: FREE'}
+TOTAL: £${orderData.finalTotal || orderData.amount}
+Payment: ${orderData.paymentMethod}
 
 Time: ${new Date(orderData.timestamp).toLocaleString('en-GB')}`,
       });

@@ -17,6 +17,8 @@ interface DeliveryDetails {
   city: string;
 }
 
+type FulfillmentType = 'delivery' | 'collection';
+
 export default function OptimizedCheckout() {
   const { items, totalPrice, clearCart } = useCart();
   const router = useRouter();
@@ -24,6 +26,7 @@ export default function OptimizedCheckout() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [validationErrors, setValidationErrors] = useState<{[key: string]: string}>({});
+  const [fulfillmentType, setFulfillmentType] = useState<FulfillmentType>('delivery');
   
   const [deliveryDetails, setDeliveryDetails] = useState<DeliveryDetails>({
     fullName: '',
@@ -34,8 +37,11 @@ export default function OptimizedCheckout() {
     city: ''
   });
 
-  // Delivery time calculation
+  // Delivery/Collection time calculation
   const [estimatedDelivery, setEstimatedDelivery] = useState('');
+  
+  // UK delivery fee
+  const UK_DELIVERY_FEE = 21.99;
   
   useEffect(() => {
     // Prevent redirect to menu during payment success flow or Safari navigation
@@ -53,13 +59,24 @@ export default function OptimizedCheckout() {
       }, 5000);
     }
     
-    // Calculate estimated delivery time (45-60 minutes from now)
+    // Calculate estimated delivery/collection time
     const now = new Date();
-    const deliveryTime = new Date(now.getTime() + (45 * 60 * 1000)); // 45 minutes
-    setEstimatedDelivery(deliveryTime.toLocaleTimeString('en-GB', { 
-      hour: '2-digit', 
-      minute: '2-digit' 
-    }));
+    if (fulfillmentType === 'delivery') {
+      // Next day delivery for UK-wide
+      const deliveryTime = new Date(now.getTime() + (24 * 60 * 60 * 1000)); // Next day
+      setEstimatedDelivery(deliveryTime.toLocaleDateString('en-GB', { 
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long'
+      }));
+    } else {
+      // Collection time (45-60 minutes from now)
+      const collectionTime = new Date(now.getTime() + (45 * 60 * 1000)); // 45 minutes
+      setEstimatedDelivery(collectionTime.toLocaleTimeString('en-GB', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+      }));
+    }
     
     // Debug: Check for stored error information on component mount
     const storedErrors = [
@@ -83,7 +100,7 @@ export default function OptimizedCheckout() {
     
     // Clear old error flags
     localStorage.removeItem('preventAutoRedirect');
-  }, [items, router, paymentSuccess]);
+  }, [items, router, paymentSuccess, fulfillmentType]);
 
   if (items.length === 0) {
     return null;
@@ -96,9 +113,13 @@ export default function OptimizedCheckout() {
     if (!deliveryDetails.email.trim()) errors.email = 'Email is required';
     else if (!/\S+@\S+\.\S+/.test(deliveryDetails.email)) errors.email = 'Email is invalid';
     if (!deliveryDetails.phone.trim()) errors.phone = 'Phone number is required';
-    if (!deliveryDetails.address.trim()) errors.address = 'Delivery address is required';
-    if (!deliveryDetails.postcode.trim()) errors.postcode = 'Postcode is required';
-    if (!deliveryDetails.city.trim()) errors.city = 'City is required';
+    
+    // Only validate address fields for delivery
+    if (fulfillmentType === 'delivery') {
+      if (!deliveryDetails.address.trim()) errors.address = 'Delivery address is required';
+      if (!deliveryDetails.postcode.trim()) errors.postcode = 'Postcode is required';
+      if (!deliveryDetails.city.trim()) errors.city = 'City is required';
+    }
     
     setValidationErrors(errors);
     return Object.keys(errors).length === 0;
@@ -175,8 +196,10 @@ export default function OptimizedCheckout() {
           },
           body: JSON.stringify({
             orderId: paymentId,
-            amount: totalPrice.toFixed(2),
+            amount: finalTotal.toFixed(2),
             paymentMethod: method,
+            fulfillmentType: fulfillmentType,
+            deliveryFee: deliveryFee,
             customerInfo: deliveryDetails,
             items: items.map(item => ({
               id: item.id,
@@ -187,6 +210,7 @@ export default function OptimizedCheckout() {
             })),
             timestamp: new Date().toISOString(),
             totalAmount: totalPrice,
+            finalTotal: finalTotal,
             estimatedDelivery
           }),
         });
@@ -326,7 +350,7 @@ export default function OptimizedCheckout() {
   };
 
   // Calculate delivery fee and total
-  const deliveryFee = totalPrice > 30 ? 0 : 3.99;
+  const deliveryFee = fulfillmentType === 'delivery' ? UK_DELIVERY_FEE : 0;
   const finalTotal = totalPrice + deliveryFee;
 
   return (
@@ -362,7 +386,95 @@ export default function OptimizedCheckout() {
             <div className="lg:col-span-2">
               {currentStep === 1 && (
                 <div className="bg-white p-6 rounded-lg shadow-sm">
-                  <h2 className="text-2xl font-bold mb-6 text-gray-900">Delivery Information</h2>
+                  <h2 className="text-2xl font-bold mb-6 text-gray-900">Order Details</h2>
+                  
+                  {/* Fulfillment Type Selection */}
+                  <div className="mb-8">
+                    <h3 className="text-lg font-semibold mb-4 text-gray-800">How would you like to receive your order?</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {/* Delivery Option */}
+                      <div 
+                        className={`relative p-6 rounded-xl border-2 cursor-pointer transition-all ${
+                          fulfillmentType === 'delivery' 
+                            ? 'border-orange-500 bg-orange-50 ring-2 ring-orange-200' 
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                        onClick={() => setFulfillmentType('delivery')}
+                      >
+                        <div className="flex items-start space-x-3">
+                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-1 ${
+                            fulfillmentType === 'delivery' ? 'border-orange-500 bg-orange-500' : 'border-gray-300'
+                          }`}>
+                            {fulfillmentType === 'delivery' && (
+                              <div className="w-2 h-2 bg-white rounded-full"></div>
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <svg className="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                              </svg>
+                              <h4 className="font-semibold text-gray-900">UK-Wide Delivery</h4>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-3">Next-day delivery anywhere in the UK mainland</p>
+                            <div className="space-y-1">
+                              <div className="flex items-center text-sm">
+                                <span className="text-gray-500">Delivery fee:</span>
+                                <span className="font-semibold text-orange-600 ml-2">£{UK_DELIVERY_FEE}</span>
+                              </div>
+                              <div className="flex items-center text-sm">
+                                <span className="text-gray-500">Estimated delivery:</span>
+                                <span className="font-medium text-gray-700 ml-2">Next working day</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Collection Option */}
+                      <div 
+                        className={`relative p-6 rounded-xl border-2 cursor-pointer transition-all ${
+                          fulfillmentType === 'collection' 
+                            ? 'border-orange-500 bg-orange-50 ring-2 ring-orange-200' 
+                            : 'border-gray-200 hover:border-gray-300'
+                        }`}
+                        onClick={() => setFulfillmentType('collection')}
+                      >
+                        <div className="flex items-start space-x-3">
+                          <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-1 ${
+                            fulfillmentType === 'collection' ? 'border-orange-500 bg-orange-500' : 'border-gray-300'
+                          }`}>
+                            {fulfillmentType === 'collection' && (
+                              <div className="w-2 h-2 bg-white rounded-full"></div>
+                            )}
+                          </div>
+                          <div className="flex-1">
+                            <div className="flex items-center space-x-2 mb-2">
+                              <svg className="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+                              </svg>
+                              <h4 className="font-semibold text-gray-900">Collection</h4>
+                            </div>
+                            <p className="text-sm text-gray-600 mb-3">Pick up from our Milton Keynes kitchen</p>
+                            <div className="space-y-1">
+                              <div className="flex items-center text-sm">
+                                <span className="text-gray-500">Collection fee:</span>
+                                <span className="font-semibold text-green-600 ml-2">FREE</span>
+                              </div>
+                              <div className="flex items-center text-sm">
+                                <span className="text-gray-500">Ready for pickup:</span>
+                                <span className="font-medium text-gray-700 ml-2">45-60 minutes</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <h3 className="text-lg font-semibold mb-4 text-gray-800">
+                    {fulfillmentType === 'delivery' ? 'Delivery Information' : 'Contact Information'}
+                  </h3>
                   
                   <div className="space-y-4">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -413,51 +525,81 @@ export default function OptimizedCheckout() {
                       )}
                     </div>
                     
-                    <div>
-                      <Label htmlFor="address" className="text-gray-700 font-medium">Delivery Address *</Label>
-                      <Input
-                        id="address"
-                        name="address"
-                        value={deliveryDetails.address}
-                        onChange={handleInputChange}
-                        className={`mt-1 ${validationErrors.address ? 'border-red-500' : 'border-gray-300'}`}
-                        placeholder="123 High Street, Apartment 4B"
-                      />
-                      {validationErrors.address && (
-                        <p className="text-red-500 text-sm mt-1">{validationErrors.address}</p>
-                      )}
-                    </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="city" className="text-gray-700 font-medium">City *</Label>
-                        <Input
-                          id="city"
-                          name="city"
-                          value={deliveryDetails.city}
-                          onChange={handleInputChange}
-                          className={`mt-1 ${validationErrors.city ? 'border-red-500' : 'border-gray-300'}`}
-                          placeholder="London"
-                        />
-                        {validationErrors.city && (
-                          <p className="text-red-500 text-sm mt-1">{validationErrors.city}</p>
-                        )}
+                    {/* Delivery Address Fields - Only show for delivery */}
+                    {fulfillmentType === 'delivery' && (
+                      <>
+                        <div>
+                          <Label htmlFor="address" className="text-gray-700 font-medium">Delivery Address *</Label>
+                          <Input
+                            id="address"
+                            name="address"
+                            value={deliveryDetails.address}
+                            onChange={handleInputChange}
+                            className={`mt-1 ${validationErrors.address ? 'border-red-500' : 'border-gray-300'}`}
+                            placeholder="123 High Street, Apartment 4B"
+                          />
+                          {validationErrors.address && (
+                            <p className="text-red-500 text-sm mt-1">{validationErrors.address}</p>
+                          )}
+                        </div>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="city" className="text-gray-700 font-medium">City *</Label>
+                            <Input
+                              id="city"
+                              name="city"
+                              value={deliveryDetails.city}
+                              onChange={handleInputChange}
+                              className={`mt-1 ${validationErrors.city ? 'border-red-500' : 'border-gray-300'}`}
+                              placeholder="London"
+                            />
+                            {validationErrors.city && (
+                              <p className="text-red-500 text-sm mt-1">{validationErrors.city}</p>
+                            )}
+                          </div>
+                          <div>
+                            <Label htmlFor="postcode" className="text-gray-700 font-medium">Postcode *</Label>
+                            <Input
+                              id="postcode"
+                              name="postcode"
+                              value={deliveryDetails.postcode}
+                              onChange={handleInputChange}
+                              className={`mt-1 ${validationErrors.postcode ? 'border-red-500' : 'border-gray-300'}`}
+                              placeholder="SW1A 1AA"
+                            />
+                            {validationErrors.postcode && (
+                              <p className="text-red-500 text-sm mt-1">{validationErrors.postcode}</p>
+                            )}
+                          </div>
+                        </div>
+                      </>
+                    )}
+                    
+                    {/* Collection Information */}
+                    {fulfillmentType === 'collection' && (
+                      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                        <div className="flex items-start space-x-3">
+                          <svg className="w-6 h-6 text-blue-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                          </svg>
+                          <div>
+                            <h4 className="font-semibold text-blue-900 mb-2">Collection Address</h4>
+                            <div className="text-sm text-blue-800 space-y-1">
+                              <p className="font-medium">TK Afro Kitchen</p>
+                              <p>Unit 12, Industrial Estate</p>
+                              <p>Milton Keynes, MK1 1AA</p>
+                              <p className="mt-2">📞 <span className="font-medium">020 1234 5678</span></p>
+                            </div>
+                            <div className="mt-3 text-xs text-blue-700 bg-blue-100 rounded px-2 py-1 inline-block">
+                              💡 We'll call you when your order is ready for collection
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <Label htmlFor="postcode" className="text-gray-700 font-medium">Postcode *</Label>
-                        <Input
-                          id="postcode"
-                          name="postcode"
-                          value={deliveryDetails.postcode}
-                          onChange={handleInputChange}
-                          className={`mt-1 ${validationErrors.postcode ? 'border-red-500' : 'border-gray-300'}`}
-                          placeholder="SW1A 1AA"
-                        />
-                        {validationErrors.postcode && (
-                          <p className="text-red-500 text-sm mt-1">{validationErrors.postcode}</p>
-                        )}
-                      </div>
-                    </div>
+                    )}
                   </div>
                   
                   <div className="mt-8 flex justify-end">
@@ -556,15 +698,36 @@ export default function OptimizedCheckout() {
               <div className="bg-white p-6 rounded-lg shadow-sm sticky top-8">
                 <h3 className="text-xl font-bold mb-4 text-gray-900">Order Summary</h3>
                 
-                {/* Estimated Delivery */}
-                <div className="mb-4 p-3 bg-green-50 rounded-lg border border-green-200">
+                {/* Estimated Delivery/Collection */}
+                <div className={`mb-4 p-3 rounded-lg border ${
+                  fulfillmentType === 'delivery' 
+                    ? 'bg-orange-50 border-orange-200' 
+                    : 'bg-green-50 border-green-200'
+                }`}>
                   <div className="flex items-center space-x-2">
-                    <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
-                    </svg>
+                    {fulfillmentType === 'delivery' ? (
+                      <svg className="w-5 h-5 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                      </svg>
+                    ) : (
+                      <svg className="w-5 h-5 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clipRule="evenodd" />
+                      </svg>
+                    )}
                     <div>
-                      <p className="text-sm font-medium text-green-800">Estimated Delivery</p>
-                      <p className="text-sm text-green-700">{estimatedDelivery} (45-60 min)</p>
+                      <p className={`text-sm font-medium ${
+                        fulfillmentType === 'delivery' ? 'text-orange-800' : 'text-green-800'
+                      }`}>
+                        {fulfillmentType === 'delivery' ? 'UK-Wide Delivery' : 'Collection Ready'}
+                      </p>
+                      <p className={`text-sm ${
+                        fulfillmentType === 'delivery' ? 'text-orange-700' : 'text-green-700'
+                      }`}>
+                        {fulfillmentType === 'delivery' 
+                          ? `${estimatedDelivery} (Next working day)` 
+                          : `${estimatedDelivery} (45-60 min)`
+                        }
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -594,13 +757,18 @@ export default function OptimizedCheckout() {
                     <span className="text-gray-900">£{totalPrice.toFixed(2)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Delivery Fee</span>
-                    <span className={`${deliveryFee === 0 ? 'text-green-600' : 'text-gray-900'}`}>
+                    <span className="text-gray-600">
+                      {fulfillmentType === 'delivery' ? 'UK Delivery Fee' : 'Collection Fee'}
+                    </span>
+                    <span className={`${deliveryFee === 0 ? 'text-green-600' : 'text-orange-600'}`}>
                       {deliveryFee === 0 ? 'FREE' : `£${deliveryFee.toFixed(2)}`}
                     </span>
                   </div>
-                  {deliveryFee === 0 && (
-                    <p className="text-xs text-green-600">Free delivery on orders over £30!</p>
+                  {fulfillmentType === 'delivery' && (
+                    <p className="text-xs text-orange-600">Next-day delivery anywhere in UK mainland</p>
+                  )}
+                  {fulfillmentType === 'collection' && (
+                    <p className="text-xs text-green-600">Free collection from Milton Keynes kitchen</p>
                   )}
                   <div className="flex justify-between font-bold text-lg border-t border-gray-200 pt-2">
                     <span className="text-gray-900">Total</span>
