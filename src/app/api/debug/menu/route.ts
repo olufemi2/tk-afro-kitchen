@@ -23,17 +23,37 @@ export async function GET() {
   };
 
   try {
-    // Test database connection
-    const { rows } = await db.sql`SELECT COUNT(*) as count FROM products`;
+    // Test database connection and check both tables
     debug.database.hasConnection = true;
-    debug.database.productCount = rows[0]?.count || 0;
     
-    // Get sample products if any
-    if (debug.database.productCount > 0) {
-      const { rows: products } = await db.sql`SELECT id, name FROM products LIMIT 3`;
-      debug.database.sampleProducts = products;
+    // Check menu_items table
+    try {
+      const { rows: menuItems } = await db.sql`SELECT COUNT(*) as count FROM menu_items`;
+      debug.database.menuItemsCount = menuItems[0]?.count || 0;
+      
+      if (debug.database.menuItemsCount > 0) {
+        const { rows: sampleMenuItems } = await db.sql`SELECT id, name, category FROM menu_items LIMIT 3`;
+        debug.database.sampleMenuItems = sampleMenuItems;
+      }
+    } catch (menuError: any) {
+      debug.database.menuItemsError = menuError.message;
     }
+    
+    // Check legacy products table
+    try {
+      const { rows: products } = await db.sql`SELECT COUNT(*) as count FROM products`;
+      debug.database.productCount = products[0]?.count || 0;
+      
+      if (debug.database.productCount > 0) {
+        const { rows: sampleProducts } = await db.sql`SELECT id, name FROM products LIMIT 3`;
+        debug.database.sampleProducts = sampleProducts;
+      }
+    } catch (productError: any) {
+      debug.database.productError = productError.message;
+    }
+
   } catch (error: any) {
+    debug.database.hasConnection = false;
     debug.database.error = error.message;
     console.error('Database debug error:', error);
   }
