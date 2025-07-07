@@ -95,7 +95,7 @@ function CheckoutForm({
       console.log('💳 Creating payment intent with amount:', amount, 'currency:', currency);
       
       // Create payment intent on your backend
-      const response = await fetch('/api/create-payment-intent', {
+      const response = await fetch('/api/stripe/connect/create-payment-intent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -104,6 +104,7 @@ function CheckoutForm({
           amount,
           currency,
           customer_details: customerDetails,
+          sellerAccountId: 'acct_1P6ZzGPCMLP5p3jS', // Replace with dynamic seller account ID
           ios_safari: isIOS // Flag for backend iOS handling
         }),
       });
