@@ -509,7 +509,7 @@ export const StripeUtils = {
   // Validate webhook signature
   validateWebhookSignature: (payload: string, signature: string, secret: string): boolean => {
     try {
-      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, { apiVersion: '2025-05-28.basil' });
+      const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', { apiVersion: '2025-05-28.basil' });
       stripe.webhooks.constructEvent(payload, signature, secret);
       return true;
     } catch {

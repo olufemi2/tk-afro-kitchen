@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-05-28.basil',
-});
-
 export async function POST(request: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+    apiVersion: '2025-05-28.basil',
+  });
   try {
     console.log('Payment intent API called');
     const body = await request.json();
@@ -143,6 +142,10 @@ export async function POST(request: NextRequest) {
 
 // Handle payment intent confirmation webhook
 export async function PUT(request: NextRequest) {
+  const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+    apiVersion: '2025-05-28.basil',
+  });
+  
   try {
     const body = await request.json();
     const { payment_intent_id } = body;

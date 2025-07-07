@@ -10,7 +10,7 @@ export async function POST(request: Request) {
   const payload = await request.text();
 
   try {
-    const event = stripeConnect.handleWebhookEvent(payload, signature);
+    const event = await stripeConnect.handleWebhookEvent(payload, signature);
 
     if (event.success && event.data) {
       const session = event.data.data.object as Stripe.Account;
@@ -18,11 +18,16 @@ export async function POST(request: Request) {
       if (event.data.type === 'account.updated') {
         const account = session;
         if (account.charges_enabled) {
-          await db.sql`
-            UPDATE sellers
-            SET stripe_account_status = 'active'
-            WHERE stripe_account_id = ${account.id};
-          `;
+          try {
+            await db.sql`
+              UPDATE sellers
+              SET stripe_account_status = 'active'
+              WHERE stripe_account_id = ${account.id};
+            `;
+          } catch (dbError) {
+            console.error('Database update failed:', dbError);
+            // Continue processing webhook even if DB update fails
+          }
         }
       }
     }

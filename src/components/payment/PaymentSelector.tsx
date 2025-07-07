@@ -41,7 +41,7 @@ export function PaymentSelector({
       console.log('💳 Auto-selecting card payment as default');
       setSelectedMethod('card');
     }
-  }, []); // Auto-select card payment on load
+  }, [selectedMethod]); // Auto-select card payment on load
 
   const bankTransferDiscount = Math.round(amount * 0.03); // 3% discount
   const bankTransferAmount = amount - bankTransferDiscount;
