@@ -104,7 +104,7 @@ function CheckoutForm({
           amount,
           currency,
           customer_details: customerDetails,
-          sellerAccountId: 'acct_1P6ZzGPCMLP5p3jS', // Replace with dynamic seller account ID
+          productId: '3a7a8e3a-5a3e-4e3a-8a3a-3a7a8e3a5a3e', // Replace with dynamic product ID
           ios_safari: isIOS // Flag for backend iOS handling
         }),
       });

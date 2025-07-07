@@ -1,44 +1,35 @@
-'use client';
-
 import { Header } from "@/components/layout/header";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import Image from "next/image";
-import { categories, featuredDishes } from "@/data/sample-menu";
-import { useRef, useState } from "react";
 import { FoodCard } from "@/components/food/food-card";
+import { db } from '@vercel/postgres';
 
-// Transform the data for the menu sections
-const menuSections = categories.map(category => ({
-  id: category.id,
-  title: category.name,
-  description: category.description,
-  imageUrl: category.imageUrl,
-  items: featuredDishes
-    .filter(dish => dish.category === category.name)
-    .map(dish => ({
-      id: dish.id,
-      name: dish.name,
-      description: dish.description,
-      imageUrl: dish.imageUrl,
-      category: dish.category,
-      sizeOptions: dish.sizeOptions,
-      defaultSizeIndex: dish.defaultSizeIndex
-    }))
-})).filter(section => section.items.length > 0);
+async function getProducts() {
+  const { rows } = await db.sql`SELECT * FROM products`;
+  return rows;
+}
 
-export default function MenuPage() {
-  const [searchQuery, setSearchQuery] = useState('');
-  
-  // Filter menu sections based on search query
-  const filteredMenuSections = menuSections.map(section => ({
-    ...section,
-    items: section.items.filter(item =>
-      item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      item.description.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  })).filter(section => section.items.length > 0);
+export default async function MenuPage() {
+  const products = await getProducts();
+
+  const menuSections = [
+    {
+      id: 'all-dishes',
+      title: 'All Dishes',
+      description: 'Explore our delicious offerings',
+      items: products.map(product => ({
+        id: product.id,
+        name: product.name,
+        description: 'Delicious Nigerian cuisine', // Add a default description
+        imageUrl: '/images/dishes/jollof-rice.jpg', // Add a default image
+        category: 'Main Dishes', // Add a default category
+        sizeOptions: [{ size: 'Regular', price: product.price / 100, portionInfo: 'Serves 1' }],
+        defaultSizeIndex: 0,
+      })),
+    },
+  ];
   
   return (
     <>

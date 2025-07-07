@@ -117,7 +117,7 @@ export class StripeConnectIntegration {
           console.log(`🔍 Unhandled Connect event type: ${event.type}`);
       }
 
-      return { success: true };
+      return { success: true, data: event };
     } catch (error: any) {
       console.error('❌ Webhook processing failed:', error);
       return { success: false, error: error.message };
