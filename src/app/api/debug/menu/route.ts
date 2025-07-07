@@ -10,6 +10,11 @@ export async function GET() {
       hasConnection: false,
       error: null,
       productCount: 0,
+      menuItemsCount: 0,
+      menuItemsError: null,
+      productError: null,
+      sampleMenuItems: null,
+      sampleProducts: null,
     },
     fallbackData: {
       available: true,
