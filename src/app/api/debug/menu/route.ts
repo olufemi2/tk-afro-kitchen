@@ -3,7 +3,7 @@ import { db } from '@vercel/postgres';
 import { featuredDishes } from '@/data/sample-menu';
 
 export async function GET() {
-  const debug = {
+  const debug: any = {
     timestamp: new Date().toISOString(),
     environment: process.env.NODE_ENV,
     database: {
