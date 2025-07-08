@@ -3,13 +3,13 @@ import { MenuSearch } from "@/components/menu/MenuSearch";
 import { db } from '@vercel/postgres';
 import { featuredDishes } from '@/data/sample-menu';
 
-async function getProducts() {
+async function getProducts(): Promise<any[]> {
   try {
     // Try menu_items table first (new structure)
     const { rows: menuItems } = await db.sql`SELECT * FROM menu_items ORDER BY category, name`;
     if (menuItems && menuItems.length > 0) {
       console.log('Menu items fetched from database:', menuItems.length);
-      return menuItems.map(item => ({
+      return menuItems.map((item: any) => ({
         id: item.id,
         name: item.name,
         description: item.description,
@@ -17,6 +17,7 @@ async function getProducts() {
         category: item.category,
         price: item.price,
         sizeOptions: item.size_options || [{ size: 'Regular', price: item.price / 100, portionInfo: 'Serves 1' }],
+        defaultSizeIndex: 0,
       }));
     }
 
@@ -24,7 +25,16 @@ async function getProducts() {
     const { rows: products } = await db.sql`SELECT * FROM products`;
     if (products && products.length > 0) {
       console.log('Products fetched from database:', products.length);
-      return products;
+      return products.map((product: any) => ({
+        id: product.id,
+        name: product.name,
+        description: 'Delicious Nigerian cuisine',
+        imageUrl: '/images/dishes/jollof-rice.jpg',
+        category: 'Main Dishes',
+        price: product.price,
+        sizeOptions: [{ size: 'Regular', price: product.price / 100, portionInfo: 'Serves 1' }],
+        defaultSizeIndex: 0,
+      }));
     }
 
     throw new Error('No items found in database');
@@ -40,7 +50,7 @@ export default async function MenuPage() {
   const products = await getProducts();
 
   // Process the items to ensure they have the correct structure
-  const menuItems = products.map(product => ({
+  const menuItems = products.map((product: any) => ({
     id: product.id,
     name: product.name,
     description: product.description || 'Delicious Nigerian cuisine',
