@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 import { createStripeConnectIntegration } from '@/lib/stripe-connect-integration';
 import { db } from '@vercel/postgres';
 import Stripe from 'stripe';
-import { sendOrderConfirmationEmail } from '../../../../lib/email-service';
+import { sendOrderConfirmationEmail, sendKitchenNotificationEmail } from '@/lib/email-service';
 
 export async function POST(request: Request) {
   const stripeConnect = createStripeConnectIntegration();
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
           }
         }
       } else if (event.data.type === 'payment_intent.succeeded') {
-        const paymentIntent = event.data.object as Stripe.PaymentIntent;
+        const paymentIntent = event.data.data.object as Stripe.PaymentIntent;
 
         // TODO: Fetch actual order details from your database using paymentIntent.id or metadata
         // For now, using placeholder values
