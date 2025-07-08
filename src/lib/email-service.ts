@@ -122,4 +122,44 @@ export async function sendPaymentFailedEmail(notification: OrderNotification) {
     subject: `Payment Failed - Order ${orderId}`,
     html: emailContent,
   });
+}
+
+export async function sendKitchenNotificationEmail(notification: OrderNotification) {
+  const { orderId, customerName, amount, items } = notification;
+
+  const emailContent = `
+    <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+      <h1 style="color: #f97316;">New Order Received!</h1>
+      <p>A new order has been placed on TK Afro Kitchen.</p>
+      
+      <div style="background-color: #f8fafc; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <h2 style="color: #1e293b;">Order Details</h2>
+        <p><strong>Order ID:</strong> ${orderId}</p>
+        <p><strong>Customer Name:</strong> ${customerName}</p>
+        <p><strong>Total Amount:</strong> £${amount}</p>
+        
+        <h3 style="color: #1e293b;">Items Ordered:</h3>
+        <ul style="list-style: none; padding: 0;">
+          ${items.map(item => `
+            <li style="margin-bottom: 10px;">
+              ${item.name} x ${item.quantity} - £${item.price}
+            </li>
+          `).join('')}
+        </ul>
+      </div>
+
+      <p>Please prepare this order for dispatch.</p>
+      
+      <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e2e8f0;">
+        <p style="color: #64748b;">This is an automated notification. Do not reply.</p>
+      </div>
+    </div>
+  `;
+
+  await transporter.sendMail({
+    from: process.env.SMTP_FROM_EMAIL,
+    to: process.env.KITCHEN_EMAIL, // Assuming KITCHEN_EMAIL is set in your .env
+    subject: `New Order #${orderId} - TK Afro Kitchen`,
+    html: emailContent,
+  });
 } 
