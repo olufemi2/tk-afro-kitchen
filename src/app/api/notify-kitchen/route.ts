@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { sendOrderConfirmationEmail } from '@/lib/email-service';
 
 // Kitchen staff email configuration
 const KITCHEN_EMAILS = [
@@ -247,6 +248,27 @@ export async function POST(request: NextRequest) {
 
     console.log(`📋 Processing kitchen notification for order ${orderData.orderId}`);
 
+    // Send customer confirmation email
+    let customerEmailSent = false;
+    try {
+      await sendOrderConfirmationEmail({
+        orderId: orderData.orderId,
+        customerEmail: orderData.customerInfo.email,
+        customerName: orderData.customerInfo.fullName,
+        amount: (orderData.finalTotal || orderData.amount).toString(),
+        status: 'Completed',
+        items: orderData.items.map((item: any) => ({
+          name: `${item.name} (${item.selectedSize.size})`,
+          quantity: item.quantity,
+          price: (item.price * item.quantity).toFixed(2)
+        }))
+      });
+      customerEmailSent = true;
+      console.log('✅ Customer confirmation email sent');
+    } catch (customerEmailError) {
+      console.error('❌ Customer confirmation email failed:', customerEmailError);
+    }
+
     // Send notifications in parallel
     const notifications = await Promise.allSettled([
       sendEmailNotification(orderData),
@@ -262,10 +284,11 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       notifications: {
-        email: emailResult.status === 'fulfilled',
+        customerEmail: customerEmailSent,
+        kitchenEmail: emailResult.status === 'fulfilled',
         whatsapp: whatsappResult.status === 'fulfilled',
       },
-      message: 'Kitchen notifications sent successfully',
+      message: 'Notifications sent successfully',
     });
 
   } catch (error: any) {
